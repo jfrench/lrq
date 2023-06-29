@@ -1,0 +1,34 @@
+--- 
+bibliography: [book.bib, packages.bib]
+---
+
+# Preliminaries {-}
+
+## Background {-}
+
+I designed this book to progressively introduce you to the analysis of data using linear models. My goal is to provide you with the skills needed to perform a linear regression analysis sooner rather than later. Most of the detailed derivations have been placed in **Going Deeper** sections or in their own chapter, which can be skipped over to more quickly progress through the material if you do not want to focus as much on theory.
+
+## Acknowledgments {-}
+
+The writing of the book was partially supported by the Colorado Department of Higher Education as part of the proposal "OER for the Creation of Interactive Computational Notebooks and a Computational Pathway in Mathematics and Statistics".
+
+The computational examples utilize the R programming language and environment [@R-base].
+
+We will also make use of the following packages:
+
+- **api2lm** [@R-api2lm].
+- **dplyr** [@R-dplyr].
+- **tidyverse** [@R-tidyverse].
+
+```{r}
+#| include: false
+
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'knitr', 'rmarkdown', 'ggplot2', 'palmerpenguins', 'broom', 'tidyr', 'dplyr', 'stringr', 'purrr', 'tibble', 'readr', 'forcats', 'tidyverse', 'base', 'readxl', 'magrittr', 'plotly', 'datasets', 'effects', 'kableExtra', 'car', 'api2lm', 'datasets'
+), 'packages.bib')
+```
+
+## Creative Commons License Information {-}
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> A Progressive Introduction to Linear Models by Joshua French is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).

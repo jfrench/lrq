@@ -1,0 +1,25 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "A Progressive Introduction to Linear Models"
+  author: "Joshua P. French"
+  date: "6/20/2023"
+  chapters:
+    - index.qmd
+    - r-foundations.qmd
+    - data-exploration.qmd
+    - references.qmd
+
+bibliography: [book.bib, packages.bib]
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+  pdf:
+    documentclass: scrreprt
+
+
+
