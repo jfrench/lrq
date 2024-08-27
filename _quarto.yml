@@ -5,7 +5,7 @@ project:
 book:
   title: "A Progressive Introduction to Linear Models"
   author: "Joshua P. French"
-  date: "6/20/2023"
+  date: today
   chapters:
     - index.qmd
     - r-foundations.qmd
