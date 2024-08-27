@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.361">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>A Progressive Introduction to Linear Models - 1&nbsp; R Foundations</title>
+<title>1&nbsp; R Foundations – A Progressive Introduction to Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -58,6 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -100,7 +101,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -109,14 +116,42 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -127,13 +162,13 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-foundations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Foundations</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-foundations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Foundations</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -142,7 +177,7 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">A Progressive Introduction to Linear Models</a> 
@@ -182,7 +217,7 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -283,14 +318,16 @@ div.csl-indent {
   </div>
   
 
+
 </header>
 
-<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking the Open in Colab graphic below.</p>
-<p><a href="https://colab.research.google.com/github/jfrench/lrq/blob/master/notebooks/01-r-foundations-notebook.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a></p>
+
+<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
+<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/01-r-foundations-notebook.ipynb"> <img src="images/qr-01-r-foundations.png"> </a></p>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
 <hr>
 <p>Meaningful data analysis requires the use of computer software.</p>
-<p>R statistical software is one of the most popular tools for data analysis in academia, industry, and government. In what follows, we will attempt to build a foundation of basic knowledge and skills with R that we will need for data analysis. Our discussion will not be exhaustive, and many other important aspects of data analysis using R (like plotting) will be discussed later, as needed.</p>
+<p>R statistical software <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2024</a>)</span> is one of the most popular tools for data analysis in academia, industry, and government. In what follows, we will learn foundational knowledge and skills that we need to effectively perform data analysis in R. Our discussion will not be exhaustive, and many other important aspects of data analysis using R (like plotting) will be discussed later, as needed.</p>
 <section id="setting-up-r-and-rstudio-desktop" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="setting-up-r-and-rstudio-desktop"><span class="header-section-number">1.1</span> Setting up R and RStudio Desktop</h2>
 <section id="what-is-r" class="level3" data-number="1.1.1">
@@ -305,8 +342,8 @@ div.csl-indent {
 </ul></li>
 <li>R is highly extendable.
 <ul>
-<li>Many user-created packages are available to extend the functionality beyond what is installed by default.</li>
-<li>Users can write their own functions and easily add software libraries to R.</li>
+<li>We can extend the functionality of R beyond what is available by default by installing user-created packages.</li>
+<li>We can write our own functions to add additional capabilities to R.</li>
 </ul></li>
 </ul>
 </section>
@@ -325,18 +362,22 @@ div.csl-indent {
 <p>RStudio Desktop has four panes:</p>
 <ol type="1">
 <li>Console: the pane where commands are run.</li>
-<li>Source: the pane where we prepare commands to be run.</li>
+<li>Source: the pane where we prepare commands to run.</li>
 <li>Environment/History: the pane where we can see all the objects in our workspace, our command history, and other information.</li>
-<li>The Files/Plot/Packages/Help: the pane where we can navigate between directories, view plots , see available packages, and view help documentation.</li>
+<li>Files/Plot/Packages/Help: the pane where we navigate between directories, view plots, see the packages available to be loaded, or get help.</li>
 </ol>
 <p>To see all RStudio panes, press the keys <code>Ctrl + Alt + Shift + 0</code> on a PC or <code>Cmd + Option + Shift + 0</code> on a Mac.</p>
-<p><a href="#fig-rstudiopanes">Figure&nbsp;<span>1.1</span></a> displays a labeled graphic of the panes. The position of the panes can change depending on how the display preferences are specified, but the look of each pain will be similar.</p>
+<p><a href="#fig-rstudiopanes" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> displays a labeled graphic of the panes. The position of the panes can change depending on how we set the display preferences, but the look of each pane will be similar.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-rstudiopanes" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="pictures/rstudio_panes.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1.1: The RStudio panes labeled for convenience.</figcaption>
+<div id="fig-rstudiopanes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rstudiopanes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/rstudio_panes_new.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rstudiopanes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: The RStudio panes labeled for convenience.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -344,20 +385,24 @@ div.csl-indent {
 </section>
 <section id="customizing-the-rstudio-workspace" class="level3" data-number="1.1.5">
 <h3 data-number="1.1.5" class="anchored" data-anchor-id="customizing-the-rstudio-workspace"><span class="header-section-number">1.1.5</span> Customizing the RStudio workspace</h3>
-<p>At this point, we should make a small workspace customization that will likely save us from experiencing future frustration. R provides a “feature” that allows us to “save a workspace”. This allows us to easily pick up our analysis where we last left off. The issue with this is that over time we accumulate a lot of environmental artifacts that can conflict with each other. This can lead to errors and incorrect results that we will need to deal with. Additionally, this “feature” hinders the ability of others to reproduce our analysis because other users are unlikely to have the same workspace.</p>
-<p>To turn off this feature, in the RStudio menu bar we click Tools → Global Options and then make sure the “General” option is selected. Then we make the following changes (if necessary):</p>
+<p>At this point, we should customize our workspace to prevent us from experiencing future frustration. R provides a “feature” that allows us to “save a workspace”. This allows us to easily pick up our analysis where we last left off. Unfortunately, over time, we will accumulate many environmental artifacts that can conflict with each other. This can lead to errors and incorrect results that we will need to deal with. Additionally, this “feature” hinders the ability of others to reproduce our analysis because other users will not have the same workspace.</p>
+<p>To turn off this feature, in the RStudio menu bar, we click Tools → Global Options and then make sure the “General” option is selected. Then we make the following changes (if necessary):</p>
 <ol type="1">
 <li>Uncheck the box for “Restore .RData into workspace at startup”.</li>
 <li>Change the toggle box for “Save workspace to .RData on exit” to “Never”.</li>
-<li>Click Apply then OK to save the changes.</li>
+<li>Click “Apply” then “OK” to save the changes.</li>
 </ol>
-<p><a href="#fig-generaloptions">Figure&nbsp;<span>1.2</span></a> displays what these options should look like.</p>
+<p><a href="#fig-generaloptions" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> displays what these options should look like.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-generaloptions" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="pictures/general_options.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1.2: The General options window.</figcaption>
+<div id="fig-generaloptions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-generaloptions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/general_options.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-generaloptions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: The General options window.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -380,15 +425,19 @@ div.csl-indent {
 </ul>
 <p>There are various ways to run code from a Script file. The most common ones are:</p>
 <ol type="1">
-<li>Highlight the code we want to run and click the Run button at the top of the Script pane. The Run button icon is shown in <a href="#fig-run-button">Figure&nbsp;<span>1.3</span></a>.</li>
-<li>Highlight the code we want to run and press “Ctrl + Enter” on our keyboard. If we don’t highlight anything, by default, RStudio runs the command the cursor currently lies on.</li>
+<li>Highlight the code we want to run and click the “Run” button at the top of the Script pane. <a href="#fig-run-button" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> displays the Run button.</li>
+<li>Highlight the code we want to run and press <code>Ctrl + Enter</code> on our keyboard. If we don’t highlight anything, by default, RStudio runs the command the cursor currently lies on.</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-run-button" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="pictures/run_button.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1.3: The Run icon can be clicked to run a selection of commands.</figcaption>
+<div id="fig-run-button" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-run-button-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/run_button.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-run-button-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: The Run icon can be clicked to run a selection of commands.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -398,15 +447,13 @@ div.csl-indent {
 <li>Click File → Save in the RStudio menu bar.</li>
 <li>Press <code>Ctrl + s</code> on a PC or <code>Cmd + s</code> on a Mac.</li>
 </ul>
-<p>A comment is a set of text ignored by R when submitted to the Console.</p>
-<p>A comment is indicated by the <code>#</code> symbol. Nothing to the right of the <code>#</code> is executed by the Console.</p>
-<p>To comment (or uncomment) multiple lines of code in the Source pane of RStudio, we highlight the code we want to comment and press <code>Ctrl + Shift + c</code> on a PC or <code>Cmd + Shift + c</code> on a Mac.</p>
+<p>A comment is a set of text ignored by R when submitted to the Console. The <code>#</code> symbol indicates the start of a comment. Nothing to the right of the <code>#</code> is executed by the Console. We can comment (or uncomment) multiple lines of code in the Source pane of RStudio by highlighting the code we want to comment and pressing <code>Ctrl + Shift + c</code> on a PC or <code>Cmd + Shift + c</code> on a Mac.</p>
 <hr>
 <section id="hands-on-practice" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="hands-on-practice">Hands-on Practice</h3>
 <p>Perform the following tasks:</p>
 <ol type="1">
-<li>Type <code>1+1</code> in the Console and press Enter.</li>
+<li>Type <code>1+1</code> in the Console and press the Enter key.</li>
 <li>Open a new Script in RStudio.</li>
 <li>Type <code>mean(1:3)</code> in the Script file.</li>
 <li>Type <code># mean(1:3)</code> in the Script file.</li>
@@ -420,7 +467,7 @@ div.csl-indent {
 <section id="sec-assignment" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-assignment"><span class="header-section-number">1.3</span> Assignment</h2>
 <p>R works on various types of objects that we’ll learn more about later.</p>
-<p>To store an object in the computer’s memory we must assign it a name using the assignment operator <code>&lt;-</code> or the equal sign <code>=</code>.</p>
+<p>To store an object in the computer’s memory, we must assign it a name using the assignment operator (<code>&lt;-</code>) or the equal sign (<code>=</code>).</p>
 <p>Some comments:</p>
 <ul>
 <li>In general, both <code>&lt;-</code> and <code>=</code> can be used for assignment.</li>
@@ -430,7 +477,7 @@ div.csl-indent {
 </ul></li>
 <li><code>&lt;-</code> and <code>=</code> are NOT synonyms, but can be used identically most of the time.</li>
 </ul>
-<p><strong>It is best to use <code>&lt;-</code> for assigning a name to an object and reserving <code>=</code> for specifying function arguments.</strong> See Section <a href="#sec-comparing-assgn-op"><span>Section&nbsp;1.14.1</span></a> for a deeper explanation.</p>
+<p><strong>It is best to use <code>&lt;-</code> for assigning a name to an object and reserving <code>=</code> for specifying function arguments.</strong> See Section <a href="#sec-comparing-assgn-op" class="quarto-xref"><span>Section 1.14.1</span></a> for a deeper explanation.</p>
 <p>Once an object has been assigned a name, it can be printed by running the name of the object in the Console or using the <code>print</code> function.</p>
 <hr>
 <section id="hands-on-practice-1" class="level3 unnumbered">
@@ -443,7 +490,7 @@ div.csl-indent {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we type the name of an object in the R Console and run the command, R will print at least some of the information in the object. In this case, the value stored in <code>m</code>, the value <code>5.5</code> will be returned.</p>
+<p>When we type the name of an object in the R Console and run the command, R will print at least some of the information in the object. In this case, the value stored in <code>m</code>, the value <code>5.5</code>, will be returned.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -453,10 +500,10 @@ div.csl-indent {
 </section>
 <section id="functions" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="functions"><span class="header-section-number">1.4</span> Functions</h2>
-<p>A function is an object that performs a certain action or set of actions based on objects it receives from its arguments. We use a sequence of function calls to perform data analysis.</p>
-<p>To use a function, we type the function’s name in the Console (or Script) and then supply the function’s “arguments” between parentheses, <code>()</code>.</p>
-<p>The arguments of a function are pieces of data or information the function needs to perform the requested task (i.e., the function “inputs”). Each argument we supply is separated by a comma, <code>,</code>. Some functions have default values for certain arguments and do not need to specified unless something besides the default behavior is desired.</p>
-<p>The <code>mean</code> function computes the sample mean of an R object <code>x</code>. (We can look at the documentation for the function by running <code>?mean</code> in the Console. We’ll talk more about getting help with R shortly.) The <code>mean</code> function also has a <code>trim</code> argument that indicates the, “… fraction … of observations to be trimmed from each end of <code>x</code> before the mean is computed” <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2023</a>, <code>?mean</code>)</span>.</p>
+<p>A function is an object that performs a certain action or set of actions based on the objects it receives from its arguments. We use a sequence of function calls to perform data analysis.</p>
+<p>We use a function by typing the function’s name in the Console (or Script), supplying the function’s arguments between parentheses, <code>()</code>, and then pressing the Enter key.</p>
+<p>The arguments of a function are pieces of data or information that the function needs to perform the requested task (i.e., the function “inputs”). Each argument we supply is separated by a comma, <code>,</code>. Some functions have default values for certain arguments and do not need to specified unless something besides the default behavior is desired.</p>
+<p>The <code>mean</code> function computes the sample mean of an R object <code>x</code>. (We can look at the documentation for the function by running <code>?mean</code> in the Console. We’ll talk more about getting help with R shortly.) The <code>mean</code> function also has a <code>trim</code> argument that indicates the, “… fraction … of observations to be trimmed from each end of <code>x</code> before the mean is computed” <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2024</a>, <code>?mean</code>)</span>.</p>
 <p>Consider the command below, in which we compute the mean of the set of values <code>1, 5, 3, 2, 10</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -471,7 +518,7 @@ div.csl-indent {
 <pre><code>[1] 4</code></pre>
 </div>
 </div>
-<p>The output differs for the two function calls because in the first we compute <code>(1 + 5 + 3 + 4 + 10)/5 = 23/5 = 4.6</code> while in the second we remove the smallest 20% and largest 20% of the values (i.e., dropping <code>1</code> and <code>10</code>) and compute <code>(5 + 3 + 4)/3 = 12/3 = 4</code>.</p>
+<p>In the first function call, we compute <code>(1 + 5 + 3 + 4 + 10)/5 = 23/5 = 4.6</code>. In the second function call, we remove the smallest 20% and largest 20% of the values (i.e., dropping <code>1</code> and <code>10</code>) and compute <code>(5 + 3 + 4)/3 = 12/3 = 4</code>.</p>
 </section>
 <section id="packages" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="packages"><span class="header-section-number">1.5</span> Packages</h2>
@@ -480,15 +527,15 @@ div.csl-indent {
 <hr>
 <section id="hands-on-practice-2" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="hands-on-practice-2">Hands-on Practice</h3>
-<p>The <strong>tidyverse</strong> <span class="citation" data-cites="R-tidyverse">(<a href="references.html#ref-R-tidyverse" role="doc-biblioref">Wickham 2023b</a>)</span> is a popular ecosystem of R packages used for manipulating, tidying, and plotting data. Currently, the <strong>tidyverse</strong> is comprised of the following packages:</p>
+<p>The <strong>tidyverse</strong> <span class="citation" data-cites="R-tidyverse">(<a href="references.html#ref-R-tidyverse" role="doc-biblioref">Wickham 2023c</a>)</span> is a popular ecosystem of R packages used for manipulating, tidying, and plotting data. Currently, the <strong>tidyverse</strong> is comprised of the following packages:</p>
 <ul>
-<li><strong>ggplot2</strong>: A package for plotting based on the “Grammar of Graphics” <span class="citation" data-cites="R-ggplot2">(<a href="references.html#ref-R-ggplot2" role="doc-biblioref">Wickham, Chang, et al. 2023</a>)</span>.</li>
+<li><strong>ggplot2</strong>: A package for plotting based on the “Grammar of Graphics” <span class="citation" data-cites="R-ggplot2">(<a href="references.html#ref-R-ggplot2" role="doc-biblioref">Wickham et al. 2024</a>)</span>.</li>
 <li><strong>purrr</strong>: A package for functional programming <span class="citation" data-cites="R-purrr">(<a href="references.html#ref-R-purrr" role="doc-biblioref">Wickham and Henry 2023</a>)</span>.</li>
 <li><strong>tibble</strong>: A package providing a more advanced data frame <span class="citation" data-cites="R-tibble">(<a href="references.html#ref-R-tibble" role="doc-biblioref">Müller and Wickham 2023</a>)</span>.</li>
-<li><strong>dplyr</strong>: A package for manipulating data <span class="citation" data-cites="R-dplyr">(<a href="references.html#ref-R-dplyr" role="doc-biblioref">Wickham, François, et al. 2023</a>)</span>. . More specifically, it provides ” a grammar of data manipulation”.</li>
-<li><strong>tidyr</strong>: A package to help create “tidy” data <span class="citation" data-cites="R-tidyr">(<a href="references.html#ref-R-tidyr" role="doc-biblioref">Wickham, Vaughan, and Girlich 2023</a>)</span>. Tidy data is an data organization style often convenient for data analysis.</li>
-<li><strong>stringr</strong>: A package for working with character/string data <span class="citation" data-cites="R-stringr">(<a href="references.html#ref-R-stringr" role="doc-biblioref">Wickham 2022</a>)</span>.</li>
-<li><strong>readr</strong>: A package for importing data <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham, Hester, and Bryan 2023</a>)</span>.</li>
+<li><strong>dplyr</strong>: A package for manipulating data <span class="citation" data-cites="R-dplyr">(<a href="references.html#ref-R-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span>. More specifically, it provides ” a grammar of data manipulation”.</li>
+<li><strong>tidyr</strong>: A package to help create “tidy” data <span class="citation" data-cites="R-tidyr">(<a href="references.html#ref-R-tidyr" role="doc-biblioref">Wickham, Vaughan, and Girlich 2024</a>)</span>. Tidy data is a data organization style often convenient for data analysis.</li>
+<li><strong>stringr</strong>: A package for working with character/string data <span class="citation" data-cites="R-stringr">(<a href="references.html#ref-R-stringr" role="doc-biblioref">Wickham 2023b</a>)</span>.</li>
+<li><strong>readr</strong>: A package for importing data <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham, Hester, and Bryan 2024</a>)</span>.</li>
 <li><strong>forcats</strong>: A package for working with categorical data <span class="citation" data-cites="R-forcats">(<a href="references.html#ref-R-forcats" role="doc-biblioref">Wickham 2023a</a>)</span>.</li>
 </ul>
 <p>Install the set of <strong>tidyverse</strong> R packages by running the command below in the Console.</p>
@@ -504,18 +551,18 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 </div>
-<p>Notice that when we loaded the <strong>tidyverse</strong> packages above that <code>dplyr::lag()</code> masks <code>stats::lag()</code>. What this means is that both the <strong>dplyr</strong> and <strong>stats</strong> packages have a function called <code>lag</code>. Different packages may use the same function name to provide certain functionality. The functions will likely be used for different tasks or require different arguments.</p>
+<p>When we loaded the <strong>tidyverse</strong> package above, notice that <code>dplyr::lag()</code> masks <code>stats::lag()</code>. “Masking” means that functions or objects from different packages have the same name. In this case, both the <strong>dplyr</strong> and <strong>stats</strong> packages have a function called <code>lag</code>. Different packages may use the same function name to provide certain functionality. The functions will likely be used for different tasks or require different arguments.</p>
 <p>To refer to a function in a specific package, we should add the syntax <code>package::</code> prior to the function name. In the code below, we run <code>stats::lag</code> and <code>dplyr::lag</code> on two different objects using the <code>::</code> syntax.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run stats::lag on a numeric vector</span></span>
@@ -546,13 +593,14 @@ attr(,"tsp")
 <ul>
 <li>A <strong>Description</strong> section with general information about the function or object.</li>
 <li>A <strong>Usage</strong> section with a generic template for using the function or object.</li>
-<li>An <strong>Arguments</strong> section summarizing the function inputs the function needs.</li>
+<li>An <strong>Arguments</strong> section summarizing the inputs the function needs.</li>
 <li>A <strong>Details</strong> section may be provided with additional information about the function or object.</li>
 <li>A <strong>Value</strong> section that describes what is returned by the function.</li>
 <li>An <strong>Examples</strong> section providing examples of how to use the function. Usually, these can be copied and pasted into the Console to better understand the function arguments and what it produces.</li>
 </ul>
 <p>If we need to find a command related to a certain <em>topic</em>, then <code>??topic</code> will search for the topic through all installed documentation and bring up any vignettes, code demonstrations, or help pages that include the topic for which we searched.</p>
 <p>If we are trying to figure out why an error is being produced, what packages can be used to perform a certain analysis, how to perform a complex task that we can’t seem to figure out, etc., then we can simply do a web search for what we’re trying to figure out! Because R is such a popular programming language, it is likely we will find a <a href="https://www.stackoverflow.com">stackoverflow</a> response, a helpful blog post, an R users forum response, etc., that addresses our question.</p>
+<p>Lastly, we can query artificial intelligence chatbots with questions about how to use R to perform a certain analysis or how to fix bugs in our code.</p>
 <hr>
 <section id="hands-on-practice-3" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="hands-on-practice-3">Hands-on Practice</h3>
@@ -561,6 +609,7 @@ attr(,"tsp")
 <li>Run<code>?lm</code> in the Console to get help on the <code>lm</code> function, which is one of the main functions used for fitting linear models.</li>
 <li>Run <code>??logarithms</code> in the Console to search the R documentation for information about logarithms. It is likely that we will see multiple help pages that mention “logarithm”, so we may end up needing to find the desired entry via trial and error.</li>
 <li>Run a web search for something along the lines of “How do I change the size of the axis labels in an R plot?”.</li>
+<li>Query an artificial intelligence chatbot regarding how to create a scatter plot using base R. Were the results useful and correct?</li>
 </ol>
 <hr>
 </section>
@@ -569,18 +618,18 @@ attr(,"tsp")
 <h2 data-number="1.7" class="anchored" data-anchor-id="data-types-and-structures"><span class="header-section-number">1.7</span> Data types and structures</h2>
 <section id="basic-data-types" class="level3" data-number="1.7.1">
 <h3 data-number="1.7.1" class="anchored" data-anchor-id="basic-data-types"><span class="header-section-number">1.7.1</span> Basic data types</h3>
-<p>R has 6 basic (“atomic”) vector types <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Basic-types">(https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Basic-types)</a> <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2023</a>)</span>:</p>
+<p>R has 6 basic (“atomic”) vector types <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Basic-types">(https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Basic-types)</a> <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2024</a>)</span>:</p>
 <ol type="1">
-<li>character: collections of characters. E.g., <code>"a"</code>, <code>"hello world!"</code>.</li>
-<li>double: decimal numbers. e.g., <code>1.2</code>, <code>1.0</code>.</li>
-<li>integer: whole numbers. In R, we must add <code>L</code> to the end of a number to specify it as an integer. E.g., <code>1L</code> is an integer but <code>1</code> is a double.</li>
-<li>logical: Boolean values, <code>TRUE</code> and <code>FALSE</code>.</li>
-<li>complex: complex numbers. E.g., <code>1+3i</code>.</li>
-<li>raw: a type to hold raw bytes.</li>
+<li><code>character</code>: collections of characters. E.g., <code>"a"</code>, <code>"hello world!"</code>.</li>
+<li><code>double</code>: decimal numbers. e.g., <code>1.2</code>, <code>1.0</code>.</li>
+<li><code>integer</code>: positive and negative whole numbers. In R, we must add <code>L</code> to the end of a number to specify it as an integer. E.g., <code>1L</code> is an integer but <code>1</code> is a double.</li>
+<li><code>logical</code>: Boolean values, <code>TRUE</code> and <code>FALSE</code>.</li>
+<li><code>complex</code>: complex numbers. E.g., <code>1+3i</code>.</li>
+<li><code>raw</code>: a type to hold raw bytes.</li>
 </ol>
-<p>Both double and integer values are specific types of numeric values.</p>
+<p>Both <code>double</code> and <code>integer</code> values are specific types of <code>numeric</code> values.</p>
 <p>The <code>typeof</code> function returns the R internal type or storage mode of any object.</p>
-<p>Consider the output of the commands below. What are some of the difference in the output?</p>
+<p>Consider the output of the commands below. How does the output differ?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -588,7 +637,7 @@ attr(,"tsp")
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="dv">1</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "integer"</code></pre>
 </div>
@@ -606,9 +655,9 @@ attr(,"tsp")
 <section id="numeric" class="level4" data-number="1.7.2.1">
 <h4 data-number="1.7.2.1" class="anchored" data-anchor-id="numeric"><span class="header-section-number">1.7.2.1</span> Numeric</h4>
 <p>An object is <code>numeric</code> if it is of type <code>integer</code> or <code>double</code>. In that case, it’s <code>mode</code> is said to be <code>numeric</code>.</p>
-<p>The <code>is.numeric</code> function tests whether an object can be interpreted as numbers. We can use it to determine whether an object is <code>numeric</code>. We do some examples of this in the code chunks run below. Are any of the results surprising?</p>
+<p>The <code>is.numeric</code> function tests whether an object can be interpreted as a set of numbers. In the code below, we use the <code>is.numeric</code> function to query whether certain objects are <code>numeric</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(<span class="st">"hello world!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(<span class="st">"1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
@@ -620,7 +669,7 @@ attr(,"tsp")
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(<span class="dv">1</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -632,7 +681,7 @@ attr(,"tsp")
 </section>
 <section id="na" class="level4" data-number="1.7.2.3">
 <h4 data-number="1.7.2.3" class="anchored" data-anchor-id="na"><span class="header-section-number">1.7.2.3</span> NA</h4>
-<p>A “missing value” occurs when the value of something isn’t known. R uses the special object <code>NA</code> to represent a missing value.</p>
+<p>A “missing value” occurs when the value of an object isn’t known. R uses the special object <code>NA</code> to represent a missing value.</p>
 <p>If we have a missing value, we should represent that value as <code>NA</code>. <code>"NA"</code> is not the same object as <code>NA</code>.</p>
 </section>
 <section id="functions-1" class="level4" data-number="1.7.2.4">
@@ -656,13 +705,17 @@ attr(,"tsp")
 <li>list.</li>
 </ol>
 <p>Vectors, matrices, and arrays are homogeneous objects that can only store a single data type at a time. Data frames and lists can store multiple data types.</p>
-<p>Vectors and lists are considered one-dimensional objects. A list is technically a vector. Vectors of a single type are atomic vectors <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#List-objects">(https://cran.r-project.org/doc/manuals/r-release/R-lang.html#List-objects)</a>. Matrices and data frames are considered two-dimensional objects. Arrays can have 1 or more dimensions.</p>
-<p>The relationship between dimensionality and data type for the basic data structures is summarized in <a href="#tbl-datastructures1">Table&nbsp;<span>1.1</span></a>, which is based on a <a href="https://adv-r.had.co.nz/Data-structures.html#data-structure">table</a> in the first edition of Hadley Wickham’s <em>Advanced R</em> <span class="citation" data-cites="advancedr">(<a href="references.html#ref-advancedr" role="doc-biblioref">Wickham 2019</a>)</span>.</p>
+<p>Vectors and lists are considered one-dimensional objects. A list is technically a vector. Vectors of a single type are atomic vectors <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#List-objects">(https://cran.r-project.org/doc/manuals/r-release/R-lang.html#List-objects)</a>. Matrices and data frames are considered two-dimensional objects. Arrays can have one or more dimensions.</p>
+<p><a href="#tbl-datastructures1" class="quarto-xref">Table&nbsp;<span>1.1</span></a> summarizes the relationship between dimensionality and data type for the basic data structures. It is based on a <a href="http://adv-r.had.co.nz/Data-structures.html">table</a> in the first edition of Hadley Wickham’s <em>Advanced R</em> <span class="citation" data-cites="advancedr">(<a href="references.html#ref-advancedr" role="doc-biblioref">Wickham 2019</a>)</span>.</p>
 <div class="cell">
+<div id="tbl-datastructures1" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-datastructures1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: A table summarizing the relationship between dimensionality and data type homogeneity for the 5 basic data structures.
+</figcaption>
+<div aria-describedby="tbl-datastructures1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-datastructures1" class="anchored">
-<table class="table table-sm table-striped small">
-<caption>Table&nbsp;1.1: A table summarizing the relationship between dimensionality and data type homogeneity for the 5 basic data structures.</caption>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">number of dimensions</th>
@@ -689,6 +742,8 @@ attr(,"tsp")
 </tbody>
 </table>
 </div>
+</div>
+</figure>
 </div>
 </div>
 </section>
@@ -724,20 +779,22 @@ attr(,"tsp")
 </section>
 <section id="the-seq-function" class="level3" data-number="1.8.3">
 <h3 data-number="1.8.3" class="anchored" data-anchor-id="the-seq-function"><span class="header-section-number">1.8.3</span> The <code>seq</code> function</h3>
-<p>The <code>seq</code> (sequence) function is used to create an equidistant series of numeric values. Some examples:</p>
+<p>The <code>seq</code> (sequence) function is used to create an equidistant series of numeric values. We provide some examples of using the <code>seq</code> function below:</p>
 <ul>
 <li><code>seq(1, 10)</code> creates a sequence of numbers from 1 to 10 in increments of 1.</li>
 <li><code>1:10</code> creates a sequence of numbers from 1 to 10 in increments of 1.</li>
 <li><code>seq(1, 20, by = 2)</code> creates a sequence of numbers from 1 to 20 in increments of 2.</li>
-<li><code>seq(10, 20, len = 100)</code> creates a sequence of numbers from 10 to 20 of length 100.</li>
+<li><code>seq(10, 20, len = 10)</code> creates a sequence of numbers from 10 to 20 of length 10.</li>
 </ul>
 <hr>
 </section>
 <section id="hands-on-practice-5" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="hands-on-practice-5">Hands-on Practice</h3>
 <p>Run the commands below in the Console and try to answer the questions below.</p>
-<p>What does the <code>by</code> argument of the <code>seq</code> function control?</p>
-<p>What does the <code>len</code> argument of the <code>seq</code> function control?</p>
+<ol type="1">
+<li>What does the <code>by</code> argument of the <code>seq</code> function control?</li>
+<li>What does the <code>len</code> argument of the <code>seq</code> function control?</li>
+</ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -748,13 +805,13 @@ attr(,"tsp")
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="at">len =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="at">len =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 <section id="the-rep-function" class="level3" data-number="1.8.4">
 <h3 data-number="1.8.4" class="anchored" data-anchor-id="the-rep-function"><span class="header-section-number">1.8.4</span> The <code>rep</code> function</h3>
-<p>The <code>rep</code> (replicate) function can be used to create a vector by replicating values. Some examples:</p>
+<p>The <code>rep</code> (replicate) function can be used to create a vector by replicating values. We provide some examples of using the <code>rep</code> function below:</p>
 <ul>
 <li><code>rep(1:3, times = 3)</code> replicates the sequence <code>1, 2, 3</code> three times in a row.</li>
 <li><code>rep(c("trt1", "trt2", "trt3"), times = 1:3)</code> replicates <code>"trt1"</code> once, <code>"trt2"</code> twice, and <code>"trt3"</code> three times.</li>
@@ -765,8 +822,10 @@ attr(,"tsp")
 <section id="hands-on-practice-6" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="hands-on-practice-6">Hands-on Practice</h3>
 <p>Run the commands below in the Console and try to answer the questions below.</p>
-<p>What does the <code>times</code> argument of the <code>rep</code> function control?</p>
-<p>What does the <code>each</code> argument of the <code>rep</code> function control?</p>
+<ol type="1">
+<li>What does the <code>times</code> argument of the <code>rep</code> function control?</li>
+<li>What does the <code>each</code> argument of the <code>rep</code> function control?</li>
+</ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">times =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -780,7 +839,7 @@ attr(,"tsp")
 </section>
 <section id="combining-vectors" class="level3" data-number="1.8.5">
 <h3 data-number="1.8.5" class="anchored" data-anchor-id="combining-vectors"><span class="header-section-number">1.8.5</span> Combining vectors</h3>
-<p>Multiple vectors can be combined into a new vector object using the <code>c</code> function. E.g., <code>c(v1, v2, v3)</code> will combine vectors <code>v1</code>, <code>v2</code>, and <code>v3</code>.</p>
+<p>Multiple vectors of the same type can be combined into a new vector object using the <code>c</code> function. E.g., <code>c(v1, v2, v3)</code> will combine vectors <code>v1</code>, <code>v2</code>, and <code>v3</code>.</p>
 <hr>
 </section>
 <section id="hands-on-practice-7" class="level3 unnumbered">
@@ -805,7 +864,7 @@ attr(,"tsp")
 </section>
 <section id="categorical-vectors" class="level3" data-number="1.8.6">
 <h3 data-number="1.8.6" class="anchored" data-anchor-id="categorical-vectors"><span class="header-section-number">1.8.6</span> Categorical vectors</h3>
-<p>Categorical data should be stored as a <code>factor</code> in R. Even though our code related to categorical data may work when stored as <code>character</code> or <code>numeric</code> data because a cautious developer planned for that possibility, it is best to use good coding practices that minimize potential issues.</p>
+<p>Categorical data should be stored as a <code>factor</code> in R. Sometimes, we might naively store categorical data as <code>character</code> or <code>numeric</code> objects for simplicity. In that situation, our code might still work because a cautious developer planned for our laziness, but it is best to use good coding practices that minimize potential issues. For that reason, represent categorical data as a <code>factor</code>.</p>
 <section id="creating-a-factor-object" class="level4" data-number="1.8.6.1">
 <h4 data-number="1.8.6.1" class="anchored" data-anchor-id="creating-a-factor-object"><span class="header-section-number">1.8.6.1</span> Creating a <code>factor</code> object</h4>
 <p>The <code>factor</code> function takes a vector of values that can be coerced to type <code>character</code> and converts them to an object of class <code>factor</code>. In the code chunks below, we create two <code>factor</code> objects from vectors.</p>
@@ -827,7 +886,7 @@ Levels: 7 a blue FALSE</code></pre>
 </div>
 <p>A printed <code>factor</code> object lists the <code>Levels</code> (i.e., unique categories) of the object.</p>
 <p>The <code>is.factor</code> function can be used to determine whether an object is a <code>factor</code>.</p>
-<p><code>factor</code> objects aren’t technically vectors (e.g., running <code>is.factor(f2)</code> based on the above code will return <code>FALSE</code>) though they essentially behave like vectors, which is why they are included here.</p>
+<p><code>factor</code> objects aren’t technically vectors (e.g., running <code>is.factor(f2)</code> based on the above code will return <code>FALSE</code>) though they essentially behave like vectors, which is why discuss them here.</p>
 <hr>
 </section>
 <section id="hands-on-practice-8" class="level4 unnumbered">
@@ -844,8 +903,8 @@ Levels: 7 a blue FALSE</code></pre>
 </section>
 <section id="creating-an-ordered-factor-object" class="level4" data-number="1.8.6.2">
 <h4 data-number="1.8.6.2" class="anchored" data-anchor-id="creating-an-ordered-factor-object"><span class="header-section-number">1.8.6.2</span> Creating an ordered <code>factor</code> object</h4>
-<p>Let’s create an ordered <code>factor</code> object.</p>
-<p>Suppose we have categorical data with the categories <code>small</code>, <code>medium</code>, and <code>large</code>. We create a <code>size</code> vector with hypothetical data below.</p>
+<p>Categorical data sometimes has a natural ordering that we want to acknowledge in our analysis. E.g., we may have categorical data with the levels <code>small</code>, <code>medium</code>, and <code>large</code>. The levels have a natural ordering (either smallest to largest or vice versa, depending on the context).</p>
+<p>Suppose we create the <code>size</code> vector with <code>character</code> values <code>"small"</code>, <code>"medium"</code>, and <code>"large"</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"small"</span>, <span class="st">"medium"</span>, <span class="st">"small"</span>, <span class="st">"large"</span>, <span class="st">"medium"</span>, <span class="st">"medium"</span>, <span class="st">"large"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -949,9 +1008,11 @@ Levels: small &lt; medium &lt; large</code></pre>
 <section id="hands-on-practice-10" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="hands-on-practice-10">Hands-on Practice</h4>
 <p>Run the following commands below in the Console.</p>
-<p>What action is each command performing?</p>
-<p>What role does <code>&amp;</code> serve in a sequence of logical values?</p>
-<p>Similarly, what roles do <code>|</code> and <code>!</code> serve in a sequence of logical values?</p>
+<ol type="1">
+<li>What role does <code>&amp;</code> serve in a sequence of logical values?</li>
+<li>What role does <code>|</code> serve in a sequence of logical values?</li>
+<li>What role does <code>!</code> serve in a sequence of logical values?</li>
+</ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">&amp;</span> <span class="cn">TRUE</span> <span class="sc">&amp;</span> <span class="cn">TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1017,12 +1078,16 @@ Levels: small &lt; medium &lt; large</code></pre>
 <p>We provide a brief overview of R functions we often use in our data analysis.</p>
 <section id="general-functions" class="level3" data-number="1.9.1">
 <h3 data-number="1.9.1" class="anchored" data-anchor-id="general-functions"><span class="header-section-number">1.9.1</span> General functions</h3>
-<p>For brevity, <a href="#tbl-generalfunctions">Table&nbsp;<span>1.2</span></a> provides a table of functions commonly useful for basic data analysis along with a description of their purpose.</p>
+<p>For brevity, <a href="#tbl-generalfunctions" class="quarto-xref">Table&nbsp;<span>1.2</span></a> provides a table of functions commonly useful for basic data analysis along with a description of their purpose.</p>
 <div class="cell">
+<div id="tbl-generalfunctions" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-generalfunctions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.2: Functions frequently useful for data analysis.
+</figcaption>
+<div aria-describedby="tbl-generalfunctions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-generalfunctions" class="anchored">
-<table class="table table-sm table-striped small">
-<caption>Table&nbsp;1.2: Functions frequently useful for data analysis.</caption>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 7%">
 <col style="width: 92%">
@@ -1074,6 +1139,8 @@ Levels: small &lt; medium &lt; large</code></pre>
 </table>
 </div>
 </div>
+</figure>
+</div>
 </div>
 <hr>
 </section>
@@ -1119,7 +1186,7 @@ Levels: small &lt; medium &lt; large</code></pre>
 <ul>
 <li><code>p[dist](q, ...)</code>: returns the cdf of <span class="math inline">\(X\)</span> evaluated at <code>q</code>, i.e., <span class="math inline">\(p=P(X\leq q)\)</span>.</li>
 <li><code>q[dist](p, ...)</code>: returns the inverse cdf (or quantile function) of <span class="math inline">\(X\)</span> evaluated at <span class="math inline">\(p\)</span>, i.e., <span class="math inline">\(q = \inf\{x: P(X\leq x) \geq p\}\)</span>.</li>
-<li><code>d[dist](x, ...)</code>: returns the mass or density of <span class="math inline">\(X\)</span> evaluated at <span class="math inline">\(x\)</span> (depending on whether it’s discrete or continuous).</li>
+<li><code>d[dist](x, ...)</code>: returns the mass or density of <span class="math inline">\(X\)</span> evaluated at <span class="math inline">\(x\)</span> (depending on whether <span class="math inline">\(X\)</span> is a discrete or continuous random variable).</li>
 <li><code>r[dist](n, ...)</code>: returns an independent and identically distributed random sample of size <code>n</code> having the same distribution as <span class="math inline">\(X\)</span>.</li>
 <li>The <code>...</code> indicates that additional arguments describing the parameters of the distribution may be required.</li>
 </ul>
@@ -1146,21 +1213,20 @@ Levels: small &lt; medium &lt; large</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dexp</span>(<span class="dv">1</span>, <span class="at">rate =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>rchisq(100, df = 5)</code> draws a sample of 100 observations from a chi-squared random variable with 5 degrees of freedom.</p>
+<p><code>rchisq(10, df = 5)</code> draws a sample of 10 observations from a chi-squared random variable with 5 degrees of freedom.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rchisq</span>(<span class="dv">100</span>, <span class="at">df =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rchisq</span>(<span class="dv">10</span>, <span class="at">df =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 </section>
 <section id="data-frames" class="level2" data-number="1.10">
 <h2 data-number="1.10" class="anchored" data-anchor-id="data-frames"><span class="header-section-number">1.10</span> Data Frames</h2>
-<p>Data frames are a <em>fundamental</em> data structure used by most of R’s modeling software. Data frames are two-dimensional data objects where each column of a data frame is a vector (or variable) of possibly different data types. The class of a <strong>base</strong> R data frame is <code>data.frame</code>, which is technically a specially structured <code>list</code>.</p>
+<p>Data frames are a <em>fundamental</em> data structure used by most of R’s modeling functions. Data frames are two-dimensional data objects where each column of a data frame is a vector (or variable) of possibly different data types. The class of a <strong>base</strong> R data frame is <code>data.frame</code>, which is technically a specially structured <code>list</code>.</p>
 <p>In general, we prefer our data to be <em>tidy</em>, which means that each variable forms a column of the data frame, and each observation forms a row.</p>
 <section id="direct-creation-1" class="level3" data-number="1.10.1">
 <h3 data-number="1.10.1" class="anchored" data-anchor-id="direct-creation-1"><span class="header-section-number">1.10.1</span> Direct creation</h3>
-<p>Data frames are directly created by passing vectors into the <code>data.frame</code> function.</p>
-<p>The names of the columns in the data frame are the names of the vectors we give the <code>data.frame</code> function. Consider the following simple example.</p>
+<p>Data frames are directly created by passing vectors into the <code>data.frame</code> function. The names of the columns in the data frame are the names of the vectors we give the <code>data.frame</code> function. Consider the following simple example.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simple data frame creation</span></span>
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
@@ -1205,7 +1271,7 @@ Levels: small &lt; medium &lt; large</code></pre>
 </section>
 <section id="importing-data" class="level3" data-number="1.10.2">
 <h3 data-number="1.10.2" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">1.10.2</span> Importing Data</h3>
-<p>Direct creation of data frames is only appropriate for very small data sets. In practice, we likely want to import data from a file into R.</p>
+<p>Direct creation of data frames is only appropriate for very small data sets. In practice, we will import data from a file into R.</p>
 <p>The <code>read.table</code> function imports data in table format from file into R as a data frame.</p>
 <p>The basic usage of this function is: <code>read.table(file, header = TRUE, sep = ",")</code>.</p>
 <ul>
@@ -1215,7 +1281,7 @@ Levels: small &lt; medium &lt; large</code></pre>
 </ul></li>
 <li><code>header</code> specifies whether the data file has a header (variable labels for each column of data in the first row of the data file).
 <ul>
-<li>If we don’t specify this option in R or use <code>header = FALSE</code>, then R will assume the file doesn’t have any headings.</li>
+<li>If we don’t specify this option in R or specify <code>header = FALSE</code>, then R will assume the file doesn’t have any headings.</li>
 <li><code>header = TRUE</code> tells R to read in the data as a data frame with column names taken from the first row of the data file.</li>
 </ul></li>
 <li><code>sep</code> specifies the delimiter separating elements in the file.
@@ -1251,8 +1317,8 @@ Levels: small &lt; medium &lt; large</code></pre>
  $ urban  : num  48.6 44.5 80.1 39.5 89.7 ...</code></pre>
 </div>
 </div>
-<p>Running <code>str</code> on the data frame gives us a general picture of the values stored in the data frame.</p>
-<p>The <code>read_table</code> function in the <strong>readr</strong> package <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham, Hester, and Bryan 2023</a>)</span> is arguably a better way of importing tabular data from file and uses similar syntax. To import data contained in Microsoft Excel files, we can use functions available in the <strong>readxl</strong> package <span class="citation" data-cites="R-readxl">(<a href="references.html#ref-R-readxl" role="doc-biblioref">Wickham and Bryan 2023</a>)</span>.</p>
+<p>Running <code>str</code> on the data frame gives us a general picture of the values stored in the data frame, the variable names, and the default variable types.</p>
+<p>The <code>read_table</code> function in the <strong>readr</strong> package <span class="citation" data-cites="R-readr">(<a href="references.html#ref-R-readr" role="doc-biblioref">Wickham, Hester, and Bryan 2024</a>)</span> is arguably a better way of importing tabular data from file and uses similar syntax. We can import data contained in a Microsoft Excel file using functions available in the <strong>readxl</strong> package <span class="citation" data-cites="R-readxl">(<a href="references.html#ref-R-readxl" role="doc-biblioref">Wickham and Bryan 2023</a>)</span>.</p>
 <hr>
 </section>
 <section id="extracting-parts-of-a-data-frame" class="level3" data-number="1.10.3">
@@ -1291,7 +1357,7 @@ Levels: small &lt; medium &lt; large</code></pre>
  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
 </div>
 </div>
-<p>We should do some data cleaning on this data set (see <a href="data-exploration.html"><span>Chapter&nbsp;2</span></a>), but we will refrain from this for simplicity.</p>
+<p>We should do some data cleaning on this data set (see <a href="data-exploration.html" class="quarto-xref"><span>Chapter 2</span></a>), but we will refrain from this for simplicity.</p>
 <hr>
 <section id="sec-direct-extraction" class="level4" data-number="1.10.3.1">
 <h4 data-number="1.10.3.1" class="anchored" data-anchor-id="sec-direct-extraction"><span class="header-section-number">1.10.3.1</span> Direct extraction</h4>
@@ -1315,131 +1381,52 @@ Levels: small &lt; medium &lt; large</code></pre>
 </div>
 </div>
 <p>The syntax above is a special case of extracting information from a data frame using <code>df[rows, columns]</code> style syntax, where <code>rows</code> and <code>columns</code> indicate the desired rows or columns to extract. If either the <code>rows</code> or <code>columns</code> are left blank, then all <code>rows</code> or <code>columns</code>, respectively, are extracted.</p>
-<p>The <code>df[rows, columns]</code> syntax has confusing behavior when you only specify a single column. Specifically, the <code>[</code> operator has a <code>drop</code> argument that is set to <code>TRUE</code> by default. The <code>drop</code> argument controls whether the result is coerced to the lowest possible dimension. If we we only specify a single column of our data frame, then R will coerce the result to a vector by default.</p>
-<p>To get around the default <code>drop</code> behavior we can change the <code>drop</code> argument to <code>FALSE</code>, as shown below.</p>
+<p>The <code>df[rows, columns]</code> syntax has confusing behavior when we only specify a single column. Specifically, the <code>[</code> operator has a <code>drop</code> argument that is set to <code>TRUE</code> by default. The <code>drop</code> argument controls whether the result is coerced to the lowest possible dimension. If we we only extract a single column of our data frame using <code>[</code>, then R will coerce the result to a vector by default.</p>
+<p>To get around the default <code>drop</code> behavior we can change the <code>drop</code> argument to <code>FALSE</code>, as shown below. We only retain the first 5 rows for brevity.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract mpg variable, keep as data frame</span></span>
-<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>mtcars[,<span class="st">"mpg"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>mtcars[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="st">"mpg"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     mpg
-Mazda RX4           21.0
-Mazda RX4 Wag       21.0
-Datsun 710          22.8
-Hornet 4 Drive      21.4
-Hornet Sportabout   18.7
-Valiant             18.1
-Duster 360          14.3
-Merc 240D           24.4
-Merc 230            22.8
-Merc 280            19.2
-Merc 280C           17.8
-Merc 450SE          16.4
-Merc 450SL          17.3
-Merc 450SLC         15.2
-Cadillac Fleetwood  10.4
-Lincoln Continental 10.4
-Chrysler Imperial   14.7
-Fiat 128            32.4
-Honda Civic         30.4
-Toyota Corolla      33.9
-Toyota Corona       21.5
-Dodge Challenger    15.5
-AMC Javelin         15.2
-Camaro Z28          13.3
-Pontiac Firebird    19.2
-Fiat X1-9           27.3
-Porsche 914-2       26.0
-Lotus Europa        30.4
-Ford Pantera L      15.8
-Ferrari Dino        19.7
-Maserati Bora       15.0
-Volvo 142E          21.4</code></pre>
+<pre><code>                   mpg
+Mazda RX4         21.0
+Mazda RX4 Wag     21.0
+Datsun 710        22.8
+Hornet 4 Drive    21.4
+Hornet Sportabout 18.7</code></pre>
 </div>
 </div>
-<p>An easier approach to avoiding the default <code>drop</code> behavior is to use the slightly different syntax <code>df["var"]</code> (notice we no longer have the comma to separate rows and columns). We use this syntax below for the <code>mpg</code> variable in <code>mtcars</code>.</p>
+<p>An easier approach to avoiding the default <code>drop</code> behavior is to use the slightly different syntax <code>df["var"]</code> (notice we no longer have the comma to separate rows and columns). We use this syntax below for the <code>mpg</code> variable in <code>mtcars</code>. For brevity, we use the <code>print</code> method for a <code>data.frame</code> object and specify the <code>max</code> argument to limit the number of data frame entries we print.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract mpg variable, keep as data frame</span></span>
-<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>mtcars[<span class="st">"mpg"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract mpg variable, keep as data frame, show only 5 rows</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mtcars[<span class="st">"mpg"</span>], <span class="at">max =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     mpg
-Mazda RX4           21.0
-Mazda RX4 Wag       21.0
-Datsun 710          22.8
-Hornet 4 Drive      21.4
-Hornet Sportabout   18.7
-Valiant             18.1
-Duster 360          14.3
-Merc 240D           24.4
-Merc 230            22.8
-Merc 280            19.2
-Merc 280C           17.8
-Merc 450SE          16.4
-Merc 450SL          17.3
-Merc 450SLC         15.2
-Cadillac Fleetwood  10.4
-Lincoln Continental 10.4
-Chrysler Imperial   14.7
-Fiat 128            32.4
-Honda Civic         30.4
-Toyota Corolla      33.9
-Toyota Corona       21.5
-Dodge Challenger    15.5
-AMC Javelin         15.2
-Camaro Z28          13.3
-Pontiac Firebird    19.2
-Fiat X1-9           27.3
-Porsche 914-2       26.0
-Lotus Europa        30.4
-Ford Pantera L      15.8
-Ferrari Dino        19.7
-Maserati Bora       15.0
-Volvo 142E          21.4</code></pre>
+<pre><code>                   mpg
+Mazda RX4         21.0
+Mazda RX4 Wag     21.0
+Datsun 710        22.8
+Hornet 4 Drive    21.4
+Hornet Sportabout 18.7
+ [ reached 'max' / getOption("max.print") -- omitted 27 rows ]</code></pre>
 </div>
 </div>
 <p>To select multiple variables in a data frame, we can provide a character vector with multiple variable names between <code>[]</code>. In the example below, we extract both the <code>mpg</code> and <code>cyl</code> variables from <code>mtcars</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>mtcars[<span class="fu">c</span>(<span class="st">"mpg"</span>, <span class="st">"cyl"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mtcars[<span class="fu">c</span>(<span class="st">"mpg"</span>, <span class="st">"cyl"</span>)], <span class="at">max =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     mpg cyl
-Mazda RX4           21.0   6
-Mazda RX4 Wag       21.0   6
-Datsun 710          22.8   4
-Hornet 4 Drive      21.4   6
-Hornet Sportabout   18.7   8
-Valiant             18.1   6
-Duster 360          14.3   8
-Merc 240D           24.4   4
-Merc 230            22.8   4
-Merc 280            19.2   6
-Merc 280C           17.8   6
-Merc 450SE          16.4   8
-Merc 450SL          17.3   8
-Merc 450SLC         15.2   8
-Cadillac Fleetwood  10.4   8
-Lincoln Continental 10.4   8
-Chrysler Imperial   14.7   8
-Fiat 128            32.4   4
-Honda Civic         30.4   4
-Toyota Corolla      33.9   4
-Toyota Corona       21.5   4
-Dodge Challenger    15.5   8
-AMC Javelin         15.2   8
-Camaro Z28          13.3   8
-Pontiac Firebird    19.2   8
-Fiat X1-9           27.3   4
-Porsche 914-2       26.0   4
-Lotus Europa        30.4   4
-Ford Pantera L      15.8   8
-Ferrari Dino        19.7   6
-Maserati Bora       15.0   8
-Volvo 142E          21.4   4</code></pre>
+<pre><code>                   mpg cyl
+Mazda RX4         21.0   6
+Mazda RX4 Wag     21.0   6
+Datsun 710        22.8   4
+Hornet 4 Drive    21.4   6
+Hornet Sportabout 18.7   8
+ [ reached 'max' / getOption("max.print") -- omitted 27 rows ]</code></pre>
 </div>
 </div>
-<p>We can also use numeric indices to directly indicate the rows or columns of the data frame that we would like to extract. We can also combine this syntax sylte with the syntax styles previously discussed.</p>
+<p>We can also use numeric indices to directly indicate the rows or columns of the data frame that we would like to extract. We can also combine this syntax style with the syntax styles previously discussed.</p>
 <ul>
 <li><code>df[1,]</code> accesses the first row of <code>df</code>.</li>
 <li><code>df[1:2,]</code> accesses the first two rows of <code>df</code>.</li>
-<li><code>df[,2]</code> accesses the second column of <code>df</code>.</li>
+<li><code>df[, 2]</code> accesses the second column of <code>df</code>.</li>
 <li><code>df[1:2, 2:3]</code> accesses the information in rows 1 and 2 of columns 2 and 3 of <code>df</code>.</li>
 <li><code>df[c(1, 3, 5), c("var1", "var2")]</code> accesses the information in rows 1, 3, and 5 of the <code>var1</code> and <code>var2</code> variables.</li>
 </ul>
@@ -1489,12 +1476,11 @@ Ford Pantera L 15.8   8  351 264 4.22 3.17 14.5  0  1    5    4
 Maserati Bora  15.0   8  301 335 3.54 3.57 14.6  0  1    5    8</code></pre>
 </div>
 </div>
-<p>We can make the logical expression more complicated and also select specific variables using the syntax discussed in <a href="#sec-direct-extraction"><span>Section&nbsp;1.10.3.1</span></a>. Below, we extract the rows of <code>mtcars</code> with 8 cylinders and <code>mpg &gt; 17</code>, while extracting only the <code>mpg</code>, <code>cyl</code>, <code>disp</code>, and <code>hp</code> variables.</p>
+<p>We can make the logical expression more complicated and also select specific variables using the syntax discussed in <a href="#sec-direct-extraction" class="quarto-xref"><span>Section 1.10.3.1</span></a>. Below, we extract the rows of <code>mtcars</code> with 8 cylinders and <code>mpg &gt; 17</code>, while extracting only the <code>mpg</code>, <code>cyl</code>, <code>disp</code>, and <code>hp</code> variables.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="co"># return rows with `cyl == 8` and `mpg &gt; 17`</span></span>
 <span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a><span class="co"># return columns mpg, cyl, disp, hp</span></span>
-<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a>mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">8</span> <span class="sc">&amp;</span> mtcars<span class="sc">$</span>mpg <span class="sc">&gt;</span> <span class="dv">17</span>, </span>
-<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"mpg"</span>, <span class="st">"cyl"</span>, <span class="st">"disp"</span>, <span class="st">"hp"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a>mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">8</span> <span class="sc">&amp;</span> mtcars<span class="sc">$</span>mpg <span class="sc">&gt;</span> <span class="dv">17</span>, <span class="fu">c</span>(<span class="st">"mpg"</span>, <span class="st">"cyl"</span>, <span class="st">"disp"</span>, <span class="st">"hp"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   mpg cyl  disp  hp
 Hornet Sportabout 18.7   8 360.0 175
@@ -1505,8 +1491,8 @@ Pontiac Firebird  19.2   8 400.0 175</code></pre>
 </section>
 <section id="extraction-using-the-subset-function" class="level4" data-number="1.10.3.3">
 <h4 data-number="1.10.3.3" class="anchored" data-anchor-id="extraction-using-the-subset-function"><span class="header-section-number">1.10.3.3</span> Extraction using the <code>subset</code> function</h4>
-<p>The techniques for extracting parts of a data frame discussed in Sections -<a href="#sec-direct-extraction"><span>Section&nbsp;1.10.3.1</span></a> and -<a href="#sec-extraction-logical"><span>Section&nbsp;1.10.3.2</span></a> are the fundamental approaches for selecting desired parts of a data frame. However, these techniques can seem complex and difficult to interpret, particularly when looking back at code we have written in the past. A sleeker approach to extracting part of a data frame is to use the <code>subset</code> function.</p>
-<p>The <code>subset</code> function returns the parts of a data frame that meets the specified conditions. The basic usage of this function is: <code>subset(x, subset, select, drop = FALSE)</code></p>
+<p>The techniques for extracting parts of a data frame discussed in -<a href="#sec-direct-extraction" class="quarto-xref"><span>Section 1.10.3.1</span></a> and -<a href="#sec-extraction-logical" class="quarto-xref"><span>Section 1.10.3.2</span></a> are the fundamental approaches for selecting desired parts of a data frame. However, these techniques can seem complex and difficult to interpret, particularly when looking back at code we have written in the past. A sleeker approach to extracting part of a data frame is to use the <code>subset</code> function.</p>
+<p>The <code>subset</code> function returns the elements of a data frame that meets the specified conditions. The basic usage of this function is: <code>subset(x, subset, select, drop = FALSE)</code></p>
 <ul>
 <li><code>x</code> is the object we want to subset.
 <ul>
@@ -1642,13 +1628,17 @@ Hornet Sportabout 18.7 12.70053</code></pre>
 </section>
 <section id="code-was-working-but-isnt-anymore" class="level3" data-number="1.12.4">
 <h3 data-number="1.12.4" class="anchored" data-anchor-id="code-was-working-but-isnt-anymore"><span class="header-section-number">1.12.4</span> Code was working, but isn’t anymore</h3>
-<p>We may have run code out of order. It may work if we run it in order. Or we may have run something in the Console that we don’t have in our Script file. It is good practice to clear our environment (the objects R has loaded in memory) using the broom icon in the Environment pane and rerunning our entire Script file to ensure it behaves as expected. The broom icon is shown in <a href="#fig-broom-button">Figure&nbsp;<span>1.4</span></a>.</p>
+<p>We may have run code out of order. It may work if we run it in order. Or we may have run something in the Console that we don’t have in our Script file. It is good practice to clear our environment (the objects R has loaded in memory) using the broom icon in the Environment pane and rerunning our entire Script file to ensure it behaves as expected. The broom icon is shown in <a href="#fig-broom-button" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-broom-button" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="pictures/broom_button.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1.4: The broom icon can be clicked to clear the objects loaded in the Environment.</figcaption>
+<div id="fig-broom-button" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-broom-button-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/broom_button.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-broom-button-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: The broom icon can be clicked to clear the objects loaded in the Environment.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1657,14 +1647,14 @@ Hornet Sportabout 18.7 12.70053</code></pre>
 </section>
 <section id="ecosystem-debate" class="level2" data-number="1.13">
 <h2 data-number="1.13" class="anchored" data-anchor-id="ecosystem-debate"><span class="header-section-number">1.13</span> Ecosystem debate</h2>
-<p>In general, we favor performing analysis using <strong>base</strong> R functionality, which means we try to perform our analysis with features R offers by default. Some of the benefits of doing this include making our code easier to maintain (<strong>base</strong> R features change very slowly and are nearly always backwards compatible) and often result in faster code. However, more complicated aspects of regression analysis are not easy to perform using <strong>base</strong> R, so we will introduce new packages and functions as we progress.</p>
+<p>In general, we favor performing analysis using <strong>base</strong> R functionality, which means we try to perform our analysis with features R offers by default. <strong>Base</strong> R code is easier to maintain since <strong>base</strong> R features change very slowly and are nearly always backwards compatible. Additionally, <strong>base</strong> R functions are often faster than alternatives. However, more complicated aspects of regression analysis are not easy to perform using <strong>base</strong> R, so we will introduce new packages and functions as we progress.</p>
 <p>Many readers may have previous experience working with the <strong>tidyverse</strong> (<a href="https://www.tidyverse.org" class="uri">https://www.tidyverse.org</a>) and wonder how frequently we use <strong>tidyverse</strong> functionality. The <strong>tidyverse</strong> offers a unified framework for data manipulation and visualization that tends to be more consistent than <strong>base</strong> R. However, there are many situations where a <strong>base</strong> R solution is more straightforward than a <strong>tidyverse</strong> solution, not to mention the fact that there are many aspects of R programming (e.g., S3 and S4 objects, method dispatch) that require knowledge of <strong>base</strong> R features. Because the R universe is vast and there are many competing coding styles, we will prioritize analysis approaches using <strong>base</strong> R, which gives users a stronger programming foundation. However, we will use parts of the <strong>tidyverse</strong> when it greatly simplifies analysis, data manipulation, or visualization because it provides an extremely useful feature set.</p>
 </section>
 <section id="going-deeper" class="level2" data-number="1.14">
 <h2 data-number="1.14" class="anchored" data-anchor-id="going-deeper"><span class="header-section-number">1.14</span> Going deeper</h2>
 <section id="sec-comparing-assgn-op" class="level3" data-number="1.14.1">
 <h3 data-number="1.14.1" class="anchored" data-anchor-id="sec-comparing-assgn-op"><span class="header-section-number">1.14.1</span> Comparing assignment operators</h3>
-<p>As previously mentioned in Section <a href="#sec-assignment"><span>Section&nbsp;1.3</span></a>, both <code>&lt;-</code> and <code>=</code> can mostly be used interchangeably for assignment. But there are times when using <code>=</code> for assignment can be problematic. Consider the examples below where we want to use <code>system.time</code> to time how long it takes to draw 100 values from a standard normal distribution and assign it the name <code>result</code>.</p>
+<p>As previously mentioned in Section <a href="#sec-assignment" class="quarto-xref"><span>Section 1.3</span></a>, both <code>&lt;-</code> and <code>=</code> can mostly be used interchangeably for assignment. But there are times when using <code>=</code> for assignment can be problematic. Consider the examples below where we want to use <code>system.time</code> to time how long it takes to draw 100 values from a standard normal distribution and assign it the name <code>result</code>.</p>
 <p>This code works:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb136"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(result <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1684,45 +1674,45 @@ Hornet Sportabout 18.7 12.70053</code></pre>
 <p>Thus, it is best to use <code>&lt;-</code> for assigning a name to an object and reserving <code>=</code> for specifying function arguments.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-R-api2lm" class="csl-entry" role="listitem">
-French, Joshua P. 2023. <em>Api2lm: Functions and Data Sets for the Book "a Progressive Introduction to Linear Models"</em>.
+French, Joshua P. 2023. <em>Api2lm: Functions and Data Sets for the Book "a Progressive Introduction to Linear Models"</em>. <a href="https://CRAN.R-project.org/package=api2lm">https://CRAN.R-project.org/package=api2lm</a>.
 </div>
 <div id="ref-R-tibble" class="csl-entry" role="listitem">
-Müller, Kirill, and Hadley Wickham. 2023. <em>Tibble: Simple Data Frames</em>. <a href="https://CRAN.R-project.org/package=tibble">https://CRAN.R-project.org/package=tibble</a>.
+Müller, Kirill, and Hadley Wickham. 2023. <em>Tibble: Simple Data Frames</em>. <a href="https://tibble.tidyverse.org/">https://tibble.tidyverse.org/</a>.
 </div>
 <div id="ref-R-base" class="csl-entry" role="listitem">
-R Core Team. 2023. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
 <div id="ref-advancedr" class="csl-entry" role="listitem">
 Wickham, Hadley. 2019. <em>Advanced <span>R</span></em>. CRC press. <a href="http://adv-r.had.co.nz/">http://adv-r.had.co.nz/</a>.
 </div>
-<div id="ref-R-stringr" class="csl-entry" role="listitem">
-———. 2022. <em>Stringr: Simple, Consistent Wrappers for Common String Operations</em>. <a href="https://CRAN.R-project.org/package=stringr">https://CRAN.R-project.org/package=stringr</a>.
-</div>
 <div id="ref-R-forcats" class="csl-entry" role="listitem">
-———. 2023a. <em>Forcats: Tools for Working with Categorical Variables (Factors)</em>. <a href="https://CRAN.R-project.org/package=forcats">https://CRAN.R-project.org/package=forcats</a>.
+———. 2023a. <em>Forcats: Tools for Working with Categorical Variables (Factors)</em>. <a href="https://forcats.tidyverse.org/">https://forcats.tidyverse.org/</a>.
+</div>
+<div id="ref-R-stringr" class="csl-entry" role="listitem">
+———. 2023b. <em>Stringr: Simple, Consistent Wrappers for Common String Operations</em>. <a href="https://stringr.tidyverse.org">https://stringr.tidyverse.org</a>.
 </div>
 <div id="ref-R-tidyverse" class="csl-entry" role="listitem">
-———. 2023b. <em>Tidyverse: Easily Install and Load the Tidyverse</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+———. 2023c. <em>Tidyverse: Easily Install and Load the Tidyverse</em>. <a href="https://tidyverse.tidyverse.org">https://tidyverse.tidyverse.org</a>.
 </div>
 <div id="ref-R-readxl" class="csl-entry" role="listitem">
-Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel Files</em>. <a href="https://CRAN.R-project.org/package=readxl">https://CRAN.R-project.org/package=readxl</a>.
+Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel Files</em>. <a href="https://readxl.tidyverse.org">https://readxl.tidyverse.org</a>.
 </div>
 <div id="ref-R-ggplot2" class="csl-entry" role="listitem">
-Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, and Dewey Dunnington. 2023. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>.
+Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey Dunnington, and Teun van den Brand. 2024. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
 </div>
 <div id="ref-R-dplyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>.
+Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
 </div>
 <div id="ref-R-purrr" class="csl-entry" role="listitem">
-Wickham, Hadley, and Lionel Henry. 2023. <em>Purrr: Functional Programming Tools</em>. <a href="https://CRAN.R-project.org/package=purrr">https://CRAN.R-project.org/package=purrr</a>.
+Wickham, Hadley, and Lionel Henry. 2023. <em>Purrr: Functional Programming Tools</em>. <a href="https://purrr.tidyverse.org/">https://purrr.tidyverse.org/</a>.
 </div>
 <div id="ref-R-readr" class="csl-entry" role="listitem">
-Wickham, Hadley, Jim Hester, and Jennifer Bryan. 2023. <em>Readr: Read Rectangular Text Data</em>. <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>.
+Wickham, Hadley, Jim Hester, and Jennifer Bryan. 2024. <em>Readr: Read Rectangular Text Data</em>. <a href="https://readr.tidyverse.org">https://readr.tidyverse.org</a>.
 </div>
 <div id="ref-R-tidyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2023. <em>Tidyr: Tidy Messy Data</em>. <a href="https://CRAN.R-project.org/package=tidyr">https://CRAN.R-project.org/package=tidyr</a>.
+Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. <em>Tidyr: Tidy Messy Data</em>. <a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a>.
 </div>
 </div>
 </section>
@@ -1764,18 +1754,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1807,11 +1786,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1821,8 +1839,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1834,7 +1861,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1878,6 +2028,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1903,6 +2054,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1964,17 +2141,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link">
+      <a href="./index.html" class="pagination-link" aria-label="Preliminaries">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preliminaries</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./data-exploration.html" class="pagination-link">
+      <a href="./data-exploration.html" class="pagination-link" aria-label="Data cleaning and exploration">
         <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data cleaning and exploration</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 

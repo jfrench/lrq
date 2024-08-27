@@ -6,7 +6,7 @@ bibliography: [book.bib, packages.bib]
 
 ## Background {-}
 
-I designed this book to progressively introduce you to the analysis of data using linear models. My goal is to provide you with the skills needed to perform a linear regression analysis sooner rather than later. Most of the detailed derivations have been placed in **Going Deeper** sections or in their own chapter, which can be skipped over to more quickly progress through the material if you do not want to focus as much on theory.
+I designed this book to progressively introduce you to the analysis of data using linear models. My goal is to provide you with the skills needed to perform a linear regression analysis sooner rather than later. Most of the detailed derivations have been placed in **Going Deeper** sections or in their own chapter, which can be skipped over to more quickly progress through the material at the expense of less exposure to theory.
 
 ## Acknowledgments {-}
 
@@ -18,6 +18,8 @@ We will also make use of the following packages:
 
 - **api2lm** [@R-api2lm].
 - **dplyr** [@R-dplyr].
+- **ggplot2** [@R-ggplot2]
+- **plotly** [@R-plotly]
 - **tidyverse** [@R-tidyverse].
 
 ```{r}
