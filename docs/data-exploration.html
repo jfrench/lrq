@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.361">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>A Progressive Introduction to Linear Models - 2&nbsp; Data cleaning and exploration</title>
+<title>2&nbsp; Data cleaning and exploration – A Progressive Introduction to Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -47,7 +47,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -56,6 +62,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -72,13 +79,13 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-exploration.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data cleaning and exploration</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-exploration.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data cleaning and exploration</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -87,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">A Progressive Introduction to Linear Models</a> 
@@ -127,9 +134,9 @@ ul.task-list li input[type="checkbox"] {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
@@ -150,7 +157,9 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
+
 </header>
+
 
 <!-- You should explore every data set numerically and visually prior to modeling it. The data exploration process will aid you in finding errors in your data, locating missing values, identifying outliers and unusual observations, finding patterns in your data, deciding on a modeling approach, etc. -->
 <!-- In order to properly explore the data, it is likely that you will need to prepare the data. Many data sets are initially poorly structured, have variables stored as an inappropriate data type, have poor variable names, etc. The process of preparing the data into a friendly format is known as "cleaning". -->
@@ -184,7 +193,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- * `Flipper Length (mm)`: a `numeric` variable indicating the penguin's flipper length in millimeters. -->
 <!-- * `Body Mass (g)`: a `numeric` variable indicating the penguin's body mass in grams. -->
 <!-- * `Sex`: a `character` variable indicating the penguin's sex (`FEMALE`, `MALE`) -->
-
 <!-- * `Delta 15 N (o/oo)`: a `numeric` variable indicating the ratio of stable isotopes 15N:14N. -->
 <!-- * `Delta 13 C (o/oo)`: a `numeric` variable indicating the ratio of stable isotopes 15C:12C. -->
 <!-- * `Comments`: a `character` variable providing additional information about the observation. -->
@@ -222,7 +230,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- # look at new column names -->
 <!-- names(penguins_clean) -->
 <!-- ``` -->
-
 <!-- There are still some issues with `penguins_clean`. The most notable issues are that the `species`, `island`, and `sex` variables are categorical, but are represented as `character` vectors. These variables should each be converted to a `factor`. We use the `transform` function to convert the each variable to a `factor`. Notice that we must replace the original `penguins_clean` object with the transformed object using the assignment operator. We then run the `str` function to confirm the structure change occurred. -->
 <!-- ```{r} -->
 <!-- # convert sex variable to factor, replace original object -->
@@ -249,7 +256,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- Our initial data cleaning process is now completed. As we explore our data further, it may become clear that additional data cleaning is needed. -->
 <!-- ## Numerical summarization of data -->
 <!-- Numerical exploration of a data set generally consists of computing various relevant statistics for each of the variables in a data set in order to summarize the data. A relevant statistic will depend on the type of data being analyzed. -->
-
 <!-- Table \@ref(tab:numsum-table) provides an overview of common numerical summaries used to explore data, the type of data that can be summarized, what is summarized, and the function to compute the summary. -->
 <!-- ```{r numsum-table, echo = FALSE} -->
 <!-- summary = c("mean", "median", "variance", "standard deviation", -->
@@ -258,7 +264,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- summarizes = c("center", "center", "spread", "spread", "spread", -->
 <!--                "center and spread", "similarity", "counts", "proportions") -->
 <!-- r_function = c("`mean`", "`median`", "`var`", "`sd`", "`quantile` (modified)", -->
-
 <!--                "`quantile`", "`cor`", "`table`", "`table` (modified)") -->
 <!-- num_sum_df = data.frame(summary = summary, -->
 <!--                         variable_type = variable_type, -->
@@ -342,32 +347,25 @@ ul.task-list li input[type="checkbox"] {
 <!-- We briefly explain why we didn't simply use the `cor` function on `penguins_clean` directly. If we try to use `cor` on `penguins_clean` naively, then R will return an error because not all variables in `penguins_clean` are `numeric`. To account for this, we create a vector that determines whether a variable in `penguins_clean` is `numeric`. Recall that a `data.frame` object is a specially-structured `list` object, with each variable being an element of the `list`. The `lapply` function applies a function (`is.numeric` in this case) to each element of the supplied `list`. In our case, we use this to determine whether each variable is `numeric`. The result is returned as a `list`, so we use the `unlist` function to simplify the `list` to a `vector`. -->
 <!-- ### Categorical data -->
 <!-- The statistics mentioned in the previous section are generally not appropriate for a categorical variable. Instead, a frequency distribution or relative frequency distribution might be a useful numeric summary of categorical data. -->
-
 <!-- The `table` function returns a contingency table summarizing the number of observations having each level. Note that by default, the table ignores `NA` values. -->
 <!-- We see that for the `sex` variable, there are 165 female penguins and 168 male penguins. -->
 <!-- ```{r} -->
-
 <!-- table(penguins_clean$sex) -->
 <!-- ``` -->
-
 <!-- To count the `NA` values (if present), we can set the `useNA` argument of `table` to `"ifany"`. -->
 <!-- We see that 11 of the observations had no available information on `sex`. -->
 <!-- ```{r} -->
-
 <!-- table(penguins_clean$sex, useNA = "ifany") -->
 <!-- ``` -->
 <!-- A relative frequency distribution summarizes the proportion or percentage of observation with each level of a categorical variable. To compute the relative frequency distribution of a variable, we must divide the frequency distribution by the number of observations. If you want to ignore `NA`s, then you can use the following code, which takes the frequency distribution of `sex` and divides by the number of non-`NA` `sex` values. -->
 <!-- ```{r} -->
 <!-- # divide the frequence distribution of sex by the number of non-NA values -->
-
 <!-- table(penguins_clean$sex)/sum(!is.na(penguins_clean$sex)) -->
 <!-- ``` -->
 <!-- We see that slightly under 50% of the `sex` values are female (not accounting for `NA` values) are just over 50% are male. -->
 <!-- Are you wondering what `sum(!is.na(penguins_clean$sex))` is doing in the code above? The  `is.na` function returns a `TRUE` for each value that is `NA` but otherwise returns `FALSE`. The `!` in front of `is.na` inverts the logical expression so that we are determining whether each value is NOT an `NA` (and returns `TRUE` if the value is not `NA`). It is common in programming associated `TRUE` with `1` and `FALSE` with `0`. So if we `sum` the the values that are not `NA`, that is equivalent to counting the number of non-`NA` observations. -->
-
 <!-- If we want to include the `NA` values in our table, we can use the code below. -->
 <!-- ```{r} -->
-
 <!-- table(penguins_clean$sex, useNA = "ifany")/length(penguins_clean$sex) -->
 <!-- ``` -->
 <!-- We do not know the `sex` of approximately 3% of the penguins observations. -->
@@ -381,7 +379,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- ## Visual summaries of data -->
 <!-- Visual summaries (i.e., plots) of data are vital to understanding your data prior to modeling. They help us to spot errors in our data, unusual observations, and simple patterns. They are also important after modeling to communicate the results of your analysis. -->
 <!-- We will introduce basic visualization approaches using **base** R functions as well as the popular **ggplot2** package [@R-ggplot2]. It is important to know the basic plotting capabilities of **base** R (particularly the `plot` function, which has been extended by many packages to provide standard plots for complex objects produced by those packages). However, **ggplot2** is able to produce complex graphics with automated legends in a consistent, systematic way, which provides it advantages over **base** graphics in many contexts. -->
-
 <!-- Table \@ref(tab:viz-sum) provides an overview of different plots types that can be used to summarize data, the type of data being summarized, whether the plot is for univariate (one variable), bivariate (two variable), or multivariate (3 or more variables) data, the **base** R functions create the plot, and the main **ggplot2** functions need to create the plot. The table is not intended to be an exhaustive list of  useful graphics you should use for data exploration. -->
 <!-- ```{r viz-sum, echo = FALSE} -->
 <!-- viz_sum = c("box plot", "histogram", "density plot", "bar plot", -->
@@ -392,7 +389,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- summary_type = rep(c("univariate", "bivariate", "multivariate"), -->
 <!--                    times = c(4, 2, 3)) -->
 <!-- base_functions = c("`boxplot`", "`hist`", "`plot`, `density`", -->
-
 <!--               "`plot` or `barplot`, `table`", -->
 <!--               "`plot`", "`plot` or `boxplot`", -->
 <!--               "`plot`", "none", "none") -->
@@ -429,18 +425,14 @@ ul.task-list li input[type="checkbox"] {
 <!-- plot(penguins_clean$island, main = "distribution of island") -->
 <!-- ``` -->
 <!-- We see that the largest number of penguins were obserevd on Biscoe allowed, followed by Dream and Torgersen islands, respectively. -->
-
 <!-- Alternatively, we can combine `barplot` with the `table` function. We do so below for the `sex` variable. To account for `NA`s in the `sex` variable, we specify `useNA = "ifany"` in the `table` function. Also, we specify `names.arg = ...` to specify the bar names, otherwise the bar for `NA` will be blank. -->
 <!-- ```{r} -->
-
 <!-- barplot(table(penguins_clean$sex, useNA = "ifany"), -->
 <!--         names.arg = c("female", "male", "NA")) -->
 <!-- ``` -->
 <!-- We see that that there are slightly more male than female penguins, with a handful of observations missing this characteristic. -->
-
 <!-- To create a relatively frequency bar plot, we should divide the results of `table` by the number of relevant observations. For this particular example, we could use the code below. We use the `length` function to determine the number of observations to divide the counts with. -->
 <!-- ```{r} -->
-
 <!-- barplot(table(penguins_clean$sex, useNA = "ifany") / -->
 <!--           length(penguins_clean$sex), -->
 <!--         names.arg = c("female", "male", "NA")) -->
@@ -664,18 +656,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -707,11 +688,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -721,8 +741,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -734,7 +763,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -778,6 +930,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -803,6 +956,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -864,17 +1043,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./r-foundations.html" class="pagination-link">
+      <a href="./r-foundations.html" class="pagination-link" aria-label="R Foundations">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Foundations</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
+      <a href="./references.html" class="pagination-link" aria-label="References">
         <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 

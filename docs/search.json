@@ -10,6 +10,46 @@
     ]
   },
   {
+    "objectID": "index.html#background",
+    "href": "index.html#background",
+    "title": "A Progressive Introduction to Linear Models",
+    "section": "Background",
+    "text": "Background\nI designed this book to progressively introduce you to the analysis of data using linear models. My goal is to provide you with the skills needed to perform a linear regression analysis sooner rather than later. Most of the detailed derivations have been placed in Going Deeper sections or in their own chapter, which can be skipped over to more quickly progress through the material at the expense of less exposure to theory.",
+    "crumbs": [
+      "Preliminaries"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgments",
+    "href": "index.html#acknowledgments",
+    "title": "A Progressive Introduction to Linear Models",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nThe writing of the book was partially supported by the Colorado Department of Higher Education as part of the proposal “OER for the Creation of Interactive Computational Notebooks and a Computational Pathway in Mathematics and Statistics”.\nThe computational examples utilize the R programming language and environment (R Core Team 2024).\nWe will also make use of the following packages:\n\napi2lm (French 2023).\ndplyr (Wickham et al. 2023).\nggplot2 (Wickham et al. 2024)\nplotly (Sievert et al. 2024)\ntidyverse (Wickham 2023).",
+    "crumbs": [
+      "Preliminaries"
+    ]
+  },
+  {
+    "objectID": "index.html#creative-commons-license-information",
+    "href": "index.html#creative-commons-license-information",
+    "title": "A Progressive Introduction to Linear Models",
+    "section": "Creative Commons License Information",
+    "text": "Creative Commons License Information\n A Progressive Introduction to Linear Models by Joshua French is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.\n\n\n\n\nFrench, Joshua P. 2023. Api2lm: Functions and Data Sets for the Book \"a Progressive Introduction to Linear Models\". https://CRAN.R-project.org/package=api2lm.\n\n\nR Core Team. 2024. R: A Language and Environment for Statistical Computing. Vienna, Austria: R Foundation for Statistical Computing. https://www.R-project.org/.\n\n\nSievert, Carson, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik Ram, Marianne Corvellec, and Pedro Despouy. 2024. Plotly: Create Interactive Web Graphics via Plotly.js. https://plotly-r.com.\n\n\nWickham, Hadley. 2023. Tidyverse: Easily Install and Load the Tidyverse. https://tidyverse.tidyverse.org.\n\n\nWickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey Dunnington, and Teun van den Brand. 2024. Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. https://ggplot2.tidyverse.org.\n\n\nWickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. Dplyr: A Grammar of Data Manipulation. https://dplyr.tidyverse.org.",
+    "crumbs": [
+      "Preliminaries"
+    ]
+  },
+  {
+    "objectID": "r-foundations.html",
+    "href": "r-foundations.html",
+    "title": "1  R Foundations",
+    "section": "",
+    "text": "1.1 Setting up R and RStudio Desktop",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Foundations</span>"
+    ]
+  },
+  {
     "objectID": "r-foundations.html#setting-up-r-and-rstudio-desktop",
     "href": "r-foundations.html#setting-up-r-and-rstudio-desktop",
     "title": "1  R Foundations",
@@ -154,46 +194,9 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "French, Joshua P. 2023. Api2lm: Functions and Data Sets for the Book\n\"a Progressive Introduction to Linear Models\".\n\n\nMüller, Kirill, and Hadley Wickham. 2023. Tibble: Simple Data\nFrames. https://CRAN.R-project.org/package=tibble.\n\n\nR Core Team. 2023. R: A Language and Environment for Statistical\nComputing. Vienna, Austria: R Foundation for Statistical Computing.\nhttps://www.R-project.org/.\n\n\nWickham, Hadley. 2019. Advanced R. CRC press. http://adv-r.had.co.nz/.\n\n\n———. 2022. Stringr: Simple, Consistent Wrappers for Common String\nOperations. https://CRAN.R-project.org/package=stringr.\n\n\n———. 2023a. Forcats: Tools for Working with Categorical Variables\n(Factors). https://CRAN.R-project.org/package=forcats.\n\n\n———. 2023b. Tidyverse: Easily Install and Load the Tidyverse.\nhttps://CRAN.R-project.org/package=tidyverse.\n\n\nWickham, Hadley, and Jennifer Bryan. 2023. Readxl: Read Excel\nFiles. https://CRAN.R-project.org/package=readxl.\n\n\nWickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen,\nKohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, and Dewey\nDunnington. 2023. Ggplot2: Create Elegant Data Visualisations Using\nthe Grammar of Graphics. https://CRAN.R-project.org/package=ggplot2.\n\n\nWickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis\nVaughan. 2023. Dplyr: A Grammar of Data Manipulation. https://CRAN.R-project.org/package=dplyr.\n\n\nWickham, Hadley, and Lionel Henry. 2023. Purrr: Functional\nProgramming Tools. https://CRAN.R-project.org/package=purrr.\n\n\nWickham, Hadley, Jim Hester, and Jennifer Bryan. 2023. Readr: Read\nRectangular Text Data. https://CRAN.R-project.org/package=readr.\n\n\nWickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2023. Tidyr:\nTidy Messy Data. https://CRAN.R-project.org/package=tidyr."
-  },
-  {
-    "objectID": "index.html#background",
-    "href": "index.html#background",
-    "title": "A Progressive Introduction to Linear Models",
-    "section": "Background",
-    "text": "Background\nI designed this book to progressively introduce you to the analysis of data using linear models. My goal is to provide you with the skills needed to perform a linear regression analysis sooner rather than later. Most of the detailed derivations have been placed in Going Deeper sections or in their own chapter, which can be skipped over to more quickly progress through the material at the expense of less exposure to theory.",
+    "text": "French, Joshua P. 2023. Api2lm: Functions and Data Sets for the Book\n\"a Progressive Introduction to Linear Models\". https://CRAN.R-project.org/package=api2lm.\n\n\nMüller, Kirill, and Hadley Wickham. 2023. Tibble: Simple Data\nFrames. https://tibble.tidyverse.org/.\n\n\nR Core Team. 2024. R: A Language and Environment for Statistical\nComputing. Vienna, Austria: R Foundation for Statistical Computing.\nhttps://www.R-project.org/.\n\n\nSievert, Carson, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik\nRam, Marianne Corvellec, and Pedro Despouy. 2024. Plotly: Create\nInteractive Web Graphics via Plotly.js. https://plotly-r.com.\n\n\nWickham, Hadley. 2019. Advanced R. CRC press. http://adv-r.had.co.nz/.\n\n\n———. 2023a. Forcats: Tools for Working with Categorical Variables\n(Factors). https://forcats.tidyverse.org/.\n\n\n———. 2023b. Stringr: Simple, Consistent Wrappers for Common String\nOperations. https://stringr.tidyverse.org.\n\n\n———. 2023c. Tidyverse: Easily Install and Load the Tidyverse.\nhttps://tidyverse.tidyverse.org.\n\n\nWickham, Hadley, and Jennifer Bryan. 2023. Readxl: Read Excel\nFiles. https://readxl.tidyverse.org.\n\n\nWickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen,\nKohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey\nDunnington, and Teun van den Brand. 2024. Ggplot2: Create Elegant\nData Visualisations Using the Grammar of Graphics. https://ggplot2.tidyverse.org.\n\n\nWickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis\nVaughan. 2023. Dplyr: A Grammar of Data Manipulation. https://dplyr.tidyverse.org.\n\n\nWickham, Hadley, and Lionel Henry. 2023. Purrr: Functional\nProgramming Tools. https://purrr.tidyverse.org/.\n\n\nWickham, Hadley, Jim Hester, and Jennifer Bryan. 2024. Readr: Read\nRectangular Text Data. https://readr.tidyverse.org.\n\n\nWickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. Tidyr:\nTidy Messy Data. https://tidyr.tidyverse.org.",
     "crumbs": [
-      "Preliminaries"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgments",
-    "href": "index.html#acknowledgments",
-    "title": "A Progressive Introduction to Linear Models",
-    "section": "Acknowledgments",
-    "text": "Acknowledgments\nThe writing of the book was partially supported by the Colorado Department of Higher Education as part of the proposal “OER for the Creation of Interactive Computational Notebooks and a Computational Pathway in Mathematics and Statistics”.\nThe computational examples utilize the R programming language and environment (R Core Team 2024).\nWe will also make use of the following packages:\n\napi2lm (French 2023).\ndplyr (Wickham et al. 2023).\nggplot2 (Wickham et al. 2024)\nplotly (Sievert et al. 2024)\ntidyverse (Wickham 2023).",
-    "crumbs": [
-      "Preliminaries"
-    ]
-  },
-  {
-    "objectID": "index.html#creative-commons-license-information",
-    "href": "index.html#creative-commons-license-information",
-    "title": "A Progressive Introduction to Linear Models",
-    "section": "Creative Commons License Information",
-    "text": "Creative Commons License Information\n A Progressive Introduction to Linear Models by Joshua French is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.\n\n\n\n\nFrench, Joshua P. 2023. Api2lm: Functions and Data Sets for the Book \"a Progressive Introduction to Linear Models\". https://CRAN.R-project.org/package=api2lm.\n\n\nR Core Team. 2024. R: A Language and Environment for Statistical Computing. Vienna, Austria: R Foundation for Statistical Computing. https://www.R-project.org/.\n\n\nSievert, Carson, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik Ram, Marianne Corvellec, and Pedro Despouy. 2024. Plotly: Create Interactive Web Graphics via Plotly.js. https://plotly-r.com.\n\n\nWickham, Hadley. 2023. Tidyverse: Easily Install and Load the Tidyverse. https://tidyverse.tidyverse.org.\n\n\nWickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey Dunnington, and Teun van den Brand. 2024. Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. https://ggplot2.tidyverse.org.\n\n\nWickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. Dplyr: A Grammar of Data Manipulation. https://dplyr.tidyverse.org.",
-    "crumbs": [
-      "Preliminaries"
-    ]
-  },
-  {
-    "objectID": "r-foundations.html",
-    "href": "r-foundations.html",
-    "title": "1  R Foundations",
-    "section": "",
-    "text": "1.1 Setting up R and RStudio Desktop",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Foundations</span>"
+      "References"
     ]
   }
 ]
