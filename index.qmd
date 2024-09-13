@@ -19,6 +19,8 @@ We will also make use of the following packages:
 - **api2lm** [@R-api2lm].
 - **dplyr** [@R-dplyr].
 - **ggplot2** [@R-ggplot2]
+- **knitr** [@R-knitr]
+- **palmerpenguins** [@R-palmerpenguins]
 - **plotly** [@R-plotly]
 - **tidyverse** [@R-tidyverse].
 
@@ -27,7 +29,7 @@ We will also make use of the following packages:
 
 # automatically create a bib database for R packages
 knitr::write_bib(c(
-  .packages(), 'knitr', 'rmarkdown', 'ggplot2', 'palmerpenguins', 'broom', 'tidyr', 'dplyr', 'stringr', 'purrr', 'tibble', 'readr', 'forcats', 'tidyverse', 'base', 'readxl', 'magrittr', 'plotly', 'datasets', 'effects', 'kableExtra', 'car', 'api2lm', 'datasets'
+  .packages(), 'knitr', 'rmarkdown', 'ggplot2', 'palmerpenguins', 'broom', 'tidyr', 'dplyr', 'stringr', 'purrr', 'tibble', 'readr', 'forcats', 'tidyverse', 'base', 'readxl', 'magrittr', 'plotly', 'datasets', 'effects', 'kableExtra', 'car', 'api2lm', 'datasets', 'ggiraph'
 ), 'packages.bib')
 ```
 
