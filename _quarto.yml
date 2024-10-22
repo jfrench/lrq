@@ -11,6 +11,8 @@ book:
     - r-foundations.qmd
     - data-exploration.qmd
     - references.qmd
+  appendices:
+    - matrix-facts.qmd
 
 bibliography: [book.bib, packages.bib]
 
