@@ -10,6 +10,8 @@ A condensed, interactive version of this content is available as a Colab noteboo
    <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/88c43eee5f12de29b6cb6e0f19ae98ce582a30bb/images/qr-matrix-facts.svg">
 </a>
 
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. 
+
 ---
 
 In this chapter we provide an overview of vectors, matrices, and matrix operations that are useful for data modeling (though their application will not be discussed here).

@@ -1,7 +1,8 @@
 --- 
-title: Data Cleaning and Exploration
 bibliography: [book.bib, packages.bib]
 ---
+
+# Data Cleaning and Exploration {#sec-ch-eda}
 
 A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
 
