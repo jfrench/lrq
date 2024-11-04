@@ -4,15 +4,19 @@ bibliography: [book.bib, packages.bib]
 
 # R Foundations {#sec-r-foundations}
 
-A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
-
-<a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/01-r-foundations-notebook.ipynb">
-   <img src="images/qr-01-r-foundations.png">
-</a>
+---
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. 
 
-___
+---
+
+A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
+
+<a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/01-r-foundations-notebook.ipynb">
+   <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/d44d4e0fe06b7526dc59adfa7667eec8328ce703/images/qr-r-foundations.svg"  width="100">
+</a>
+
+---
 
 Meaningful data analysis requires the use of computer software.
 

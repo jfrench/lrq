@@ -1,0 +1,87 @@
+# Probability Basics {#sec-probability-basics}
+
+---
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. 
+
+---
+
+A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
+
+<a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/b-probability-basics-notebook.ipynb">
+<img src="https://raw.githubusercontent.com/jfrench/LinearRegression/5e46eb8016c13447d4d918321ebb943cde8f2dcc/images/qr-prob-basics.svg" width="100">
+</a>
+
+---
+
+The mathematical field of probability attempts to quantify how frequently outcomes from a random experiment will occur.
+
+We review some basic probability-related terminology in @tbl-prob-tab1.
+
+```{r prob-tab1, echo = FALSE}
+#| label: tbl-prob-tab1
+#| echo: false
+#| tbl-cap: Basic terminology used in probability.
+#| filters:
+#| - parse-latex
+prob_tab1 <- data.frame(term = c("experiment", "outcome", "sample space", "event", "empty set"),
+                        notation = c("N/A", "$\\omega$", "$\\Omega$", "$A$, $A_i$, $B$, etc.", "$\\emptyset$"),
+                        definition = c("A mechanism that produces outcomes that cannot be predicted with absolute certainty.",
+                                       "The simplest kind of result produced by an experiment.",
+                                       "The set of all possible outcomes an experiment can produce.", "Any subset of $\\Omega$.", "The event that includes no outcomes.")
+                        )
+knitr::kable(prob_tab1)
+```
+
+We make some notes about the terms in @tbl-prob-tab1:
+
+- **Outcomes** are also known as **points**, **realizations**, or **elements**.
+- An **event** is a set of outcomes.
+- The **empty set** is a subset of $\Omega$ but not an outcome of $\Omega$.
+- The **empty set** is a subset of every event $A\subseteq \Omega$.
+
+## Basic set operations
+
+We now review some basic set operations and related facts. Let $A$ and $B$ be two events contained in $\Omega$.
+
+The **intersection** of $A$ and $B$, denoted $A \cap B$, is the set of outcomes that are common to both $A$ and $B$, i.e., $A \cap B = \{\omega \in \Omega: \omega \in A\;\mathrm{and}\;\omega \in B\}$.
+
+Events $A$ and $B$ are **disjoint** if $A\cap B = \emptyset$, i.e., if $A$ and $B$ have no common outcomes.
+
+The **union** of $A$ and $B$, denoted $A \cup B$, is the set of outcomes that are in $A$ or $B$ or both, i.e., $A \cup B = \{\omega \in \Omega: \omega \in A\;\mathrm{or}\;\omega \in B\}$.
+
+The **complement** of $A$, denoted $A^c$, is the set of outcomes that are in $\Omega$ but are not in $A$, i.e., $A^c = \{\omega \in \Omega: \omega \not\in A\}$. The complement of $A$ may also be denoted as $\overline{A}$ or $A'$.
+
+The set **difference** between $A$ and $B$, denoted $A \setminus B$, is the set of outcomes in $A$ that are not in $B$, i.e., $A\setminus B = \{\omega \in A: \omega \not\in B\}$. The set difference between $A$ and $B$ may also be denoted by $A-B$. The set difference is order specific, i.e., $(A\setminus B) \not= (B\setminus A)$ in general.
+
+## Probability function
+
+A **probability function** is a function $P$ that assigns a real number $P(A)$ to every event $A \subseteq \Omega$ and satisfies three properties:
+
+1. $P(A)\geq 0$ for all $A\subseteq \Omega$.
+2. $P(\Omega) = 1$. Alternatively, $P(\emptyset) = 0$. Informally, the probability that at least one of the possible outcomes in the sample space occurs is 1.
+3. If $A_1, A_2, \ldots$ are disjoint, then $P\left(\bigcup_{i=1}^\infty A_i \right)=\sum_{i=1}^\infty P(A_i)$.
+
+## Independence and conditional probability
+
+A set of events $\{A_i:i\in I\}$ are **independent** if 
+$$
+P\left(\cap_{i\in J} A_i \right)=\prod_{i\in J} P(A_i )
+$$
+for every finite subset $J\subseteq I$.
+
+The **conditional probability** of $A$ given $B$, denoted as $P(A\mid B)$, is the probability that $A$ occurs given that $B$ has occurred, and is defined as 
+$$
+P(A\mid B) = \frac{P(A\cap B)}{P(B)}, \quad P(B) > 0.
+$$
+
+## Additional probability results
+
+The following probability results are frequently useful in solving practical problems:
+
+- **Complement rule**: $P(A^c) = 1 - P(A)$.
+- **Addition rule**: $P(A\cup B) = P(A) + P(B) - P(A \cap B)$.
+- **Bayes' rule**: Assuming $P(A) > 0$ and $P(B) > 0$, then 
+$$P(A\mid B) = \frac{P(B\mid A)P(A)}{P(B)}.$$
+- **Law of Total Probability**: Let $B_1, B_2, \ldots$ be a countably infinite partition of $\Omega$. Then 
+$$P(A) = \sum_{i=1}^{\infty} P(A \cap B_i) = \sum_{i=1}^{\infty} P(A \mid B_i) P(B_i).$$

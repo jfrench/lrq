@@ -10,9 +10,14 @@ book:
     - index.qmd
     - r-foundations.qmd
     - data-exploration.qmd
-    - references.qmd
   appendices:
     - matrix-facts.qmd
+    - probability-basics.qmd
+    - random-variables.qmd
+    - multivariate-distributions.qmd
+    - random-vectors.qmd
+    - estimation-inference-review.qmd
+    - references.qmd
 
 bibliography: [book.bib, packages.bib]
 

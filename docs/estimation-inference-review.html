@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Appendix F — Review of Estimation, Hypothesis Testing, and Confidence Intervals – A Progressive Introduction to Linear Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./random-vectors.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./estimation-inference-review.html"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">A Progressive Introduction to Linear Models</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preliminaries</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Foundations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-exploration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Cleaning and Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-facts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Overview of matrix definitions, properties, operations, etc.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Probability Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./random-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multivariate-distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./random-vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation-inference-review.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#estimation" id="toc-estimation" class="nav-link active" data-scroll-target="#estimation"><span class="header-section-number">F.1</span> Estimation</a></li>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing"><span class="header-section-number">F.2</span> Hypothesis Testing</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">F.3</span> Confidence Intervals</a></li>
+  <li><a href="#linking-hypothesis-tests-and-confidence-intervals" id="toc-linking-hypothesis-tests-and-confidence-intervals" class="nav-link" data-scroll-target="#linking-hypothesis-tests-and-confidence-intervals"><span class="header-section-number">F.4</span> Linking Hypothesis Tests and Confidence Intervals</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./estimation-inference-review.html"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Appendix F — Review of Estimation, Hypothesis Testing, and Confidence Intervals</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<hr>
+<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
+<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/f-estimation-inference-review-notebook.ipynb"> <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/3de5c91751584e2ecfc19b7145984087077a2ad8/images/qr-estimation-inference-review.svg" width="100"> </a></p>
+<hr>
+<p>A primary purpose of statistics is taking a sample of values from a population and using the sample to draw conclusions about that population. In what follows, we discuss statistical concepts related to estimation, hypothesis testing, and confidence intervals.</p>
+<section id="estimation" class="level2" data-number="F.1">
+<h2 data-number="F.1" class="anchored" data-anchor-id="estimation"><span class="header-section-number">F.1</span> Estimation</h2>
+<p>A <strong>parameter</strong> is a numeric characteristic that describes a population. E.g., the population mean, standard deviation, or cumulative distribution function.</p>
+<p>The <strong>target</strong> parameter or <strong>parameter of interest</strong> is the population parameter we would like to estimate.</p>
+<p>There are different kinds of estimates:</p>
+<ul>
+<li>A <strong>point estimate</strong> is a single number that we <em>hope</em> is close to the true value of the target parameter.</li>
+<li>An <strong>interval estimate</strong> is an interval of numbers that we <em>hope</em> will contain the target parameter.</li>
+</ul>
+<p>An estimate and an estimator are different but related concepts. An estimate is a specific number (for a point estimate) or a specific range of numbers (for an interval estimate). Once the data are observed, an estimate is fixed. An <strong>estimator</strong> is a formula we use to calculate an estimate once we get a sample of data. An estimator is a random variable. An estimator produces different estimates based on the sample of data we obtain from the population.</p>
+<p>The <strong>sampling distribution</strong> of an estimator is the distribution of the estimates we get when we use the estimator to compute estimates from all possible samples of a fixed size <span class="math inline">\(n\)</span> from the population of interest.</p>
+<p>A point estimator, <span class="math inline">\(\hat{\theta}\)</span>, is an <strong>unbiased estimator</strong> of a target parameter, <span class="math inline">\(\theta\)</span>, if <span class="math inline">\(E(\hat{\theta})=\theta\)</span>. An estimator is biased if it is not biased.</p>
+<p>The <strong>bias</strong> of an estimator is defined as</p>
+<p><span class="math display">\[
+B(\hat{\theta})=E(\hat{\theta})-\theta.
+\]</span></p>
+<p>The <strong>variance of an estimator</strong> is defined as</p>
+<p><span class="math display">\[
+\mathrm{var}(\hat{\theta})=E[\hat{\theta}-E(\hat{\theta})]^2.
+\]</span></p>
+<p>The <strong>standard error of an estimator</strong> is the standard deviation of the estimator, i.e., <span class="math display">\[
+\mathrm{se}(\hat{\theta})\equiv\mathrm{sd}(\hat{\theta})=\sqrt{\mathrm{var}(\hat{\theta})}.
+\]</span></p>
+<p>Typically, we cannot compute the standard error of an estimator because it is a function of parameters that we do not know. Instead, we use the sample data to estimate the standard error. When we hear or read the term “standard error”, we must carefully determine whether the “standard error” presented is the theoretical standard error or the estimated standard error (and it’s nearly always the latter).</p>
+<p>The <strong>mean square error</strong> of a point estimator is <span class="math display">\[
+MSE(\hat{\theta})=E(\hat{\theta}-\theta)^{2},
+\]</span> which is equivalent to <span class="math display">\[
+MSE(\hat{\theta})=\mathrm{var}(\hat{\theta})+[B(\hat{\theta})]^{2}.
+\]</span></p>
+<p>The MSE formula makes it clear that there is a “bias-variance trade off” when choosing between point estimators. Typically, unbiased point estimators will have larger variance (and correspondingly, MSE). Biased estimators will often have smaller MSE, but are (obviously) biased. It’s a trade off we have to balance.</p>
+<p><strong>Example</strong></p>
+<p>Let <span class="math inline">\(Y_1, Y_2, \ldots, Y_n \stackrel{i.i.d.}{\sim} \mathsf{N}(\mu, \sigma^2)\)</span>.</p>
+<p>Determine the mean and variance of the estimator <span class="math inline">\(\hat{\mu}=\bar{Y}\)</span>.</p>
+<p>The mean of the estimator is</p>
+<p><span class="math display">\[
+\begin{aligned}
+E(\bar{Y}) &amp;= E\biggl(\frac{1}{n}\sum_{i=1}^n Y_i \biggr) &amp; \tiny\text{(substitute definition of $\bar{Y}$)} \\
+&amp;= \frac{1}{n}E\biggl(\sum_{i=1}^n Y_i \biggr) &amp; \tiny\text{(factor constant)} \\
+&amp;= \frac{1}{n}\sum_{i=1}^n E(Y_i) &amp; \tiny\text{(linearity of expectation)} \\
+&amp;= \frac{1}{n}\sum_{i=1}^n \mu  &amp; \tiny\text{(assumption about mean of $Y_i$ for $i=1,2,\ldots,n$)} \\
+&amp;= \frac{n}{n} \mu  &amp; \tiny\text{(sum $\mu$ $n$ times)} \\
+&amp;= \mu. &amp;
+\end{aligned}
+\]</span></p>
+<p>The variance of the estimator is</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathrm{var}(\bar{Y}) &amp;= \mathrm{var}\biggl(\frac{1}{n}\sum_{i=1}^n Y_i \biggr) &amp; \tiny\text{(substitute definition of $\bar{Y}$)} \\
+&amp;= \frac{1}{n^2}\mathrm{var}\biggl(\sum_{i=1}^n Y_i \biggr) &amp; \tiny\text{(factor constant out of $\mathrm{var}$)} \\
+&amp;= \frac{1}{n^2}\sum_{i=1}^n \mathrm{var}(Y_i) &amp; \tiny\text{(linearity of variance for independent random variables)} \\
+&amp;= \frac{1}{n^2}\sum_{i=1}^n \sigma^2  &amp; \tiny\text{(assumption about variance of $Y_i$ for $i=1,2,\ldots,n$)} \\
+&amp;= \frac{n}{n^2} \sigma^2  &amp; \tiny\text{(sum $\sigma^2$ $n$ times)} \\
+&amp;= \frac{\sigma^2}{n}. &amp;
+\end{aligned}
+\]</span> Is the sample median a better or worse estimator of <span class="math inline">\(\mu\)</span> than the sample mean in this context? To prove this, we would have to consider order statistics, which we will not do. Instead, we will investigate this using a simulation experiment.</p>
+<p>We will sample 100 values from our population assuming <span class="math inline">\(\mu=0\)</span> and <span class="math inline">\(\sigma^2 = 100\)</span> and compare the properties of the sample mean and sample median for 10,000 independent samples. We start by drawing 10,000 samples of size 100 from a <span class="math inline">\(\mathsf{N}(0, 10^2)\)</span> population, computing the sample mean and median, and then storing these values for further analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1904</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>nsamples <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of independent samples</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># sample size</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># store sample means and medians</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sample_means <span class="ot">&lt;-</span> <span class="fu">numeric</span>(nsamples)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sample_meds <span class="ot">&lt;-</span> <span class="fu">numeric</span>(nsamples)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># perform experiment nsamples times</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(nsamples)) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw sample</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute sample mean</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  sample_means[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute and store sample median</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  sample_meds[i] <span class="ot">&lt;-</span> <span class="fu">median</span>(y)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We now plot the approximate sampling distributions of the sample mean and median using relative frequency histograms of their values from the 10,000 samples. Setting the <code>probability</code> argument of the <code>hist</code> function to <code>TRUE</code> will produce a relative frequency histogram instead of the default frequency histogram. We also set the <code>breaks</code> argument to <code>100</code> to ask the <code>hist</code> function to use approximately 100 bins.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)) <span class="co"># side-by-side histograms</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sample_means, <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">100</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"sampling distribution of</span><span class="sc">\n</span><span class="st"> the sample means"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sample_meds, <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">100</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"sampling distribution of</span><span class="sc">\n</span><span class="st"> the sample medians"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="estimation-inference-review_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Both sampling distributions appear to be approximately normal (and from statistical theory, we know that they are normally distributed). We compute the sample mean and standard deviation of the two sets of statistics to approximate the expected value (mean) and standard error, respectively, of the statistics. The estimated mean of the sampling distribution of the sample mean is 0.01, as shown below. We showed that the theoretical mean is 0, so this is a good approximation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample_means) <span class="co"># estimated mean of statistic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01409124</code></pre>
+</div>
+</div>
+<p>The estimated standard error of the sampling distribution of the sample mean is 1.00, as shown below. Recall that the theoretical standard error is 1 (<span class="math inline">\(\sigma^2/n = 100/100 = 1\)</span>), so this is a good approximation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(sample_means) <span class="co"># estimated standard error of statistic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9958627</code></pre>
+</div>
+</div>
+<p>The estimated mean of the sampling distribution of the sample median is 0.01, as shown below. The theoretical mean is 0.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample_meds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01444009</code></pre>
+</div>
+</div>
+<p>The estimated standard error of the sampling distribution of the sample median is 1.24, as shown below. The asymptotic standard error is 1.2533, i.e., the theoretical standard error as <span class="math inline">\(n\rightarrow\infty\)</span> <span class="citation" data-cites="wackerly2008mathematical">(see <a href="references.html#ref-wackerly2008mathematical" role="doc-biblioref">Wackerly, Mendhall, and Scheaffer 2008, sec. 9.2</a>)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(sample_meds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.235693</code></pre>
+</div>
+</div>
+<p>Since both estimators are unbiased and the standard error of the sample mean is smaller than the sample median, this demonstrates that the sample mean is a more efficient estimator than the sample median in this context.</p>
+<p>We overlay a normal curve (the solid orange lines) on each sampling distribution, using the mean and standard errors computed above for the mean and standard deviation, respectively, of the normal curve. Both curves fit well.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)) <span class="co"># side-by-side histograms</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="at">len =</span> <span class="dv">10000</span>) <span class="co"># sequence for plotting</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sample_means, <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">100</span>, <span class="at">col =</span> <span class="st">"lightgrey"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"sampling distribution of</span><span class="sc">\n</span><span class="st"> the sample means"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># normal curve with estimated mean and standard error</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(s, <span class="fu">dnorm</span>(s, <span class="at">mean =</span> <span class="fu">mean</span>(sample_means), <span class="at">sd =</span> <span class="fu">sd</span>(sample_means)), </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sample_meds, <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">100</span>, <span class="at">col =</span> <span class="st">"lightgrey"</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"sampling distribution of</span><span class="sc">\n</span><span class="st"> the sample medians"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(s, <span class="fu">dnorm</span>(s, <span class="at">mean =</span> <span class="fu">mean</span>(sample_meds), <span class="at">sd =</span> <span class="fu">sd</span>(sample_meds)), </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="estimation-inference-review_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="hypothesis-testing" class="level2" data-number="F.2">
+<h2 data-number="F.2" class="anchored" data-anchor-id="hypothesis-testing"><span class="header-section-number">F.2</span> Hypothesis Testing</h2>
+<p>A <strong>statistical test of hypotheses</strong> or <strong>hypothesis test</strong> is a statistical procedure used to decide between a null hypothesis, <span class="math inline">\(H_0\)</span>, and an alternative hypothesis, <span class="math inline">\(H_a\)</span> or <span class="math inline">\(H_1\)</span>. The null hypothesis is usually a hypothesis that “nothing interesting is going on”. The alternative hypothesis is generally the complement of the null hypothesis and is usually what we want to show is true.</p>
+<p>A <strong>test statistic</strong> is a number used to decide between <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_a\)</span>. A test statistic is a function of the data, and generally, parameters in the hypotheses. A test statistic measures the compatibility of the observed data with <span class="math inline">\(H_0\)</span>. A “small” test statistic suggests the observed data are consistent with <span class="math inline">\(H_0\)</span>. An “extreme” test statistic indicates that the observed data are inconsistent with <span class="math inline">\(H_0\)</span>, which we take as evidence that <span class="math inline">\(H_a\)</span> is true.</p>
+<p>The <strong>null distribution</strong> allows us to identify the values of the test statistic that are typical or unusual when <span class="math inline">\(H_0\)</span> is true. Formally, the null distribution is the distribution of the test statistic under the assumption that <span class="math inline">\(H_0\)</span> is true.</p>
+<p>There are two types of errors we can make when doing hypothesis testing. A type I error is rejecting <span class="math inline">\(H_0\)</span> when <span class="math inline">\(H_0\)</span> is true. A type II error is failing to reject <span class="math inline">\(H_0\)</span> when <span class="math inline">\(H_a\)</span> is true.</p>
+<p>We can control the Type I error rate at a specified level, <span class="math inline">\(\alpha\)</span>, called the <strong>significance level</strong>, since we know the distribution of our test statistic under the assumption that <span class="math inline">\(H_0\)</span> is true. We reject <span class="math inline">\(H_0\)</span> and conclude that <span class="math inline">\(H_a\)</span> is true if the test statistic falls in the <strong>rejection region</strong> of the null distribution. The rejection region is the set of test statistics that are the <span class="math inline">\(100\alpha\%\)</span> most unlikely test statistics if <span class="math inline">\(H_0\)</span> is true.</p>
+<p>Instead of using the test statistic directly to decide between <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_a\)</span>, we generally use the test statistic to compute a p-value. The <strong>p-value</strong> of a test statistic is the probability of seeing a test statistic at least as supportive of <span class="math inline">\(H_a\)</span> when <span class="math inline">\(H_0\)</span> is true. If we specify the significance level, <span class="math inline">\(\alpha\)</span>, prior to performing our hypothesis test (which is the ethical thing to do), then we reject <span class="math inline">\(H_0\)</span> and conclude <span class="math inline">\(H_a\)</span> is true when the p-value <span class="math inline">\(&lt;\alpha\)</span>. Otherwise, we fail to reject <span class="math inline">\(H_0\)</span>.</p>
+<p>Researchers sometimes say that the smaller the p-value, the stronger the evidence that <span class="math inline">\(H_a\)</span> is true and <span class="math inline">\(H_0\)</span> is false. This isn’t definitively true because the p-value doesn’t have the ability to distinguish between the following options: (1) <span class="math inline">\(H_0\)</span> is true but our observed data were very unlikely, (2) <span class="math inline">\(H_0\)</span> is false. When <span class="math inline">\(H_0\)</span> is true, then the test statistic (for simple hypotheses and continuous test statistics) has a uniform distribution over the interval [0, 1]. Conversely, if <span class="math inline">\(H_a\)</span> is true, then the p-value is more likely to be small, which makes us think <span class="math inline">\(H_a\)</span> is true for small p-values. However, unless we know the <strong>power</strong> of our test, which is the probability that we reject <span class="math inline">\(H_0\)</span> when <span class="math inline">\(H_a\)</span> is true, then it is very difficult to assess how much evidence for <span class="math inline">\(H_a\)</span> a small p-value provides. <span class="citation" data-cites="gibson_pvalue">Gibson (<a href="references.html#ref-gibson_pvalue" role="doc-biblioref">2021</a>)</span> point out the p-values can be interpreted naturally on a <span class="math inline">\(\log_{10}\)</span> scale. <span class="citation" data-cites="gibson_pvalue">Gibson (<a href="references.html#ref-gibson_pvalue" role="doc-biblioref">2021</a>)</span> states:</p>
+<blockquote class="blockquote">
+<p>The p-value can be expressed as <span class="math inline">\(p=c\times 10^{-k}\)</span> so that <span class="math inline">\(\log_{10}(p)=-\log_{10}(c)+k\)</span>, where <span class="math inline">\(c\)</span> is a constant and <span class="math inline">\(k\)</span> is an integer, which implies that only the magnitude <em>k</em> measures the actual strength of evidence <span class="citation" data-cites="boos_stefanski_2011_pvalues">(<a href="references.html#ref-boos_stefanski_2011_pvalues" role="doc-biblioref">Boos and Stefanski 2011</a>)</span>. <span class="math inline">\(\ldots\)</span> This would suggest that <span class="math inline">\(p=0.01\)</span> (<span class="math inline">\(k=2\)</span>) could be interpreted as twice the evidence [for <span class="math inline">\(H_a\)</span> as] <span class="math inline">\(p=0.10\)</span> (<span class="math inline">\(k=1\)</span>).</p>
+</blockquote>
+<p><span class="citation" data-cites="gibson_pvalue">Gibson (<a href="references.html#ref-gibson_pvalue" role="doc-biblioref">2021</a>)</span> provides a thorough review of p-value interpretation. <a href="#tbl-pvalue-interp" class="quarto-xref">Table&nbsp;<span>F.1</span></a> summarizes common strength of evidence interpretations for p-values.</p>
+<div class="cell">
+<div id="tbl-pvalue-interp" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pvalue-interp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;F.1: A summary of common strength-of-evidence interpretations for p-values.
+</figcaption>
+<div aria-describedby="tbl-pvalue-interp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">p-value</th>
+<th style="text-align: left;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(&gt; 0.10\)</span></td>
+<td style="text-align: left;">no evidence for <span class="math inline">\(H_a\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\leq 0.10\)</span></td>
+<td style="text-align: left;">weak evidence for <span class="math inline">\(H_a\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\leq 0.05\)</span></td>
+<td style="text-align: left;">moderate evidence for <span class="math inline">\(H_a\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\leq 0.01\)</span></td>
+<td style="text-align: left;">strong evidence for <span class="math inline">\(H_a\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\leq 0.001\)</span></td>
+<td style="text-align: left;">very strong evidence for <span class="math inline">\(H_a\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><strong>Simulation study</strong></p>
+<p>We provide a brief simulation study to better understand the null distribution and also how rejection regions are chosen to control the type I error rate.</p>
+<p>Assume that we sample <span class="math inline">\(n=10\)</span> values from a <span class="math inline">\(\mathsf{N}(\mu, \sigma^2)\)</span> population but do not know the mean or standard deviation of the population. We want to test are <span class="math inline">\(H_0: \mu = 2\)</span> versus <span class="math inline">\(H_a: \mu &gt; 2\)</span> (implicitly, the null hypothesis is <span class="math inline">\(H_0: \mu \leq 2\)</span>). In this context, it is common to use the test statistic <span class="math display">\[
+T^* = \frac{\bar{Y} - \mu}{s/\sqrt{n}},
+\]</span> where <span class="math inline">\(s\)</span> is the sample standard deviation of the measurements. If the null hypothesis is true, <span class="math inline">\(\mu=2\)</span>, and statistical theory tells us that <span class="math inline">\(T^* \sim t_{n-1}\)</span>, i.e., the test statistic has a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. Since <span class="math inline">\(n=10\)</span>, our test statistic has a <span class="math inline">\(t\)</span> distribution with 9 degrees of freedom if the null hypothesis is true.</p>
+<p>We now describe our simulation experiment. To draw our sample, we must choose a value of <span class="math inline">\(\sigma^2\)</span>. We will use <span class="math inline">\(\sigma^2 = 4^2\)</span>. The exact value isn’t important, but choosing a fixed number for <span class="math inline">\(\sigma^2\)</span> is critical for the example below. In the code below, we (1) Draw <span class="math inline">\(B=1,000\)</span> samples of size <span class="math inline">\(n=10\)</span> from our <span class="math inline">\(\mathsf{N}(\mu,4^2)\)</span> population assuming the null hypothesis is true, i.e., with <span class="math inline">\(\mu = 2\)</span>, and (2) Compute the test statistic for each sample.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set number seed for reproducible results</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create vector to store test statistics</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>tstats <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">10000</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># for 10,000 experiments</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="dv">10000</span>)) {</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw a sample of size 10 from a N(2, 4^2)</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">4</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute and store the test statistic for the sample</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  tstats[i] <span class="ot">&lt;-</span> (<span class="fu">mean</span>(y) <span class="sc">-</span> <span class="dv">2</span>) <span class="sc">/</span> (<span class="fu">sd</span>(y) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">10</span>))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Recall that the null distribution of a test statistic is its sampling distribution under the assumption that the null hypothesis is true. We now use the code below to compute the empirical density of the computed test statistics (i.e., the estimated sampling distribution) and overlay the density of a <span class="math inline">\(t\)</span> distribution with 9 degrees of freedom. We see that the two distributions match up very well.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot empirical null distribution</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(tstats),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"test statistic"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"density"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"empirical versus true null distribution"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># sequence to plot null density over</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">len =</span> <span class="dv">1000</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(s, <span class="fu">dt</span>(s, <span class="at">df =</span> <span class="dv">9</span>), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="estimation-inference-review_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What should we takeaway from this example? The null distribution of a hypothesis test is the sampling distribution of the test statistic under the assumption that <span class="math inline">\(H_0\)</span> is true. We approximated the null distribution of our test statistic by drawing 10,000 samples from the population distribution under the assumption that <span class="math inline">\(H_0\)</span> was true.</p>
+<p>How does the null distribution relate to choosing the rejection region? The type I error rate is the probability of rejecting <span class="math inline">\(H_0\)</span> when <span class="math inline">\(H_0\)</span> is true. Since we know the null distribution, we know what behavior to expect from our test statistic if <span class="math inline">\(H_0\)</span> is true. Specifically, we know what test statistics are most unlikely if <span class="math inline">\(H_0\)</span> is true.</p>
+<p>Assume we want to control the type I error at <span class="math inline">\(\alpha = 0.05\)</span>. For this upper-tailed test, we should reject <span class="math inline">\(H_0\)</span> when the test statistic is greater than <span class="math inline">\(t^{0.05}_9\)</span>, i.e., the 0.95 quantile of a <span class="math inline">\(t\)</span> distribution with 9 degrees of freedom.</p>
+<p>Why do we use this threshold? Because if <span class="math inline">\(H_0\)</span> is true, this will only lead to erroneous rejections of <span class="math inline">\(H_0\)</span> (i.e., a type I error) 5% of the time. Additionally, the test statistics in the rejection are the ones least compatible with the <span class="math inline">\(H_0\)</span> if in fact the <span class="math inline">\(H_0\)</span> is true.</p>
+<p>In the code below, we compute the sample proportion of test statistics from our null distribution that are more than <span class="math inline">\(t^{0.05}_9\)</span>. Our sample proportion is very close to 0.05, and this number will converge to 0.05 as we increase the number samples used in our simulation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(tstats <span class="sc">&gt;</span> <span class="fu">qt</span>(<span class="fl">0.95</span>, <span class="at">df =</span> <span class="dv">9</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0489</code></pre>
+</div>
+</div>
+<p><strong>Example</strong></p>
+<p>Suppose that <span class="math inline">\(Y_1,\ldots,Y_n\)</span> is a random sample (in other words, an independent and identically distributed sample) from a population having a normal distribution with unknown mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2=1\)</span>. We would like to decide between the following two hypotheses: <span class="math inline">\(H_0:\mu=0\)</span> and <span class="math inline">\(H_a:\mu\neq 0\)</span>.</p>
+<p>If <span class="math inline">\(H_0\)</span> is true, then the test statistic <span class="math display">\[
+Z^*=\frac{\bar{Y}}{1/\sqrt{n}}=\sqrt{n}\bar{Y}\sim \mathsf{N}(0, 1),
+\]</span></p>
+<p>i.e., the null distribution of <span class="math inline">\(Z^*\)</span> is <span class="math inline">\(\mathsf{N}(0,1)\)</span>. This follows from recognizing that <span class="math inline">\(\bar{Y} \sim \mathsf{N}(0,1/n)\)</span> and the test statistic is simply standardizing <span class="math inline">\(\bar{Y}\)</span>.</p>
+<p>If <span class="math inline">\(\alpha=0.10\)</span>, then the 10% of test statistics that are most unlikely if <span class="math inline">\(H_0\)</span> is true (i.e., most supportive of <span class="math inline">\(H_a\)</span>) are more extreme than <span class="math inline">\(Z^{0.95}\)</span> and <span class="math inline">\(Z^{0.05}\)</span>, the 0.05 and 0.95 quantiles of a standard normal distribution, respectively. The superscript in the quantile notation indicates the area to the right of the quantile in the CDF). The 0.05 quantile of the standard normal distribution is -1.645 and the 0.95 quantile is 1.645. In R, we can find these quantiles using the <code>qnorm</code> function, where the first argument of <code>qnorm</code> is <code>p</code>, which is the vector of probabilities to the left of the quantile. We verify these quantiles using the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.05</span>,<span class="fl">0.95</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.644854  1.644854</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(H_0\)</span> should be rejected when <span class="math inline">\(Z^*\)</span> is less than -1.645 or more than 1.65, i.e., the rejection region is <span class="math inline">\((-\infty, -1.645) \cup (1.645,\infty)\)</span>.</p>
+<p>Alternatively, we can compute the p-value using the formula <span class="math inline">\(2P(Z\geq |Z^*|)\)</span> in order to make our choice between the hypotheses.</p>
+<p>Suppose <span class="math inline">\(z^*=1.74\)</span> and <span class="math inline">\(\alpha=0.10\)</span>. The test statistic is in the rejection region, so we would conclude that <span class="math inline">\(H_a\)</span> is true. We demonstrate this visually in <a href="#fig-rejection-region" class="quarto-xref">Figure&nbsp;<span>F.1</span></a>, shading the rejection region in grey. We represent the observed test statistic with a vertical line.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-rejection-region" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rejection-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="estimation-inference-review_files/figure-html/fig-rejection-region-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rejection-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;F.1: A plot of the rejection region for a two-tailed alternative hypothesis.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The p-value is <span class="math inline">\(2P(Z\geq 1.74)=0.082\)</span>. In R, we can compute the p-value using the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fl">1.74</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.08185902</code></pre>
+</div>
+</div>
+<p>Visually, the p-value is the sum of the area to the left of -1.74 and the area to the right of 1.74 because test statistics with those values are at least as supportive of <span class="math inline">\(H_a\)</span> as the observed statistic. We display this in <a href="#fig-pvalue" class="quarto-xref">Figure&nbsp;<span>F.2</span></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pvalue" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="estimation-inference-review_files/figure-html/fig-pvalue-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;F.2: A plot of the area used to compute the p-value based on a two-tailed alternative hypothesis.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Using the p-value approach with <span class="math inline">\(\alpha = 0.10\)</span>, we conclude that <span class="math inline">\(H_a\)</span> is true.</p>
+<p>In straightforward language, our interpretation could be: there is weak evidence that the population mean differs from 0.</p>
+<p>We note that the rejection region and p-value approaches to deciding between hypotheses will always agree.</p>
+</section>
+<section id="confidence-intervals" class="level2" data-number="F.3">
+<h2 data-number="F.3" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">F.3</span> Confidence Intervals</h2>
+<p>A <strong>confidence interval</strong> provides us with plausible values of a target parameter. It is the most common type of interval estimator.</p>
+<p>A confidence interval procedure has an associated <strong>confidence level</strong>. When independent random samples are taken repeatedly from the population, a confidence interval procedure will produce intervals containing the target parameter with probability equal to the confidence level.</p>
+<p>Confidence level is associated with a confidence interval <em>procedure</em>, not a specific interval. A 95% confidence interval <em>procedure</em> will produce intervals that contain the target parameter 95% of the time. A specific interval estimate will either contain the target parameter or it will not.</p>
+<p>The formulas for confidence intervals are usually derived from a pivotal quantity. A <strong>pivotal quantity</strong> is a function of the data and the target parameter whose distribution does not depend on the value of the target parameter.</p>
+<p><strong>Example:</strong></p>
+<p>Suppose <span class="math inline">\(Y_1,Y_2,\ldots,Y_n \stackrel{i.i.d.}{\sim} \mathsf{N}(\mu, 1)\)</span>. The random variable <span class="math inline">\(Z=(\bar{Y}-\mu)/(1/\sqrt{n})\sim \mathsf{N}(0,1)\)</span> is a pivotal quantity. Since <span class="math inline">\(P(-1.96\leq Z\leq 1.96)=0.95\)</span>, we can derive that <span class="math display">\[
+P(\bar{Y}-1.96\times 1/\sqrt{n}\leq \mu \leq \bar{Y}+1.96\times 1/\sqrt{n})=0.95.
+\]</span></p>
+<p>Our 95% confidence interval for <span class="math inline">\(\mu\)</span> in this context is <span id="eq-sample-mean-ci-known-variance"><span class="math display">\[
+[\bar{Y}-1.96\times 1/\sqrt{n}, \bar{Y}+1.96\times 1/\sqrt{n}].
+\tag{F.1}\]</span></span> If <span class="math inline">\(\bar{Y}=0.551\)</span> and <span class="math inline">\(n=10\)</span>, then the associated 95% confidence interval for <span class="math inline">\(\mu\)</span> is [-0.070,1.171].</p>
+<p><strong>More discussion of confidence level</strong></p>
+<p>The CI procedure provided in <a href="#eq-sample-mean-ci-known-variance" class="quarto-xref">Equation&nbsp;<span>F.1</span></a> is supposed to produce 95% confidence intervals (i.e., the confidence level of the procedure is 0.95). If we produce 100 intervals from independent data sets, then about 95% of them should contain the true mean, but about 5% will not.</p>
+<p>To illustrate this further, we use a small simulation example to produce 100 95% confidence intervals using samples of size <span class="math inline">\(n = 10\)</span> from a <span class="math inline">\(\mathsf{N(0,1)}\)</span> population. First, we obtain 100 samples of size 10 from the population <span class="math inline">\(\mathsf{N(0,1)}\)</span> and then compute the sample mean of each sample. We do this in the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">33</span>) <span class="co"># set number seed for reproducibility</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create vector to store sample means</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">100</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># perform experiment 100 times</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="dv">100</span>)) {</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw sample of size 10 from N(0, 1) and compute sample mean</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  means[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we use <a href="#eq-sample-mean-ci-known-variance" class="quarto-xref">Equation&nbsp;<span>F.1</span></a> to determine the lower and upper bound of the confidence interval associated with each interval.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate the lower and upper bounds for the 95% CIs</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>lb <span class="ot">=</span> means <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">10</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>ub <span class="ot">=</span> means <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="#fig-ci-interp-plot" class="quarto-xref">Figure&nbsp;<span>F.3</span></a> displays each interval. An interval is orange if the interval doesn’t contain the true population mean, which is 0. In this example, 94 out of 100 intervals for the population mean contained the true population mean of 0. As we construct more intervals, the proportion of intervals containing the true mean of 0 will typically get closer to 95%.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ci-interp-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ci-interp-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="estimation-inference-review_files/figure-html/fig-ci-interp-plot-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ci-interp-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;F.3: A plot of 100 95% confidence intervals for a population mean produced from independent samples from a <span class="math inline">\(\mathsf{N}(0,1)\)</span> population
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice how the intervals move around. This is because each sample provides us with slightly different values, so the intervals move around because of the samples obtained.</p>
+<p>Each interval either contains the true mean of 0 or it does not. But as a whole, the procedure we are using will produce confidence intervals that contain the true mean 95% of the time.</p>
+</section>
+<section id="linking-hypothesis-tests-and-confidence-intervals" class="level2" data-number="F.4">
+<h2 data-number="F.4" class="anchored" data-anchor-id="linking-hypothesis-tests-and-confidence-intervals"><span class="header-section-number">F.4</span> Linking Hypothesis Tests and Confidence Intervals</h2>
+<p>CIs are directly linked to hypothesis tests. A <span class="math inline">\(100(1-\alpha)\%\)</span> two-sided confidence interval for target parameter <span class="math inline">\(\theta\)</span> is linked with a hypothesis test of <span class="math inline">\(H_0:\theta = c\)</span> versus <span class="math inline">\(H_a:\theta \neq c\)</span> tested at level <span class="math inline">\(\alpha\)</span>. Any point that lies within the <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\theta\)</span> represents a value of <span class="math inline">\(c\)</span> for which the associated null hypothesis would not be rejected at significance level <span class="math inline">\(\theta\)</span>. Any point outside of the confidence interval is a value of <span class="math inline">\(c\)</span> for which the associated null hypothesis would be rejected. Similar relationships hold for one-sided CIs and hypothesis tests.</p>
+<p>A confidence interval provides us with much of the same information as a hypothesis test, but it doesn’t provide the p-value or allow us to do hypothesis tests at different significance levels. Confidence intervals are often preferred over hypothesis tests because they provide additional information in the form of plausible parameters values while giving us enough information to perform a hypothesis test.</p>
+<p><strong>Example:</strong></p>
+<p>Consider the 95% confidence interval for <span class="math inline">\(\mu\)</span> we previously constructed: [-0.070,1.171]. That interval is conceptually linked to the statistical test of <span class="math inline">\(H_0:\mu = c\)</span> versus <span class="math inline">\(H_a:\mu \neq c\)</span> using <span class="math inline">\(\alpha =0.05\)</span>. We reject <span class="math inline">\(H_0\)</span> for any hypothesized values of <span class="math inline">\(c\)</span> less than -0.070 or more than 1.171. We fail to reject <span class="math inline">\(H_0\)</span> for any values of <span class="math inline">\(c\)</span> between -0.070 and 1.171.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-boos_stefanski_2011_pvalues" class="csl-entry" role="listitem">
+Boos, Dennis D., and Leonard A. Stefanski. 2011. <span>“P-Value Precision and Reproducibility.”</span> <em>The American Statistician</em> 65 (4): 213–21. <a href="https://doi.org/10.1198/tas.2011.10129">https://doi.org/10.1198/tas.2011.10129</a>.
+</div>
+<div id="ref-gibson_pvalue" class="csl-entry" role="listitem">
+Gibson, Eric W. 2021. <span>“The Role of p-Values in Judging the Strength of Evidence and Realistic Replication Expectations.”</span> <em>Statistics in Biopharmaceutical Research</em> 13 (1): 6–18. <a href="https://doi.org/10.1080/19466315.2020.1724560">https://doi.org/10.1080/19466315.2020.1724560</a>.
+</div>
+<div id="ref-wackerly2008mathematical" class="csl-entry" role="listitem">
+Wackerly, Dennis D, William Mendhall, and Richard L Scheaffer. 2008. <span>“Mathematical Statistics with Applications, 7th Edition.”</span> Belmont, California: Cengage.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./random-vectors.html" class="pagination-link" aria-label="Random vectors">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

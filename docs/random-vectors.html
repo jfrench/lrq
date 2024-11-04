@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – A Progressive Introduction to Linear Models</title>
+<title>Appendix E — Random vectors – A Progressive Introduction to Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./estimation-inference-review.html" rel="prev">
+<link href="./estimation-inference-review.html" rel="next">
+<link href="./multivariate-distributions.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -87,6 +69,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -100,7 +111,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./random-vectors.html"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -178,7 +189,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./random-vectors.html" class="sidebar-item-text sidebar-link">
+  <a href="./random-vectors.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></span></a>
   </div>
 </li>
@@ -190,7 +201,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -201,15 +212,27 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#definition" id="toc-definition" class="nav-link active" data-scroll-target="#definition"><span class="header-section-number">E.1</span> Definition</a></li>
+  <li><a href="#mean-variance-and-covariance" id="toc-mean-variance-and-covariance" class="nav-link" data-scroll-target="#mean-variance-and-covariance"><span class="header-section-number">E.2</span> Mean, variance, and covariance</a></li>
+  <li><a href="#properties-of-transformations-of-random-vectors" id="toc-properties-of-transformations-of-random-vectors" class="nav-link" data-scroll-target="#properties-of-transformations-of-random-vectors"><span class="header-section-number">E.3</span> Properties of transformations of random vectors</a></li>
+  <li><a href="#example-continuous-bivariate-distribution-continued" id="toc-example-continuous-bivariate-distribution-continued" class="nav-link" data-scroll-target="#example-continuous-bivariate-distribution-continued"><span class="header-section-number">E.4</span> Example (Continuous bivariate distribution continued)</a></li>
+  <li><a href="#multivariate-normal-gaussian-distribution" id="toc-multivariate-normal-gaussian-distribution" class="nav-link" data-scroll-target="#multivariate-normal-gaussian-distribution"><span class="header-section-number">E.5</span> Multivariate normal (Gaussian) distribution</a></li>
+  <li><a href="#linear-transformation-of-a-multivariate-normal-random-vector" id="toc-linear-transformation-of-a-multivariate-normal-random-vector" class="nav-link" data-scroll-target="#linear-transformation-of-a-multivariate-normal-random-vector"><span class="header-section-number">E.6</span> Linear transformation of a multivariate normal random vector</a></li>
+  <li><a href="#example-ols-matrix-form" id="toc-example-ols-matrix-form" class="nav-link" data-scroll-target="#example-ols-matrix-form"><span class="header-section-number">E.7</span> Example (OLS matrix form)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./random-vectors.html"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title">Appendix E — Random vectors</h1>
 </div>
 
 
@@ -226,113 +249,190 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-boos_stefanski_2011_pvalues" class="csl-entry" role="listitem">
-Boos, Dennis D., and Leonard A. Stefanski. 2011. <span>“P-Value
-Precision and Reproducibility.”</span> <em>The American
-Statistician</em> 65 (4): 213–21. <a href="https://doi.org/10.1198/tas.2011.10129">https://doi.org/10.1198/tas.2011.10129</a>.
-</div>
-<div id="ref-brewer" class="csl-entry" role="listitem">
-Brewer, Cynthia A. 2022. <span>“ColorBrewer2.org.”</span> <a href="https://colorbrewer2.org">https://colorbrewer2.org</a>.
-</div>
-<div id="ref-R-api2lm" class="csl-entry" role="listitem">
-French, Joshua P. 2023. <em>Api2lm: Functions and Data Sets for the Book
-"a Progressive Introduction to Linear Models"</em>. <a href="https://CRAN.R-project.org/package=api2lm">https://CRAN.R-project.org/package=api2lm</a>.
-</div>
-<div id="ref-gibson_pvalue" class="csl-entry" role="listitem">
-Gibson, Eric W. 2021. <span>“The Role of p-Values in Judging the
-Strength of Evidence and Realistic Replication Expectations.”</span>
-<em>Statistics in Biopharmaceutical Research</em> 13 (1): 6–18. <a href="https://doi.org/10.1080/19466315.2020.1724560">https://doi.org/10.1080/19466315.2020.1724560</a>.
-</div>
-<div id="ref-R-ggiraph" class="csl-entry" role="listitem">
-Gohel, David, and Panagiotis Skintzos. 2024. <em>Ggiraph: Make Ggplot2
-Graphics Interactive</em>. <a href="https://davidgohel.github.io/ggiraph/">https://davidgohel.github.io/ggiraph/</a>.
-</div>
-<div id="ref-GormanEtAl2014" class="csl-entry" role="listitem">
-Gorman, Kristen B., Tony D. Williams, and William R. Fraser. 2014.
-<span>“Ecological Sexual Dimorphism and Environmental Variability Within
-a Community of Antarctic Penguins (Genus Pygoscelis).”</span> <em>PLOS
-ONE</em> 9 (3): 1–14. <a href="https://doi.org/10.1371/journal.pone.0090081">https://doi.org/10.1371/journal.pone.0090081</a>.
-</div>
-<div id="ref-R-palmerpenguins" class="csl-entry" role="listitem">
-Horst, Allison, Alison Hill, and Kristen Gorman. 2022.
-<em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>.
-<a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a>.
-</div>
-<div id="ref-R-tibble" class="csl-entry" role="listitem">
-Müller, Kirill, and Hadley Wickham. 2023. <em>Tibble: Simple Data
-Frames</em>. <a href="https://tibble.tidyverse.org/">https://tibble.tidyverse.org/</a>.
-</div>
-<div id="ref-plotly" class="csl-entry" role="listitem">
-Plotly Technologies Inc. 2015. <span>“Collaborative Data
-Science.”</span> Montreal, QC: Plotly Technologies Inc. 2015. <a href="https://plot.ly">https://plot.ly</a>.
-</div>
-<div id="ref-R-base" class="csl-entry" role="listitem">
-R Core Team. 2024. <em>R: A Language and Environment for Statistical
-Computing</em>. Vienna, Austria: R Foundation for Statistical Computing.
-<a href="https://www.R-project.org/">https://www.R-project.org/</a>.
-</div>
-<div id="ref-R-plotly" class="csl-entry" role="listitem">
-Sievert, Carson, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik
-Ram, Marianne Corvellec, and Pedro Despouy. 2024. <em>Plotly: Create
-Interactive Web Graphics via Plotly.js</em>. <a href="https://plotly-r.com">https://plotly-r.com</a>.
-</div>
-<div id="ref-wackerly2008mathematical" class="csl-entry" role="listitem">
-Wackerly, Dennis D, William Mendhall, and Richard L Scheaffer. 2008.
-<span>“Mathematical Statistics with Applications, 7th Edition.”</span>
-Belmont, California: Cengage.
-</div>
-<div id="ref-advancedr" class="csl-entry" role="listitem">
-Wickham, Hadley. 2019. <em>Advanced <span>R</span></em>. CRC press. <a href="http://adv-r.had.co.nz/">http://adv-r.had.co.nz/</a>.
-</div>
-<div id="ref-tidyversestyleguide" class="csl-entry" role="listitem">
-———. 2022. <em>The Tidyverse Style Guide</em>. <a href="https://style.tidyverse.org/">https://style.tidyverse.org/</a>.
-</div>
-<div id="ref-R-forcats" class="csl-entry" role="listitem">
-———. 2023a. <em>Forcats: Tools for Working with Categorical Variables
-(Factors)</em>. <a href="https://forcats.tidyverse.org/">https://forcats.tidyverse.org/</a>.
-</div>
-<div id="ref-R-stringr" class="csl-entry" role="listitem">
-———. 2023b. <em>Stringr: Simple, Consistent Wrappers for Common String
-Operations</em>. <a href="https://stringr.tidyverse.org">https://stringr.tidyverse.org</a>.
-</div>
-<div id="ref-R-tidyverse" class="csl-entry" role="listitem">
-———. 2023c. <em>Tidyverse: Easily Install and Load the Tidyverse</em>.
-<a href="https://tidyverse.tidyverse.org">https://tidyverse.tidyverse.org</a>.
-</div>
-<div id="ref-R-readxl" class="csl-entry" role="listitem">
-Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel
-Files</em>. <a href="https://readxl.tidyverse.org">https://readxl.tidyverse.org</a>.
-</div>
-<div id="ref-R-ggplot2" class="csl-entry" role="listitem">
-Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen,
-Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey
-Dunnington, and Teun van den Brand. 2024. <em>Ggplot2: Create Elegant
-Data Visualisations Using the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
-</div>
-<div id="ref-R-dplyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis
-Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
-</div>
-<div id="ref-R-purrr" class="csl-entry" role="listitem">
-Wickham, Hadley, and Lionel Henry. 2023. <em>Purrr: Functional
-Programming Tools</em>. <a href="https://purrr.tidyverse.org/">https://purrr.tidyverse.org/</a>.
-</div>
-<div id="ref-R-readr" class="csl-entry" role="listitem">
-Wickham, Hadley, Jim Hester, and Jennifer Bryan. 2024. <em>Readr: Read
-Rectangular Text Data</em>. <a href="https://readr.tidyverse.org">https://readr.tidyverse.org</a>.
-</div>
-<div id="ref-R-tidyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. <em>Tidyr:
-Tidy Messy Data</em>. <a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a>.
-</div>
-<div id="ref-R-knitr" class="csl-entry" role="listitem">
-Xie, Yihui. 2024. <em>Knitr: A General-Purpose Package for Dynamic
-Report Generation in r</em>. <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
-</div>
-</div>
+<hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<hr>
+<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
+<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/d-multivariate-distributions-and-random-vectors-notebook.ipynb"> <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/0ece3fee82ea5e6188728023edf1dfa8318e4d48/images/qr-random-vectors.svg" width="100"> </a></p>
+<section id="definition" class="level2" data-number="E.1">
+<h2 data-number="E.1" class="anchored" data-anchor-id="definition"><span class="header-section-number">E.1</span> Definition</h2>
+<p>A <strong>random vector</strong> is a vector of random variables. A random vector is assumed to be a column vector unless otherwise specified.</p>
+<p>Additionally, a <strong>random matrix</strong> is a matrix of random variables.</p>
+</section>
+<section id="mean-variance-and-covariance" class="level2" data-number="E.2">
+<h2 data-number="E.2" class="anchored" data-anchor-id="mean-variance-and-covariance"><span class="header-section-number">E.2</span> Mean, variance, and covariance</h2>
+<p>Let <span class="math inline">\(\mathbf{y}=[Y_1,Y_2,\dots,Y_n]\)</span> be an <span class="math inline">\(n\times1\)</span> vector.</p>
+<p>The mean of a random vector is the vector containing the means of the random variables in the vector. More specifically, the mean of <span class="math inline">\(\mathbf{y}\)</span> is defined as <span class="math display">\[
+E(\mathbf{y})=\begin{bmatrix}E(Y_1)\\E(Y_2)\\\vdots\\E(Y_n)\end{bmatrix}.
+\]</span></p>
+<p>The variance of a random vector isn’t a number or a vector of numbers. Instead, it is the matrix of covariances of all pairs of random variables in the random vector. The variance matrix of <span class="math inline">\(\mathbf{y}\)</span> is defined as <span class="math display">\[
+\begin{aligned}
+\mathrm{var}(\mathbf{y}) &amp;= E\Bigl[(\mathbf{y} - E(\mathbf{y}))(\mathbf{y} - E(\mathbf{y}))^T\Bigr]\\
+&amp;= \begin{bmatrix}\mathrm{cov}(Y_1, Y_1) &amp; \mathrm{cov}(Y_1,Y_2) &amp;\dots &amp;\mathrm{cov}(Y_1,Y_n)\\\mathrm{cov}(Y_2,Y_1 )&amp;\mathrm{cov}(Y_2, Y_2)&amp;\dots&amp;\mathrm{cov}(Y_2,Y_n)\\\vdots&amp;\vdots&amp;\vdots&amp;\vdots\\
+\mathrm{cov}(Y_n,Y_1)&amp;\mathrm{cov}(Y_n,Y_2)&amp;\dots&amp;\mathrm{cov}(Y_n, Y_n)\end{bmatrix}.
+\end{aligned}
+\]</span> The variance matrix of <span class="math inline">\(\mathbf{y}\)</span> can also be computed as <span class="math display">\[
+\mathrm{var}(\mathbf{y}) = E(\mathbf{y}\mathbf{y}^T)-E(\mathbf{y})E(\mathbf{y})^T.
+\]</span> Also, noting that <span class="math inline">\(\mathrm{cov}(Y, Y) = \mathrm{var}(Y)\)</span> for a random variable <span class="math inline">\(Y\)</span>, we can write the variance matrix of <span class="math inline">\(\mathbf{y}\)</span> as <span class="math display">\[
+\begin{aligned}
+\mathrm{var}(\mathbf{y}) &amp;= \begin{bmatrix}\mathrm{var}(Y_1) &amp; \mathrm{cov}(Y_1,Y_2) &amp;\dots &amp;\mathrm{cov}(Y_1,Y_n)\\
+\mathrm{cov}(Y_2,Y_1 )&amp;\mathrm{var}(Y_2) &amp;\dots&amp; \mathrm{cov}(Y_2,Y_n) \\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+\mathrm{cov}(Y_n,Y_1)&amp;\mathrm{cov}(Y_n,Y_2)&amp;\dots&amp;\mathrm{var}(Y_n)\end{bmatrix}.
+\end{aligned}
+\]</span> The variance matrix of <span class="math inline">\(\mathbf{y}\)</span> is also called the <strong>covariance matrix</strong> or <strong>variance-covariance matrix</strong> of <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<p>Let <span class="math inline">\(\mathbf{x} = [X_1, X_2, \ldots, X_n]\)</span> be an <span class="math inline">\(n\times 1\)</span> random vector. The covariance matrix between <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> is defined as <span class="math display">\[
+\begin{align}
+\mathrm{cov}(\mathbf{x}, \mathbf{y}) &amp;= E\bigl[(\mathbf{x} - E(\mathbf{x}))(\mathbf{y}  - E(\mathbf{y})^T\bigr]\\
+&amp;=
+\begin{bmatrix}
+\mathrm{cov}(X_1, Y_1) &amp; \mathrm{cov}(X_1,Y_2) &amp;\dots &amp;\mathrm{cov}(X_1,Y_n) \\
+\mathrm{cov}(X_2,Y_1 )&amp;\mathrm{cov}(X_2, Y_2) &amp;\dots&amp; \mathrm{cov}(X_2,Y_n) \\
+\vdots&amp;\vdots&amp;\dots&amp;\vdots\\
+\mathrm{cov}(X_n,Y_1)&amp;\mathrm{cov}(X_n,Y_2)&amp;\dots&amp;\mathrm{cov}(X_n, Y_n)
+\end{bmatrix}.
+\end{align}
+\]</span> The covariance matrix between <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> may also be computed as <span class="math inline">\(\mathrm{cov}(\mathbf{x}, \mathbf{y}) = E(\mathbf{x}\mathbf{y}^T) - E(\mathbf{x}) E(\mathbf{y})^T.\)</span></p>
+<p>We note that <span class="math inline">\(\mathrm{var}(\mathbf{y})=\mathrm{cov}(\mathbf{y}, \mathbf{y})\)</span>.</p>
+</section>
+<section id="properties-of-transformations-of-random-vectors" class="level2" data-number="E.3">
+<h2 data-number="E.3" class="anchored" data-anchor-id="properties-of-transformations-of-random-vectors"><span class="header-section-number">E.3</span> Properties of transformations of random vectors</h2>
+<p>Define:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{a}\)</span> to be an <span class="math inline">\(n\times 1\)</span> vector of real numbers.</li>
+<li><span class="math inline">\(\mathbf{A}\)</span> to be an <span class="math inline">\(m\times n\)</span> matrix of real numbers.</li>
+<li><span class="math inline">\(\mathbf{x}=[X_1,X_2,\ldots,X_n]\)</span> to be an <span class="math inline">\(n\times 1\)</span> random vector.</li>
+<li><span class="math inline">\(\mathbf{y}=[Y_1,Y_2,\ldots,Y_n]\)</span> to be an <span class="math inline">\(n\times 1\)</span> random vector.</li>
+<li><span class="math inline">\(\mathbf{z}=[Z_1,Z_2,\ldots,Z_n]\)</span> to be an <span class="math inline">\(n\times 1\)</span> random vector.</li>
+<li><span class="math inline">\(0_{m\times n}\)</span> to be an <span class="math inline">\(m\times n\)</span> matrix of zeros.</li>
+</ul>
+<p>Then:</p>
+<ul>
+<li><span class="math inline">\(E(\mathbf{a}) = \mathbf{a}\)</span>.</li>
+<li><span class="math inline">\(E(\mathbf{A}\mathbf{y})=\mathbf{A}E(\mathbf{y})\)</span>.</li>
+<li><span class="math inline">\(E(\mathbf{y}\mathbf{A}^T )=E(\mathbf{y}) \mathbf{A}^T\)</span>.</li>
+<li><span class="math inline">\(E(\mathbf{x}+\mathbf{y})=E(\mathbf{x})+E(\mathbf{y})\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(\mathbf{A}\mathbf{y})=\mathbf{A}\mathrm{var}(\mathbf{y}) \mathbf{A}^T\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(\mathbf{x}+\mathbf{y},\mathbf{z})=\mathrm{cov}(\mathbf{x},\mathbf{z})+\mathrm{cov}(\mathbf{y},\mathbf{z})\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(\mathbf{x},\mathbf{y}+\mathbf{z})=\mathrm{cov}(\mathbf{x},\mathbf{y})+\mathrm{cov}(\mathbf{x},\mathbf{z})\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(\mathbf{A}\mathbf{x},\mathbf{y})=\mathbf{A}\ \mathrm{cov}(\mathbf{x},\mathbf{y})\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(\mathbf{x},\mathbf{A}\mathbf{y})=\mathrm{cov}(\mathbf{x},\mathbf{y}) \mathbf{A}^T\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(\mathbf{a})= 0_{n\times n}\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(\mathbf{a},\mathbf{y})=0_{n\times n}\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(\mathbf{a}+\mathbf{y})=\mathrm{var}(\mathbf{y})\)</span>.</li>
+</ul>
+</section>
+<section id="example-continuous-bivariate-distribution-continued" class="level2" data-number="E.4">
+<h2 data-number="E.4" class="anchored" data-anchor-id="example-continuous-bivariate-distribution-continued"><span class="header-section-number">E.4</span> Example (Continuous bivariate distribution continued)</h2>
+<p>Using the definitions and results for random vectors, we want to answer <strong>Q7</strong> of the hydration example in <a href="multivariate-distributions.html#sec-continuous-bivariate-distribution-example" class="quarto-xref"><span>Section D.8</span></a>. Summarizing only the essential details, we have a <span class="math inline">\(2\times 1\)</span> random vector <span class="math inline">\(\mathbf{z}=[X, Y]\)</span> with mean <span class="math inline">\(E(\mathbf{z})=[2/5, 4/5]\)</span> and covariance matrix <span class="math display">\[
+\mathrm{var}(\mathbf{z})=
+\begin{bmatrix}
+14/225 &amp; 1/75 \\
+1/75 &amp; 2/75
+\end{bmatrix}.
+\]</span></p>
+<p>We want to determine <span class="math inline">\(E(Y-X)\)</span> and <span class="math inline">\(\mathrm{var}(Y-X)\)</span>.</p>
+<p>Define <span class="math inline">\(\mathbf{A}=[-1, 1]^T\)</span> (the ROW vector with 1 and -1). Then, <span class="math display">\[
+\mathbf{Az}=\begin{bmatrix}-1 &amp; 1\end{bmatrix}
+\begin{bmatrix}
+X\\
+Y
+\end{bmatrix}
+=Y-X
+\]</span> and <span class="math display">\[
+\begin{aligned}
+E(Y-X)&amp;=E(\mathbf{Az})\\
+&amp;=\begin{bmatrix}-1 &amp; 1\end{bmatrix}
+\begin{bmatrix}
+2/5\\
+4/5
+\end{bmatrix}\\
+&amp;=-2/5+4/5\\
+&amp;=2/5.
+\end{aligned}
+\]</span> Additionally, <span class="math display">\[
+\begin{aligned}
+&amp; \mathrm{var}(Y-X) \\
+&amp;=\mathrm{var}(\mathbf{Az}) \\
+&amp;=\mathbf{A}\mathrm{var}(\mathbf{z})\mathbf{A}^T \\
+&amp;=
+\begin{bmatrix}
+-1 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+14/225 &amp; 1/75 \\
+1/75 &amp; 2/75
+\end{bmatrix}
+\begin{bmatrix}
+-1 \\ 1
+\end{bmatrix} \\
+&amp;= \begin{bmatrix}
+-14/225+1/75 &amp; -1/75+2/75
+\end{bmatrix}
+\begin{bmatrix}
+-1 \\ 1
+\end{bmatrix} \\
+&amp;= 14/225 - 1/75 -1/75 + 2/75 \\
+&amp;=14/225.
+\end{aligned}
+\]</span></p>
+</section>
+<section id="multivariate-normal-gaussian-distribution" class="level2" data-number="E.5">
+<h2 data-number="E.5" class="anchored" data-anchor-id="multivariate-normal-gaussian-distribution"><span class="header-section-number">E.5</span> Multivariate normal (Gaussian) distribution</h2>
+<p>The random vector <span class="math inline">\(\mathbf{y}=[Y_1,\dots,Y_n]\)</span> has a multivariate normal distribution with mean <span class="math inline">\(E(\mathbf{y})=\boldsymbol{\mu}\)</span> (an <span class="math inline">\(n\times 1\)</span> vector) and covariance matrix <span class="math inline">\(\mathrm{var}(\mathbf{y})=\boldsymbol{\Sigma}\)</span> (an <span class="math inline">\(n\times n\)</span> matrix) if its joint pdf is <span class="math display">\[
+f(\mathbf{y})=\frac{1}{(2\pi)^{n/2} |\boldsymbol{\Sigma}|^{1/2} }  \exp\left(-\frac{1}{2} (\mathbf{y}-\boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{y}-\boldsymbol{\mu})\right),
+\]</span> where <span class="math inline">\(|\boldsymbol{\Sigma}|\)</span> is the determinant of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>. Note that <span class="math inline">\(\boldsymbol{\Sigma}\)</span> must be symmetric and positive definite.</p>
+<p>In this case, we denote the distribution of <span class="math inline">\(\mathbf{y}\)</span> as <span class="math display">\[
+\mathbf{y}\sim \mathsf{N}(\boldsymbol{\mu},\boldsymbol{\Sigma}).
+\]</span></p>
+</section>
+<section id="linear-transformation-of-a-multivariate-normal-random-vector" class="level2" data-number="E.6">
+<h2 data-number="E.6" class="anchored" data-anchor-id="linear-transformation-of-a-multivariate-normal-random-vector"><span class="header-section-number">E.6</span> Linear transformation of a multivariate normal random vector</h2>
+<p>Assume that <span class="math inline">\(\mathbf{y}\)</span> is an <span class="math inline">\(n\times 1\)</span> random vector and <span class="math inline">\(\mathbf{y}\sim \mathsf{N}(\boldsymbol{\mu},\boldsymbol{\Sigma}).\)</span> Also, assume that <span class="math inline">\(\mathbf{a}\)</span> is an <span class="math inline">\(m\times 1\)</span> vector of real numbers and <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(m\times n\)</span> matrix of real numbers.</p>
+<p>A linear transformation of a multivariate normal random vector of the form <span class="math inline">\(\mathbf{a}+\mathbf{A}\mathbf{y}\)</span> is also a multivariate normal random vector (though it could collapse to a single random variable if <span class="math inline">\(\mathbf{A}\)</span> is a <span class="math inline">\(1\times n\)</span> vector).</p>
+<p><strong>Application</strong>: Suppose that <span class="math inline">\(\mathbf{y}\sim \mathsf{N}(\boldsymbol{\mu},\boldsymbol{\Sigma})\)</span>. For an <span class="math inline">\(m\times n\)</span> matrix of constants <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{A}\mathbf{y}\sim \mathsf{N}(\mathbf{A}\boldsymbol{\mu},\mathbf{A}\boldsymbol{\Sigma} \mathbf{A}^T)\)</span>.</p>
+<p>The most common estimators used in linear regression are linear combinations of a (typically) multivariate normal random vectors, meaning that many of the estimators also have a (multivariate) normal distribution.</p>
+</section>
+<section id="example-ols-matrix-form" class="level2" data-number="E.7">
+<h2 data-number="E.7" class="anchored" data-anchor-id="example-ols-matrix-form"><span class="header-section-number">E.7</span> Example (OLS matrix form)</h2>
+<p>Ordinary least squares regression is a method for fitting a linear regression model to data. Suppose that we have observed variables <span class="math inline">\(X_1, X_2, X_3, \ldots, X_{p-1}, Y\)</span> for each of <span class="math inline">\(n\)</span> subjects from some population, with <span class="math inline">\(X_{i,j}\)</span> denoting the value of <span class="math inline">\(X_j\)</span> for observation <span class="math inline">\(i\)</span> and <span class="math inline">\(Y_i\)</span> denoting the value of <span class="math inline">\(Y\)</span> for observation <span class="math inline">\(i\)</span>. In general, we want to use <span class="math inline">\(X_1, \ldots, X_{p-1}\)</span> to predict the value of <span class="math inline">\(Y\)</span>. Define <span class="math inline">\(\mathbf{X}\)</span> to be a full-rank <span class="math inline">\(n\times p\)</span> matrix as <span class="math display">\[
+\mathbf{X} =
+\begin{bmatrix}
+1 &amp; X_{1,1} &amp; X_{1,2} &amp; \cdots &amp; X_{1,p-1} \\
+1 &amp; X_{2,1} &amp; X_{2,2} &amp; \cdots &amp; X_{2,p-1} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+1 &amp; X_{n,1} &amp; X_{n,2} &amp; \cdots &amp; X_{n,p-1}
+\end{bmatrix}
+\]</span> Define <span class="math inline">\(\mathbf{y}\)</span> to be the <span class="math inline">\(n\times 1\)</span> random vector of responses as <span class="math inline">\(\mathbf{y}=[Y_1, Y_2, \ldots,Y_n]\)</span>.</p>
+<p>As is common in regression, we assume that, <span class="math display">\[
+\mathbf{y}\sim \mathsf{N}(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}_{n\times n}),
+\]</span> where <span class="math inline">\(\boldsymbol{\beta}=[\beta_0,\beta_1,\ldots,\beta_{p-1}]\)</span> is a <span class="math inline">\(p\times 1\)</span> vector of real numbers.</p>
+<p>The matrix <span class="math inline">\(\mathbf{H}=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\)</span> projects <span class="math inline">\(\mathbf{y}\)</span> into the space spanned by the vectors in <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>Determine the distribution of <span class="math inline">\(\mathbf{Hy}\)</span>.</p>
+<p>Notice that <span class="math display">\[
+\begin{aligned}
+E(\mathbf{Hy}) &amp;= \mathbf{H}E(\mathbf{y}) \\  &amp;=\mathbf{HX}\boldsymbol{\beta}\\
+&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} \\
+&amp;=\mathbf{X}\mathbf{I}_{p\times p}\boldsymbol{\beta} \\
+&amp;=\mathbf{X}\boldsymbol{\beta}.
+\end{aligned}
+\]</span></p>
+<p>Additionally, <span class="math display">\[
+\begin{aligned}
+\mathrm{var}(\mathbf{Hy}) &amp;= \mathbf{H}\mathrm{var}(\mathbf{y})\mathbf{H}^T \\
+&amp;=\mathbf{H}\sigma^2 \mathbf{I}_{n\times n}\mathbf{\mathbf{H^T}} \\
+&amp;= \sigma^2 \mathbf{H}\mathbf{H}^T\\
+&amp;=\sigma^2 \mathbf{H}.
+\end{aligned}
+\]</span></p>
+<p>Lastly, since <span class="math inline">\(\mathbf{Hy}\)</span> is a linear transformation of a multivariate normal random vector, it also have a multivariate normal distribution.</p>
+<p>We combine these facts together to see that<br>
+<span class="math display">\[
+\mathbf{Hy}\sim \mathsf{N}(\mathbf{H}\boldsymbol{\beta}, \sigma^2 \mathbf{H}).
+\]</span></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -757,11 +857,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./estimation-inference-review.html" class="pagination-link" aria-label="Review of Estimation, Hypothesis Testing, and Confidence Intervals">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></span>
+      <a href="./multivariate-distributions.html" class="pagination-link" aria-label="Multivariate distributions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./estimation-inference-review.html" class="pagination-link" aria-label="Review of Estimation, Hypothesis Testing, and Confidence Intervals">
+        <span class="nav-page-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

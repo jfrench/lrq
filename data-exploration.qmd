@@ -7,7 +7,7 @@ bibliography: [book.bib, packages.bib]
 A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
 
 <a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/02-data-exploration-notebook.ipynb">
-   <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/9d0559b9fa7bdecc94158ebb6a0395c9139648d7/images/qr-02-data-exploration.png">
+   <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/c2d3c6c541f4519883c2ece5a983b836b6375bce/images/qr-data-exploration.svg" width="100">
 </a>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. 

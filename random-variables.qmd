@@ -1,0 +1,169 @@
+# Random Variables
+
+---
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. 
+
+---
+
+A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
+
+<a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/c-random-variables-notebook.ipynb">
+<img src="https://raw.githubusercontent.com/jfrench/LinearRegression/ee3d385af063b0342ff165f3e48f3ddd7f82f04e/images/qr-random-variables.svg" width="100">
+</a>
+
+---
+
+A **random variable** $Y$ is a function mapping outcomes from a sample space, $\Omega$, to the real numbers, which is indicated by the notation
+$$
+Y:\Omega\to\mathbb{R}.
+$$
+The function $Y$ assigns a real number $Y(\omega)$ to each outcome $\omega\in \Omega$. We typically drop the $(\omega)$ notation for simplicity.
+
+The **cumulative distribution function (CDF)** of $Y$, $F_Y$, is a function $F_Y:\mathbb{R}\to [0,1]$ defined by 
+$$
+F_Y (y)=P(Y \leq y).
+$$
+The subscript of $F$ indicates the random variable the CDF describes. E.g., $F_X$ denotes the CDF of the random variable $X$ and $F_Y$ denotes the CDF of the random variable $Y$. The subscript can be dropped when the context makes it clear what random variable the CDF describes. An $F$-distributed random variable is one that has the $F$ distribution.
+
+The **support** of $Y$, $\mathcal{S}$, is the smallest set such that $P(Y\in \mathcal{S})=1$.
+
+## Discrete random variables
+
+$Y$ is a **discrete** random variable if it takes countably many values. The support can be represented as $\mathcal{S} = \{y_1, y_2, \dots \}$.  
+
+The **probability mass function (pmf)** for $Y$ is $f_Y (y)=P(Y=y)$, where $y\in \mathbb{R}$, and must have the following properties:
+
+1. $0 \leq f_Y(y) \leq 1$.
+2. $\sum_{y\in \mathcal{S}} f_Y(y) = 1$.
+
+Additionally, the following statements are true:
+
+- $F_Y(c) = P(Y \leq c) = \sum_{y\in \mathcal{S}:y \leq c} f_Y(y)$.
+- $P(Y \in A) = \sum_{y \in A} f_Y(y)$ for some event $A$.
+0 $P(a \leq Y \leq b) = \sum_{y\in\mathcal{S}:a\leq y\leq b} f_Y(y)$.
+
+The **expected value**, **mean**, or first moment of $Y$, is defined as 
+$$
+E(Y) = \sum_{y\in \mathcal{S}} y f_Y(y),
+$$
+assuming the sum is well-defined.
+
+The **variance** of $Y$ is defined as 
+$$
+\mathrm{var}(Y)=E(Y-E(Y))^2 = 
+\sum_{y\in \mathcal{S}} (y - E(Y))^2 f_Y(y).
+$$
+
+Note that $\mathrm{var}(Y)=E(Y-E(Y))^2=E(Y^2)-[E(Y)]^2$. This formula is often easier to compute.
+
+The **standard deviation** of $Y$ is defined as
+$$
+SD(Y)=\sqrt{\mathrm{var}(Y)}.
+$$
+
+More generally, for a discrete random variable $Y$ and a real-valued function $g$,
+$$E(g(Y))=\sum_{y\in\mathcal{S}}g(y)f_Y(y),$$
+assuming the sum is well-defined.
+
+### Example (Bernoulli distribution) {#sec-bernoulli-distribution-example}
+
+A random variable $Y$ has a Bernoulli distribution with probability $\theta$, denoted $Y\sim \mathsf{Bernoulli}(\theta)$, if $\mathcal{S} = \{0, 1\}$ and $P(Y = 1) = \theta$, where $\theta\in (0,1)$.
+
+The pmf of a Bernoulli random variable is 
+$$
+f_Y(y) = \theta^y (1-\theta)^{(1-y)},\quad y\in \{0, 1\}, \theta \in (0, 1).
+$$
+
+The mean of a Bernoulli random variable is 
+$$
+E(Y)=0(1-\theta )+1(\theta)=\theta.
+$$
+
+The variance of a Bernoulli random variable is 
+$$
+\mathrm{var}(Y)=(0-\theta)^2(1-\theta)+(1-\theta)^2\theta = \theta(1-\theta).
+$$
+
+## Continuous random variables
+
+$Y$ is a **continuous** random variable if there exists a function $f_Y (y)$ such that: 
+
+1. $f_Y (y)\geq 0$ for all $y$,
+2. $\int_{-\infty}^\infty f_Y (y)  dy = 1$,
+3. $a\leq b$, $P(a<Y<b)=\int_a^b f_Y (y)  dy$.  
+
+The function $f_Y$ is called the **probability density function (pdf)**.  
+
+Additionally, $F_Y (y)=\int_{-\infty}^y f_Y (y)  dy$ and $f_Y (y)=F'_Y(y)$ for any point $y$ at which $F_Y$ is differentiable. 
+
+The **mean** of a continuous random variables $Y$ is defined as 
+$$
+E(Y) =
+\int_{-\infty}^{\infty} y f_Y(y)  dy =
+\int_{y\in\mathcal{S}} y f_Y(y).
+$$
+assuming the integral is well-defined.
+
+The **variance** of a continuous random variable $Y$ is defined by 
+$$
+\mathrm{var}(Y)=
+E(Y-E(Y))^2=\int_{-\infty}^{\infty} (y - E(Y))^2 f_Y(y)  dy =
+\int_{y\in\mathcal{S}} (y - E(Y))^2 f_Y(y) dy.
+$$
+
+More generally, for a continuous random variable $Y$ and a real-valued function $g$,
+$$E(g(Y))=\int_{y\in\mathcal{S}}g(y)f_Y(y)\;dy,$$
+assuming the integral is well-defined.
+
+### Example (Uniform distribution)
+
+A random variable $Y$ is said to have an uniform distribution with parameters $a<b$, written as $Y \sim \mathsf{U}(a, b)$, if $\mathcal{S} = \{y\in \mathbb{R}:a\leq y \leq b\}$ and has the density function
+$$
+f(y) = \frac{1}{b-a}, \quad a\leq y \leq b, a < b.
+$$
+
+The mean of $Y$ is computed as
+$$
+\begin{aligned}
+E(Y)&=\int_{a}^{b} y\frac{1}{b-a}\;dy\\
+&=\frac{y^2}{2}\frac{1}{b-a}\biggr]^{b}_{a}\\
+&=\frac{1}{2}\frac{b^2-a^2}{b-a} \\
+&=\frac{1}{2}\frac{(b-a)(b+a)}{b-a} \\
+&=\frac{b+a}{2}.
+\end{aligned}
+$$
+
+Additionally, 
+$$
+\begin{aligned}
+E(Y^2)&=\int_{a}^{b} y^2\frac{1}{b-a}\;dy\\
+&=\frac{y^3}{3}\frac{1}{b-a}\biggr]^{b}_{a}\\
+&=\frac{1}{3}\frac{b^3-a^3}{b-a} \\
+&=\frac{1}{3}\frac{(b-a)(b^2+ab+a^2)}{b-a} \\
+&=\frac{b^2+ab+a^2}{3}.
+\end{aligned}
+$$
+
+Thus, the variance of $Y$ is 
+$$
+\begin{aligned}
+\mathrm{var}(Y)&=
+E(Y^2)-[E(Y)]^2\\
+&=\frac{b^2+ab+a^2}{3}-\biggl[\frac{(b+a)}{2}\biggr]^2\\
+&=\frac{4b^2+4ab+4a^2}{12}-\frac{3b^2 +6ab + 3a^2}{12}\\
+&=\frac{b^2-2ab-a^2}{12}\\
+&=\frac{(b-a)^2}{12}.
+\end{aligned}
+$$
+
+## Useful facts for transformations of random variables
+
+Let $Y$ be a random variable and $a\in\mathbb{R}$ be a constant. Then:
+
+- $E(a) = a$. 
+- $E(aY) = a E(Y)$.
+- $E(a + Y) = a + E(Y)$.
+- $\mathrm{var}(a) = 0$.
+- $\mathrm{var}(aY) = a^2 \mathrm{var}(Y)$.
+- $\mathrm{var}(a + Y) = \mathrm{var}(Y)$.

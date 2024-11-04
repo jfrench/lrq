@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – A Progressive Introduction to Linear Models</title>
+<title>Appendix D — Multivariate distributions – A Progressive Introduction to Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./estimation-inference-review.html" rel="prev">
+<link href="./random-vectors.html" rel="next">
+<link href="./random-variables.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -87,6 +69,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -100,7 +111,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./multivariate-distributions.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -172,7 +183,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./multivariate-distributions.html" class="sidebar-item-text sidebar-link">
+  <a href="./multivariate-distributions.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></span></a>
   </div>
 </li>
@@ -190,7 +201,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -201,15 +212,28 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#basic-properties" id="toc-basic-properties" class="nav-link active" data-scroll-target="#basic-properties"><span class="header-section-number">D.1</span> Basic properties</a></li>
+  <li><a href="#marginal-distributions" id="toc-marginal-distributions" class="nav-link" data-scroll-target="#marginal-distributions"><span class="header-section-number">D.2</span> Marginal distributions</a></li>
+  <li><a href="#independence-of-random-variables" id="toc-independence-of-random-variables" class="nav-link" data-scroll-target="#independence-of-random-variables"><span class="header-section-number">D.3</span> Independence of random variables</a></li>
+  <li><a href="#conditional-distributions" id="toc-conditional-distributions" class="nav-link" data-scroll-target="#conditional-distributions"><span class="header-section-number">D.4</span> Conditional distributions</a></li>
+  <li><a href="#covariance" id="toc-covariance" class="nav-link" data-scroll-target="#covariance"><span class="header-section-number">D.5</span> Covariance</a></li>
+  <li><a href="#sec-trans-mult-rand-vars" id="toc-sec-trans-mult-rand-vars" class="nav-link" data-scroll-target="#sec-trans-mult-rand-vars"><span class="header-section-number">D.6</span> Useful facts for transformations of multiple random variables</a></li>
+  <li><a href="#example-binomial" id="toc-example-binomial" class="nav-link" data-scroll-target="#example-binomial"><span class="header-section-number">D.7</span> Example (Binomial)</a></li>
+  <li><a href="#sec-continuous-bivariate-distribution-example" id="toc-sec-continuous-bivariate-distribution-example" class="nav-link" data-scroll-target="#sec-continuous-bivariate-distribution-example"><span class="header-section-number">D.8</span> Example (Continuous bivariate distribution)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./multivariate-distributions.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span id="sec-multivariate-distributions" class="quarto-section-identifier">Appendix D — Multivariate distributions</span></h1>
 </div>
 
 
@@ -226,113 +250,171 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-boos_stefanski_2011_pvalues" class="csl-entry" role="listitem">
-Boos, Dennis D., and Leonard A. Stefanski. 2011. <span>“P-Value
-Precision and Reproducibility.”</span> <em>The American
-Statistician</em> 65 (4): 213–21. <a href="https://doi.org/10.1198/tas.2011.10129">https://doi.org/10.1198/tas.2011.10129</a>.
-</div>
-<div id="ref-brewer" class="csl-entry" role="listitem">
-Brewer, Cynthia A. 2022. <span>“ColorBrewer2.org.”</span> <a href="https://colorbrewer2.org">https://colorbrewer2.org</a>.
-</div>
-<div id="ref-R-api2lm" class="csl-entry" role="listitem">
-French, Joshua P. 2023. <em>Api2lm: Functions and Data Sets for the Book
-"a Progressive Introduction to Linear Models"</em>. <a href="https://CRAN.R-project.org/package=api2lm">https://CRAN.R-project.org/package=api2lm</a>.
-</div>
-<div id="ref-gibson_pvalue" class="csl-entry" role="listitem">
-Gibson, Eric W. 2021. <span>“The Role of p-Values in Judging the
-Strength of Evidence and Realistic Replication Expectations.”</span>
-<em>Statistics in Biopharmaceutical Research</em> 13 (1): 6–18. <a href="https://doi.org/10.1080/19466315.2020.1724560">https://doi.org/10.1080/19466315.2020.1724560</a>.
-</div>
-<div id="ref-R-ggiraph" class="csl-entry" role="listitem">
-Gohel, David, and Panagiotis Skintzos. 2024. <em>Ggiraph: Make Ggplot2
-Graphics Interactive</em>. <a href="https://davidgohel.github.io/ggiraph/">https://davidgohel.github.io/ggiraph/</a>.
-</div>
-<div id="ref-GormanEtAl2014" class="csl-entry" role="listitem">
-Gorman, Kristen B., Tony D. Williams, and William R. Fraser. 2014.
-<span>“Ecological Sexual Dimorphism and Environmental Variability Within
-a Community of Antarctic Penguins (Genus Pygoscelis).”</span> <em>PLOS
-ONE</em> 9 (3): 1–14. <a href="https://doi.org/10.1371/journal.pone.0090081">https://doi.org/10.1371/journal.pone.0090081</a>.
-</div>
-<div id="ref-R-palmerpenguins" class="csl-entry" role="listitem">
-Horst, Allison, Alison Hill, and Kristen Gorman. 2022.
-<em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>.
-<a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a>.
-</div>
-<div id="ref-R-tibble" class="csl-entry" role="listitem">
-Müller, Kirill, and Hadley Wickham. 2023. <em>Tibble: Simple Data
-Frames</em>. <a href="https://tibble.tidyverse.org/">https://tibble.tidyverse.org/</a>.
-</div>
-<div id="ref-plotly" class="csl-entry" role="listitem">
-Plotly Technologies Inc. 2015. <span>“Collaborative Data
-Science.”</span> Montreal, QC: Plotly Technologies Inc. 2015. <a href="https://plot.ly">https://plot.ly</a>.
-</div>
-<div id="ref-R-base" class="csl-entry" role="listitem">
-R Core Team. 2024. <em>R: A Language and Environment for Statistical
-Computing</em>. Vienna, Austria: R Foundation for Statistical Computing.
-<a href="https://www.R-project.org/">https://www.R-project.org/</a>.
-</div>
-<div id="ref-R-plotly" class="csl-entry" role="listitem">
-Sievert, Carson, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik
-Ram, Marianne Corvellec, and Pedro Despouy. 2024. <em>Plotly: Create
-Interactive Web Graphics via Plotly.js</em>. <a href="https://plotly-r.com">https://plotly-r.com</a>.
-</div>
-<div id="ref-wackerly2008mathematical" class="csl-entry" role="listitem">
-Wackerly, Dennis D, William Mendhall, and Richard L Scheaffer. 2008.
-<span>“Mathematical Statistics with Applications, 7th Edition.”</span>
-Belmont, California: Cengage.
-</div>
-<div id="ref-advancedr" class="csl-entry" role="listitem">
-Wickham, Hadley. 2019. <em>Advanced <span>R</span></em>. CRC press. <a href="http://adv-r.had.co.nz/">http://adv-r.had.co.nz/</a>.
-</div>
-<div id="ref-tidyversestyleguide" class="csl-entry" role="listitem">
-———. 2022. <em>The Tidyverse Style Guide</em>. <a href="https://style.tidyverse.org/">https://style.tidyverse.org/</a>.
-</div>
-<div id="ref-R-forcats" class="csl-entry" role="listitem">
-———. 2023a. <em>Forcats: Tools for Working with Categorical Variables
-(Factors)</em>. <a href="https://forcats.tidyverse.org/">https://forcats.tidyverse.org/</a>.
-</div>
-<div id="ref-R-stringr" class="csl-entry" role="listitem">
-———. 2023b. <em>Stringr: Simple, Consistent Wrappers for Common String
-Operations</em>. <a href="https://stringr.tidyverse.org">https://stringr.tidyverse.org</a>.
-</div>
-<div id="ref-R-tidyverse" class="csl-entry" role="listitem">
-———. 2023c. <em>Tidyverse: Easily Install and Load the Tidyverse</em>.
-<a href="https://tidyverse.tidyverse.org">https://tidyverse.tidyverse.org</a>.
-</div>
-<div id="ref-R-readxl" class="csl-entry" role="listitem">
-Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel
-Files</em>. <a href="https://readxl.tidyverse.org">https://readxl.tidyverse.org</a>.
-</div>
-<div id="ref-R-ggplot2" class="csl-entry" role="listitem">
-Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen,
-Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey
-Dunnington, and Teun van den Brand. 2024. <em>Ggplot2: Create Elegant
-Data Visualisations Using the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
-</div>
-<div id="ref-R-dplyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis
-Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
-</div>
-<div id="ref-R-purrr" class="csl-entry" role="listitem">
-Wickham, Hadley, and Lionel Henry. 2023. <em>Purrr: Functional
-Programming Tools</em>. <a href="https://purrr.tidyverse.org/">https://purrr.tidyverse.org/</a>.
-</div>
-<div id="ref-R-readr" class="csl-entry" role="listitem">
-Wickham, Hadley, Jim Hester, and Jennifer Bryan. 2024. <em>Readr: Read
-Rectangular Text Data</em>. <a href="https://readr.tidyverse.org">https://readr.tidyverse.org</a>.
-</div>
-<div id="ref-R-tidyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. <em>Tidyr:
-Tidy Messy Data</em>. <a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a>.
-</div>
-<div id="ref-R-knitr" class="csl-entry" role="listitem">
-Xie, Yihui. 2024. <em>Knitr: A General-Purpose Package for Dynamic
-Report Generation in r</em>. <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
-</div>
-</div>
+<hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<hr>
+<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
+<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/d-multivariate-distributions-notebook.ipynb"> <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/281ae22b4ccc75524058acdc2d41517ac29aaf95/images/qr-multivariate-distributions.svg" width="100"> </a></p>
+<hr>
+<section id="basic-properties" class="level2" data-number="D.1">
+<h2 data-number="D.1" class="anchored" data-anchor-id="basic-properties"><span class="header-section-number">D.1</span> Basic properties</h2>
+<p>Let <span class="math inline">\(Y_1,Y_2,\ldots,Y_n\)</span> denote <span class="math inline">\(n\)</span> random variables with supports <span class="math inline">\(\mathcal{S}_1,\mathcal{S}_2,\ldots,\mathcal{S}_n\)</span>, respectively.</p>
+<p>If the random variables are <strong>jointly discrete</strong> (i.e., all discrete), then the joint pmf <span class="math inline">\(f(y_1,\ldots,y_n)=P(Y_1=y_1,\ldots,Y_n=y_n)\)</span> satisfies the following properties:</p>
+<ol type="1">
+<li><span class="math inline">\(0\leq f(y_1,\ldots,y_n )\leq 1\)</span>,</li>
+<li><span class="math inline">\(\sum_{y_1\in\mathcal{S}_1}\cdots \sum_{y_n\in\mathcal{S}_n} f(y_1,\ldots,y_n ) = 1\)</span>,</li>
+<li><span class="math inline">\(P((Y_1,\ldots,Y_n)\in A)=\sum_{(y_1,\ldots,y_n) \in A} f(y_1,\ldots,y_n)\)</span>.</li>
+</ol>
+<p>In this context, <span class="math display">\[
+E(Y_1 \cdots Y_n)=\sum_{y_1\in\mathcal{S}_1} \cdots \sum_{y_n\in\mathcal{S}_n}y_1 \cdots y_n  f(y_1,\ldots,y_n).
+\]</span></p>
+<p>In general, <span class="math display">\[
+E(g(Y_1,\ldots,Y_n))=\sum_{y_1\in\mathcal{S}_1} \cdots \sum_{y_n\in\mathcal{S}_n} g(y_1, \ldots, y_n) f(y_1,\ldots,y_n),
+\]</span> where <span class="math inline">\(g\)</span> is a function of the random variables.</p>
+<p>If the random variables are <strong>jointly continuous</strong>, then <span class="math inline">\(f(y_1,\ldots,y_n)\)</span> is the joint pdf if it satisfies the following properties:</p>
+<ol type="1">
+<li><span class="math inline">\(f(y_1,\ldots,y_n ) \geq 0\)</span>,</li>
+<li><span class="math inline">\(\int_{y_1\in\mathcal{S}_1}\cdots \int_{y_n\in\mathcal{S}_n} f(y_1,\ldots,y_n ) dy_n \cdots dy_1 = 1\)</span>,</li>
+<li><span class="math inline">\(P((Y_1,\ldots,Y_n)\in A)=\int \cdots \int_{(y_1,\ldots,y_n) \in A} f(y_1,\ldots,y_n) dy_n\ldots dy_1\)</span>.</li>
+</ol>
+<p>In this context, <span class="math display">\[
+E(Y_1 \cdots Y_n)=\int_{y_1\in\mathcal{S}_1} \cdots \int_{y_n\in\mathcal{S}_n} y_1 \cdots y_n  f(y_1,\ldots,y_n) dy_n \ldots dy_1.
+\]</span></p>
+<p>In general, <span class="math display">\[
+E(g(Y_1,\ldots,Y_n))=\int_{y_1\in\mathcal{S}_1} \cdots \int_{y_n\in\mathcal{S}_n} g(y_1, \ldots, y_n) f(y_1,\ldots,y_n) dy_n \cdots dy_1,
+\]</span> where <span class="math inline">\(g\)</span> is a function of the random variables.</p>
+</section>
+<section id="marginal-distributions" class="level2" data-number="D.2">
+<h2 data-number="D.2" class="anchored" data-anchor-id="marginal-distributions"><span class="header-section-number">D.2</span> Marginal distributions</h2>
+<p>If the random variables are jointly discrete, then the marginal pmf of <span class="math inline">\(Y_1\)</span> is obtained by summing over the other variables <span class="math inline">\(Y_2, ..., Y_n\)</span>: <span class="math display">\[
+f_{Y_1}(y_1)=\sum_{y_2\in\mathcal{S}_2}\cdots \sum_{y_n\in\mathcal{S}_n} f(y_1,\ldots,y_n).
+\]</span></p>
+<p>Similarly, if the random variables are jointly continuous, then the marginal pdf of <span class="math inline">\(Y_1\)</span> is obtained by integrating over the other variables <span class="math inline">\(Y_2, ..., Y_n\)</span> <span class="math display">\[
+f_{Y_1}(y_1)=\int_{y_2\in\mathcal{S}_2}\cdots \int_{y_n\in\mathcal{S}_n} f(y_1,\ldots,y_n) dy_n \cdots dy_2.
+\]</span></p>
+</section>
+<section id="independence-of-random-variables" class="level2" data-number="D.3">
+<h2 data-number="D.3" class="anchored" data-anchor-id="independence-of-random-variables"><span class="header-section-number">D.3</span> Independence of random variables</h2>
+<p>Random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent if <span class="math display">\[
+F(x, y) = F_X(x) F_Y(y).
+\]</span></p>
+<p>Alternatively, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent if <span class="math display">\[
+f(x, y) = f_X(x)f_Y(y).
+\]</span></p>
+</section>
+<section id="conditional-distributions" class="level2" data-number="D.4">
+<h2 data-number="D.4" class="anchored" data-anchor-id="conditional-distributions"><span class="header-section-number">D.4</span> Conditional distributions</h2>
+<p>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be random variables. Then assuming <span class="math inline">\(f_Y(y)&gt;0\)</span>, the conditional distribution of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y = y\)</span>, denoted <span class="math inline">\(X|Y=y\)</span> comes from Bayes’ formula: <span class="math display">\[
+f(x\mid y) = \frac{f(x, y)}{f_{Y}(y)}, \quad f_Y(y)&gt;0.
+\]</span></p>
+</section>
+<section id="covariance" class="level2" data-number="D.5">
+<h2 data-number="D.5" class="anchored" data-anchor-id="covariance"><span class="header-section-number">D.5</span> Covariance</h2>
+<p>The covariance between random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is <span class="math display">\[
+\mathrm{cov}(X,Y)=E[(X-E(X))(Y-E(Y))]=E(XY)-E(X)E(Y).
+\]</span></p>
+</section>
+<section id="sec-trans-mult-rand-vars" class="level2" data-number="D.6">
+<h2 data-number="D.6" class="anchored" data-anchor-id="sec-trans-mult-rand-vars"><span class="header-section-number">D.6</span> Useful facts for transformations of multiple random variables</h2>
+<p>Let <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> be scalar constants. Let <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span> be random variables. Then:</p>
+<ul>
+<li><span class="math inline">\(E(aY+bZ)=aE(Y)+bE(Z)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(Y+Z)=\mathrm{var}(Y)+\mathrm{var}(Z)+2\mathrm{cov}(Y, Z)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(a,Y)=0\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(Y,Y)=\mathrm{var}(Y)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(aY, bZ)=ab\mathrm{cov}(Y, Z)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(a + Y,b + Z)=\mathrm{cov}(Y, Z)\)</span>.</li>
+</ul>
+<p>If <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span> are also independent, then:</p>
+<ul>
+<li><span class="math inline">\(E(YZ)=E(Y)E(Z)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{cov}(Y, Z)=0\)</span>.</li>
+</ul>
+<p>In general, if <span class="math inline">\(Y_1, Y_2, \ldots, Y_n\)</span> are a set of random variables, then:</p>
+<ul>
+<li><span class="math inline">\(E(\sum_{i=1}^n Y_i) = \sum_{i=1}^n E(Y_i)\)</span>, i.e., the expectation of the sum of random variables is the sum of the expectation of the random variables.</li>
+<li><span class="math inline">\(\mathrm{var}(\sum_{i=1}^n Y_i) = \sum_{i=1}^n \mathrm{var}(Y_i) + \sum_{j=1}^n\sum_{1\leq i&lt;j\leq n}2\mathrm{cov}(Y_i, Y_j)\)</span>, i.e., the variance of the sum of random variables is the sum fo the variables’ variances plus the sum of twice all possible pairwise covariances.</li>
+</ul>
+<p>If in addition, <span class="math inline">\(Y_1, Y_2, \ldots, Y_n\)</span> are all independent of each other, then:</p>
+<ul>
+<li><span class="math inline">\(\mathrm{var}(\sum_{i=1}^n Y_i) = \sum_{i=1}^n \mathrm{var}(Y_i)\)</span> since all pairwise covariances are 0.</li>
+</ul>
+</section>
+<section id="example-binomial" class="level2" data-number="D.7">
+<h2 data-number="D.7" class="anchored" data-anchor-id="example-binomial"><span class="header-section-number">D.7</span> Example (Binomial)</h2>
+<p>A random variable <span class="math inline">\(Y\)</span> is said to have a Binomial distribution with <span class="math inline">\(n\)</span> trials and probability of success <span class="math inline">\(\theta\)</span>, denoted <span class="math inline">\(Y\sim \mathsf{Bin}(n,\theta)\)</span> when <span class="math inline">\(\mathcal{S}=\{0,1,2,\ldots,n\}\)</span> and the pmf is <span class="math display">\[
+f(y\mid\theta) = \binom{n}{y} \theta^y (1-\theta)^{(n-y)}.
+\]</span></p>
+<p>An alternative explanation of a Binomial random variable is that it is the sum of <span class="math inline">\(n\)</span> independent and identically-distributed Bernoulli random variables. Alternatively, let <span class="math inline">\(Y_1,Y_2,\ldots,Y_n\stackrel{i.i.d.}{\sim} \mathsf{Bernoulli}(\theta)\)</span>, where i.i.d. stands for independent and identically distributed, i.e., <span class="math inline">\(Y_1, Y_2, \ldots, Y_n\)</span> are independent random variables with identical distributions. Then <span class="math inline">\(Y=\sum_{i=1}^n Y_i \sim \mathsf{Bin}(n,\theta)\)</span>.</p>
+<p>A Binomial random variable with <span class="math inline">\(\theta = 0.5\)</span> models the question: what is the probability of flipping <span class="math inline">\(y\)</span> heads in <span class="math inline">\(n\)</span> flips?</p>
+<p>Using this information and the facts above, we can easily determine the mean and variance of <span class="math inline">\(Y\)</span>.</p>
+<p>Using our results from <a href="random-variables.html#sec-bernoulli-distribution-example" class="quarto-xref"><span>Section C.1.1</span></a>, we can see that <span class="math inline">\(E(Y_i) = \theta\)</span> for <span class="math inline">\(i=1,2,\ldots,n\)</span>. Similarly, <span class="math inline">\(\mathrm{var}(Y_i)=\theta(1-\theta)\)</span> for <span class="math inline">\(i=1,2,\ldots,n\)</span>.</p>
+<p>We determine that: <span class="math display">\[
+E(Y)=E\biggl(\sum_{i=1}^n Y_i\biggr)=\sum_{i=1}^n E(Y_i) = \sum_{i=1}^n \theta = n\theta.
+\]</span></p>
+<p>Similarly, since <span class="math inline">\(Y_1, Y_2, \ldots, Y_n\)</span> are i.i.d. and using the facts in <a href="#sec-trans-mult-rand-vars" class="quarto-xref"><span>Section D.6</span></a>, we see that <span class="math display">\[
+\mathrm{var}(Y) = \mathrm{var}(\sum_{i=1}^n Y_i) = \sum_{i=1}^n\mathrm{var}(Y_i)=\sum_{i=1}^n \theta(1-\theta) = n\theta(1-\theta).
+\]</span></p>
+</section>
+<section id="sec-continuous-bivariate-distribution-example" class="level2" data-number="D.8">
+<h2 data-number="D.8" class="anchored" data-anchor-id="sec-continuous-bivariate-distribution-example"><span class="header-section-number">D.8</span> Example (Continuous bivariate distribution)</h2>
+<p>Hydration is important for health. Like many people, the author has a water bottle he uses to say hydrated through the day and drinks several liters of water per day. Let’s say the author refills his water bottle every 3 hours. Let <span class="math inline">\(Y\)</span> denote the proportion of the water bottle filled with water at the beginning of the 3-hour window. Let <span class="math inline">\(X\)</span> denote the amount of water the author consumes in the 3-hour window (measured in the the proportion of total water bottle capacity). We know that <span class="math inline">\(0\leq X \leq Y \leq 1\)</span>. The joint density of the random variables is <span class="math display">\[
+f(x,y)=4y^2,\quad 0 \leq x\leq y\leq 1,
+\]</span> and 0 otherwise.</p>
+<p>We answer a series of questions about this distribution.</p>
+<p><strong>Q1: Determine <span class="math inline">\(P(0.5\leq X\leq 1, 0.75\leq Y)\)</span></strong>.</p>
+<p>Note that the comma between the two events means “and”.</p>
+<p>Since <span class="math inline">\(X\)</span> must be no more than <span class="math inline">\(Y\)</span>, we can answer this question as <span class="math display">\[
+\int_{3/4}^{1} \int_{1/2}^{y} 4y^2\;dx\;dy=229/768\approx 0.30.
+\]</span></p>
+<p><strong>Q2: Determine the marginal distributions of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</strong></p>
+<p>To find the marginal distribution of <span class="math inline">\(X\)</span>, we must integrate the joint pdf with respect to the limits of <span class="math inline">\(Y\)</span>. Don’t forget to include the support of the pdf of <span class="math inline">\(X\)</span> (which after integrating out <span class="math inline">\(Y\)</span>, must be between 0 and 1). <span class="math display">\[
+\begin{aligned}
+f_X(x) &amp;=\int_{x}^1 4y^2\;dy \\
+&amp;=\frac{4}{3}(1-x^3),\quad 0\leq x \leq 1.
+\end{aligned}
+\]</span></p>
+<p>Similarly, <span class="math display">\[
+\begin{aligned}
+f_Y(y) &amp;=\int_{0}^y 4y^2\;dx \\
+&amp;=4y^3,\quad 0\leq y \leq 1.
+\end{aligned}
+\]</span></p>
+<p><strong>Q3: Determine the means of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</strong></p>
+<p>The mean of <span class="math inline">\(X\)</span> is the integral of <span class="math inline">\(x f_X(x)\)</span> over the support of <span class="math inline">\(X\)</span>, i.e., <span class="math display">\[
+E(X) =\int_{0}^1 x\biggl(\frac{4}{3}(1-x^3)\biggr)\;dx = \frac{2}{5}
+\]</span></p>
+<p>Similarly, <span class="math display">\[
+E(Y) =\int_{0}^1 y(4y^3)\;dy = \frac{4}{5}
+\]</span></p>
+<p><strong>Q4: Determine the variances of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</strong></p>
+<p>We use the formula <span class="math inline">\(\mathrm{var}(X)=E(X^2)-[E(X)^2]\)</span> to compute the variances. First, <span class="math display">\[
+E(X^2) =\int_{0}^1 x^2\biggl(\frac{4}{3}(1-x^3)\biggr)\;dx = \frac{2}{9}.
+\]</span> Second, <span class="math display">\[
+E(Y^2) =\int_{0}^1 y^2(4y^3)\;dy = \frac{2}{3}.
+\]</span> Thus, <span class="math display">\[
+\mathrm{var}(X)=\frac{2}{9}-\biggl(\frac{2}{5}\biggr)^2=\frac{14}{225}.
+\]</span> <span class="math display">\[
+\mathrm{var}(Y)=\frac{2}{3}-\biggl(\frac{4}{5}\biggr)^2=\frac{2}{75}.
+\]</span></p>
+<p><strong>Q5: Determine the mean of <span class="math inline">\(XY\)</span>.</strong></p>
+<p>The mean of <span class="math inline">\(XY\)</span> requires us to integrate the product of <span class="math inline">\(xy\)</span> and the joint pdf over the joint support of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Specifically, <span class="math display">\[
+E(XY)=\int_{0}^{1}\int_{0}^{y} xy(4y^2)\;dx\;dy= \frac{1}{3}.
+\]</span></p>
+<p><strong>Q6: Determine the covariance of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</strong></p>
+<p>Using our previous work, we see that <span class="math display">\[
+\mathrm{cov}(X,Y)=E(XY) - E(X)E(Y)=\frac{1}{3}-\frac{2}{5}\cdot\frac{4}{5}=\frac{1}{75}.
+\]</span></p>
+<p><strong>Q7: Determine the mean and variance of <span class="math inline">\(Y-X\)</span>, i.e., the average amount of water remaining after a 3-hour window and the variability of that amount.</strong></p>
+<p>Using the results in <a href="#sec-trans-mult-rand-vars" class="quarto-xref"><span>Section D.6</span></a>, we have that <span class="math display">\[
+E(Y-X)=E(Y)-E(X)=4/5-2/5=2/5,
+\]</span> and <span class="math display">\[
+\mathrm{var}(Y-X)=\mathrm{var}(Y)+\mathrm{var}(X)-2\mathrm{cov}(Y,X)=
+\frac{2}{75}+\frac{14}{225}-2\cdot\frac{1}{75}=\frac{14}{225}.
+\]</span></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -757,11 +839,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./estimation-inference-review.html" class="pagination-link" aria-label="Review of Estimation, Hypothesis Testing, and Confidence Intervals">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></span>
+      <a href="./random-variables.html" class="pagination-link" aria-label="Random Variables">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./random-vectors.html" class="pagination-link" aria-label="Random vectors">
+        <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

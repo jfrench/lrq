@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – A Progressive Introduction to Linear Models</title>
+<title>Appendix C — Random Variables – A Progressive Introduction to Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./estimation-inference-review.html" rel="prev">
+<link href="./multivariate-distributions.html" rel="next">
+<link href="./probability-basics.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -87,6 +69,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -100,7 +111,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./random-variables.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -166,7 +177,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./random-variables.html" class="sidebar-item-text sidebar-link">
+  <a href="./random-variables.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
   </div>
 </li>
@@ -190,7 +201,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -201,15 +212,29 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#discrete-random-variables" id="toc-discrete-random-variables" class="nav-link active" data-scroll-target="#discrete-random-variables"><span class="header-section-number">C.1</span> Discrete random variables</a>
+  <ul class="collapse">
+  <li><a href="#sec-bernoulli-distribution-example" id="toc-sec-bernoulli-distribution-example" class="nav-link" data-scroll-target="#sec-bernoulli-distribution-example"><span class="header-section-number">C.1.1</span> Example (Bernoulli distribution)</a></li>
+  </ul></li>
+  <li><a href="#continuous-random-variables" id="toc-continuous-random-variables" class="nav-link" data-scroll-target="#continuous-random-variables"><span class="header-section-number">C.2</span> Continuous random variables</a>
+  <ul class="collapse">
+  <li><a href="#example-uniform-distribution" id="toc-example-uniform-distribution" class="nav-link" data-scroll-target="#example-uniform-distribution"><span class="header-section-number">C.2.1</span> Example (Uniform distribution)</a></li>
+  </ul></li>
+  <li><a href="#useful-facts-for-transformations-of-random-variables" id="toc-useful-facts-for-transformations-of-random-variables" class="nav-link" data-scroll-target="#useful-facts-for-transformations-of-random-variables"><span class="header-section-number">C.3</span> Useful facts for transformations of random variables</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./random-variables.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title">Appendix C — Random Variables</h1>
 </div>
 
 
@@ -226,113 +251,128 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-boos_stefanski_2011_pvalues" class="csl-entry" role="listitem">
-Boos, Dennis D., and Leonard A. Stefanski. 2011. <span>“P-Value
-Precision and Reproducibility.”</span> <em>The American
-Statistician</em> 65 (4): 213–21. <a href="https://doi.org/10.1198/tas.2011.10129">https://doi.org/10.1198/tas.2011.10129</a>.
-</div>
-<div id="ref-brewer" class="csl-entry" role="listitem">
-Brewer, Cynthia A. 2022. <span>“ColorBrewer2.org.”</span> <a href="https://colorbrewer2.org">https://colorbrewer2.org</a>.
-</div>
-<div id="ref-R-api2lm" class="csl-entry" role="listitem">
-French, Joshua P. 2023. <em>Api2lm: Functions and Data Sets for the Book
-"a Progressive Introduction to Linear Models"</em>. <a href="https://CRAN.R-project.org/package=api2lm">https://CRAN.R-project.org/package=api2lm</a>.
-</div>
-<div id="ref-gibson_pvalue" class="csl-entry" role="listitem">
-Gibson, Eric W. 2021. <span>“The Role of p-Values in Judging the
-Strength of Evidence and Realistic Replication Expectations.”</span>
-<em>Statistics in Biopharmaceutical Research</em> 13 (1): 6–18. <a href="https://doi.org/10.1080/19466315.2020.1724560">https://doi.org/10.1080/19466315.2020.1724560</a>.
-</div>
-<div id="ref-R-ggiraph" class="csl-entry" role="listitem">
-Gohel, David, and Panagiotis Skintzos. 2024. <em>Ggiraph: Make Ggplot2
-Graphics Interactive</em>. <a href="https://davidgohel.github.io/ggiraph/">https://davidgohel.github.io/ggiraph/</a>.
-</div>
-<div id="ref-GormanEtAl2014" class="csl-entry" role="listitem">
-Gorman, Kristen B., Tony D. Williams, and William R. Fraser. 2014.
-<span>“Ecological Sexual Dimorphism and Environmental Variability Within
-a Community of Antarctic Penguins (Genus Pygoscelis).”</span> <em>PLOS
-ONE</em> 9 (3): 1–14. <a href="https://doi.org/10.1371/journal.pone.0090081">https://doi.org/10.1371/journal.pone.0090081</a>.
-</div>
-<div id="ref-R-palmerpenguins" class="csl-entry" role="listitem">
-Horst, Allison, Alison Hill, and Kristen Gorman. 2022.
-<em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>.
-<a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a>.
-</div>
-<div id="ref-R-tibble" class="csl-entry" role="listitem">
-Müller, Kirill, and Hadley Wickham. 2023. <em>Tibble: Simple Data
-Frames</em>. <a href="https://tibble.tidyverse.org/">https://tibble.tidyverse.org/</a>.
-</div>
-<div id="ref-plotly" class="csl-entry" role="listitem">
-Plotly Technologies Inc. 2015. <span>“Collaborative Data
-Science.”</span> Montreal, QC: Plotly Technologies Inc. 2015. <a href="https://plot.ly">https://plot.ly</a>.
-</div>
-<div id="ref-R-base" class="csl-entry" role="listitem">
-R Core Team. 2024. <em>R: A Language and Environment for Statistical
-Computing</em>. Vienna, Austria: R Foundation for Statistical Computing.
-<a href="https://www.R-project.org/">https://www.R-project.org/</a>.
-</div>
-<div id="ref-R-plotly" class="csl-entry" role="listitem">
-Sievert, Carson, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik
-Ram, Marianne Corvellec, and Pedro Despouy. 2024. <em>Plotly: Create
-Interactive Web Graphics via Plotly.js</em>. <a href="https://plotly-r.com">https://plotly-r.com</a>.
-</div>
-<div id="ref-wackerly2008mathematical" class="csl-entry" role="listitem">
-Wackerly, Dennis D, William Mendhall, and Richard L Scheaffer. 2008.
-<span>“Mathematical Statistics with Applications, 7th Edition.”</span>
-Belmont, California: Cengage.
-</div>
-<div id="ref-advancedr" class="csl-entry" role="listitem">
-Wickham, Hadley. 2019. <em>Advanced <span>R</span></em>. CRC press. <a href="http://adv-r.had.co.nz/">http://adv-r.had.co.nz/</a>.
-</div>
-<div id="ref-tidyversestyleguide" class="csl-entry" role="listitem">
-———. 2022. <em>The Tidyverse Style Guide</em>. <a href="https://style.tidyverse.org/">https://style.tidyverse.org/</a>.
-</div>
-<div id="ref-R-forcats" class="csl-entry" role="listitem">
-———. 2023a. <em>Forcats: Tools for Working with Categorical Variables
-(Factors)</em>. <a href="https://forcats.tidyverse.org/">https://forcats.tidyverse.org/</a>.
-</div>
-<div id="ref-R-stringr" class="csl-entry" role="listitem">
-———. 2023b. <em>Stringr: Simple, Consistent Wrappers for Common String
-Operations</em>. <a href="https://stringr.tidyverse.org">https://stringr.tidyverse.org</a>.
-</div>
-<div id="ref-R-tidyverse" class="csl-entry" role="listitem">
-———. 2023c. <em>Tidyverse: Easily Install and Load the Tidyverse</em>.
-<a href="https://tidyverse.tidyverse.org">https://tidyverse.tidyverse.org</a>.
-</div>
-<div id="ref-R-readxl" class="csl-entry" role="listitem">
-Wickham, Hadley, and Jennifer Bryan. 2023. <em>Readxl: Read Excel
-Files</em>. <a href="https://readxl.tidyverse.org">https://readxl.tidyverse.org</a>.
-</div>
-<div id="ref-R-ggplot2" class="csl-entry" role="listitem">
-Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen,
-Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, Dewey
-Dunnington, and Teun van den Brand. 2024. <em>Ggplot2: Create Elegant
-Data Visualisations Using the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
-</div>
-<div id="ref-R-dplyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis
-Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
-</div>
-<div id="ref-R-purrr" class="csl-entry" role="listitem">
-Wickham, Hadley, and Lionel Henry. 2023. <em>Purrr: Functional
-Programming Tools</em>. <a href="https://purrr.tidyverse.org/">https://purrr.tidyverse.org/</a>.
-</div>
-<div id="ref-R-readr" class="csl-entry" role="listitem">
-Wickham, Hadley, Jim Hester, and Jennifer Bryan. 2024. <em>Readr: Read
-Rectangular Text Data</em>. <a href="https://readr.tidyverse.org">https://readr.tidyverse.org</a>.
-</div>
-<div id="ref-R-tidyr" class="csl-entry" role="listitem">
-Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2024. <em>Tidyr:
-Tidy Messy Data</em>. <a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a>.
-</div>
-<div id="ref-R-knitr" class="csl-entry" role="listitem">
-Xie, Yihui. 2024. <em>Knitr: A General-Purpose Package for Dynamic
-Report Generation in r</em>. <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
-</div>
-</div>
+<hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<hr>
+<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
+<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/c-random-variables-notebook.ipynb"> <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/ee3d385af063b0342ff165f3e48f3ddd7f82f04e/images/qr-random-variables.svg" width="100"> </a></p>
+<hr>
+<p>A <strong>random variable</strong> <span class="math inline">\(Y\)</span> is a function mapping outcomes from a sample space, <span class="math inline">\(\Omega\)</span>, to the real numbers, which is indicated by the notation <span class="math display">\[
+Y:\Omega\to\mathbb{R}.
+\]</span> The function <span class="math inline">\(Y\)</span> assigns a real number <span class="math inline">\(Y(\omega)\)</span> to each outcome <span class="math inline">\(\omega\in \Omega\)</span>. We typically drop the <span class="math inline">\((\omega)\)</span> notation for simplicity.</p>
+<p>The <strong>cumulative distribution function (CDF)</strong> of <span class="math inline">\(Y\)</span>, <span class="math inline">\(F_Y\)</span>, is a function <span class="math inline">\(F_Y:\mathbb{R}\to [0,1]\)</span> defined by <span class="math display">\[
+F_Y (y)=P(Y \leq y).
+\]</span> The subscript of <span class="math inline">\(F\)</span> indicates the random variable the CDF describes. E.g., <span class="math inline">\(F_X\)</span> denotes the CDF of the random variable <span class="math inline">\(X\)</span> and <span class="math inline">\(F_Y\)</span> denotes the CDF of the random variable <span class="math inline">\(Y\)</span>. The subscript can be dropped when the context makes it clear what random variable the CDF describes. An <span class="math inline">\(F\)</span>-distributed random variable is one that has the <span class="math inline">\(F\)</span> distribution.</p>
+<p>The <strong>support</strong> of <span class="math inline">\(Y\)</span>, <span class="math inline">\(\mathcal{S}\)</span>, is the smallest set such that <span class="math inline">\(P(Y\in \mathcal{S})=1\)</span>.</p>
+<section id="discrete-random-variables" class="level2" data-number="C.1">
+<h2 data-number="C.1" class="anchored" data-anchor-id="discrete-random-variables"><span class="header-section-number">C.1</span> Discrete random variables</h2>
+<p><span class="math inline">\(Y\)</span> is a <strong>discrete</strong> random variable if it takes countably many values. The support can be represented as <span class="math inline">\(\mathcal{S} = \{y_1, y_2, \dots \}\)</span>.</p>
+<p>The <strong>probability mass function (pmf)</strong> for <span class="math inline">\(Y\)</span> is <span class="math inline">\(f_Y (y)=P(Y=y)\)</span>, where <span class="math inline">\(y\in \mathbb{R}\)</span>, and must have the following properties:</p>
+<ol type="1">
+<li><span class="math inline">\(0 \leq f_Y(y) \leq 1\)</span>.</li>
+<li><span class="math inline">\(\sum_{y\in \mathcal{S}} f_Y(y) = 1\)</span>.</li>
+</ol>
+<p>Additionally, the following statements are true:</p>
+<ul>
+<li><span class="math inline">\(F_Y(c) = P(Y \leq c) = \sum_{y\in \mathcal{S}:y \leq c} f_Y(y)\)</span>.</li>
+<li><span class="math inline">\(P(Y \in A) = \sum_{y \in A} f_Y(y)\)</span> for some event <span class="math inline">\(A\)</span>. 0 <span class="math inline">\(P(a \leq Y \leq b) = \sum_{y\in\mathcal{S}:a\leq y\leq b} f_Y(y)\)</span>.</li>
+</ul>
+<p>The <strong>expected value</strong>, <strong>mean</strong>, or first moment of <span class="math inline">\(Y\)</span>, is defined as <span class="math display">\[
+E(Y) = \sum_{y\in \mathcal{S}} y f_Y(y),
+\]</span> assuming the sum is well-defined.</p>
+<p>The <strong>variance</strong> of <span class="math inline">\(Y\)</span> is defined as <span class="math display">\[
+\mathrm{var}(Y)=E(Y-E(Y))^2 =
+\sum_{y\in \mathcal{S}} (y - E(Y))^2 f_Y(y).
+\]</span></p>
+<p>Note that <span class="math inline">\(\mathrm{var}(Y)=E(Y-E(Y))^2=E(Y^2)-[E(Y)]^2\)</span>. This formula is often easier to compute.</p>
+<p>The <strong>standard deviation</strong> of <span class="math inline">\(Y\)</span> is defined as <span class="math display">\[
+SD(Y)=\sqrt{\mathrm{var}(Y)}.
+\]</span></p>
+<p>More generally, for a discrete random variable <span class="math inline">\(Y\)</span> and a real-valued function <span class="math inline">\(g\)</span>, <span class="math display">\[E(g(Y))=\sum_{y\in\mathcal{S}}g(y)f_Y(y),\]</span> assuming the sum is well-defined.</p>
+<section id="sec-bernoulli-distribution-example" class="level3" data-number="C.1.1">
+<h3 data-number="C.1.1" class="anchored" data-anchor-id="sec-bernoulli-distribution-example"><span class="header-section-number">C.1.1</span> Example (Bernoulli distribution)</h3>
+<p>A random variable <span class="math inline">\(Y\)</span> has a Bernoulli distribution with probability <span class="math inline">\(\theta\)</span>, denoted <span class="math inline">\(Y\sim \mathsf{Bernoulli}(\theta)\)</span>, if <span class="math inline">\(\mathcal{S} = \{0, 1\}\)</span> and <span class="math inline">\(P(Y = 1) = \theta\)</span>, where <span class="math inline">\(\theta\in (0,1)\)</span>.</p>
+<p>The pmf of a Bernoulli random variable is <span class="math display">\[
+f_Y(y) = \theta^y (1-\theta)^{(1-y)},\quad y\in \{0, 1\}, \theta \in (0, 1).
+\]</span></p>
+<p>The mean of a Bernoulli random variable is <span class="math display">\[
+E(Y)=0(1-\theta )+1(\theta)=\theta.
+\]</span></p>
+<p>The variance of a Bernoulli random variable is <span class="math display">\[
+\mathrm{var}(Y)=(0-\theta)^2(1-\theta)+(1-\theta)^2\theta = \theta(1-\theta).
+\]</span></p>
+</section>
+</section>
+<section id="continuous-random-variables" class="level2" data-number="C.2">
+<h2 data-number="C.2" class="anchored" data-anchor-id="continuous-random-variables"><span class="header-section-number">C.2</span> Continuous random variables</h2>
+<p><span class="math inline">\(Y\)</span> is a <strong>continuous</strong> random variable if there exists a function <span class="math inline">\(f_Y (y)\)</span> such that:</p>
+<ol type="1">
+<li><span class="math inline">\(f_Y (y)\geq 0\)</span> for all <span class="math inline">\(y\)</span>,</li>
+<li><span class="math inline">\(\int_{-\infty}^\infty f_Y (y)  dy = 1\)</span>,</li>
+<li><span class="math inline">\(a\leq b\)</span>, <span class="math inline">\(P(a&lt;Y&lt;b)=\int_a^b f_Y (y)  dy\)</span>.</li>
+</ol>
+<p>The function <span class="math inline">\(f_Y\)</span> is called the <strong>probability density function (pdf)</strong>.</p>
+<p>Additionally, <span class="math inline">\(F_Y (y)=\int_{-\infty}^y f_Y (y)  dy\)</span> and <span class="math inline">\(f_Y (y)=F'_Y(y)\)</span> for any point <span class="math inline">\(y\)</span> at which <span class="math inline">\(F_Y\)</span> is differentiable.</p>
+<p>The <strong>mean</strong> of a continuous random variables <span class="math inline">\(Y\)</span> is defined as <span class="math display">\[
+E(Y) =
+\int_{-\infty}^{\infty} y f_Y(y)  dy =
+\int_{y\in\mathcal{S}} y f_Y(y).
+\]</span> assuming the integral is well-defined.</p>
+<p>The <strong>variance</strong> of a continuous random variable <span class="math inline">\(Y\)</span> is defined by <span class="math display">\[
+\mathrm{var}(Y)=
+E(Y-E(Y))^2=\int_{-\infty}^{\infty} (y - E(Y))^2 f_Y(y)  dy =
+\int_{y\in\mathcal{S}} (y - E(Y))^2 f_Y(y) dy.
+\]</span></p>
+<p>More generally, for a continuous random variable <span class="math inline">\(Y\)</span> and a real-valued function <span class="math inline">\(g\)</span>, <span class="math display">\[E(g(Y))=\int_{y\in\mathcal{S}}g(y)f_Y(y)\;dy,\]</span> assuming the integral is well-defined.</p>
+<section id="example-uniform-distribution" class="level3" data-number="C.2.1">
+<h3 data-number="C.2.1" class="anchored" data-anchor-id="example-uniform-distribution"><span class="header-section-number">C.2.1</span> Example (Uniform distribution)</h3>
+<p>A random variable <span class="math inline">\(Y\)</span> is said to have an uniform distribution with parameters <span class="math inline">\(a&lt;b\)</span>, written as <span class="math inline">\(Y \sim \mathsf{U}(a, b)\)</span>, if <span class="math inline">\(\mathcal{S} = \{y\in \mathbb{R}:a\leq y \leq b\}\)</span> and has the density function <span class="math display">\[
+f(y) = \frac{1}{b-a}, \quad a\leq y \leq b, a &lt; b.
+\]</span></p>
+<p>The mean of <span class="math inline">\(Y\)</span> is computed as <span class="math display">\[
+\begin{aligned}
+E(Y)&amp;=\int_{a}^{b} y\frac{1}{b-a}\;dy\\
+&amp;=\frac{y^2}{2}\frac{1}{b-a}\biggr]^{b}_{a}\\
+&amp;=\frac{1}{2}\frac{b^2-a^2}{b-a} \\
+&amp;=\frac{1}{2}\frac{(b-a)(b+a)}{b-a} \\
+&amp;=\frac{b+a}{2}.
+\end{aligned}
+\]</span></p>
+<p>Additionally, <span class="math display">\[
+\begin{aligned}
+E(Y^2)&amp;=\int_{a}^{b} y^2\frac{1}{b-a}\;dy\\
+&amp;=\frac{y^3}{3}\frac{1}{b-a}\biggr]^{b}_{a}\\
+&amp;=\frac{1}{3}\frac{b^3-a^3}{b-a} \\
+&amp;=\frac{1}{3}\frac{(b-a)(b^2+ab+a^2)}{b-a} \\
+&amp;=\frac{b^2+ab+a^2}{3}.
+\end{aligned}
+\]</span></p>
+<p>Thus, the variance of <span class="math inline">\(Y\)</span> is <span class="math display">\[
+\begin{aligned}
+\mathrm{var}(Y)&amp;=
+E(Y^2)-[E(Y)]^2\\
+&amp;=\frac{b^2+ab+a^2}{3}-\biggl[\frac{(b+a)}{2}\biggr]^2\\
+&amp;=\frac{4b^2+4ab+4a^2}{12}-\frac{3b^2 +6ab + 3a^2}{12}\\
+&amp;=\frac{b^2-2ab-a^2}{12}\\
+&amp;=\frac{(b-a)^2}{12}.
+\end{aligned}
+\]</span></p>
+</section>
+</section>
+<section id="useful-facts-for-transformations-of-random-variables" class="level2" data-number="C.3">
+<h2 data-number="C.3" class="anchored" data-anchor-id="useful-facts-for-transformations-of-random-variables"><span class="header-section-number">C.3</span> Useful facts for transformations of random variables</h2>
+<p>Let <span class="math inline">\(Y\)</span> be a random variable and <span class="math inline">\(a\in\mathbb{R}\)</span> be a constant. Then:</p>
+<ul>
+<li><span class="math inline">\(E(a) = a\)</span>.</li>
+<li><span class="math inline">\(E(aY) = a E(Y)\)</span>.</li>
+<li><span class="math inline">\(E(a + Y) = a + E(Y)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(a) = 0\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(aY) = a^2 \mathrm{var}(Y)\)</span>.</li>
+<li><span class="math inline">\(\mathrm{var}(a + Y) = \mathrm{var}(Y)\)</span>.</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -757,11 +797,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./estimation-inference-review.html" class="pagination-link" aria-label="Review of Estimation, Hypothesis Testing, and Confidence Intervals">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></span>
+      <a href="./probability-basics.html" class="pagination-link" aria-label="Probability Basics">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Probability Basics</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./multivariate-distributions.html" class="pagination-link" aria-label="Multivariate distributions">
+        <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

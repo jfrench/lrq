@@ -1,0 +1,231 @@
+# Random vectors
+
+---
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. 
+
+---
+
+A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below. 
+
+<a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/d-multivariate-distributions-and-random-vectors-notebook.ipynb">
+<img src="https://raw.githubusercontent.com/jfrench/LinearRegression/0ece3fee82ea5e6188728023edf1dfa8318e4d48/images/qr-random-vectors.svg" width="100">
+</a>
+
+## Definition
+
+A **random vector** is a vector of random variables. A random vector is assumed to be a column vector unless otherwise specified.
+
+Additionally, a **random matrix** is a matrix of random variables.
+
+## Mean, variance, and covariance
+
+Let $\mathbf{y}=[Y_1,Y_2,\dots,Y_n]$ be an $n\times1$ vector. 
+
+The mean of a random vector is the vector containing the means of the random variables in the vector. More specifically, the mean of $\mathbf{y}$ is defined as
+$$
+E(\mathbf{y})=\begin{bmatrix}E(Y_1)\\E(Y_2)\\\vdots\\E(Y_n)\end{bmatrix}.
+$$
+
+The variance of a random vector isn't a number or a vector of numbers. Instead, it is the matrix of covariances of all pairs of random variables in the random vector. The variance matrix of $\mathbf{y}$ is defined as
+$$
+\begin{aligned}
+\mathrm{var}(\mathbf{y}) &= E\Bigl[(\mathbf{y} - E(\mathbf{y}))(\mathbf{y} - E(\mathbf{y}))^T\Bigr]\\
+&= \begin{bmatrix}\mathrm{cov}(Y_1, Y_1) & \mathrm{cov}(Y_1,Y_2) &\dots &\mathrm{cov}(Y_1,Y_n)\\\mathrm{cov}(Y_2,Y_1 )&\mathrm{cov}(Y_2, Y_2)&\dots&\mathrm{cov}(Y_2,Y_n)\\\vdots&\vdots&\vdots&\vdots\\
+\mathrm{cov}(Y_n,Y_1)&\mathrm{cov}(Y_n,Y_2)&\dots&\mathrm{cov}(Y_n, Y_n)\end{bmatrix}.
+\end{aligned}
+$$
+The variance matrix of $\mathbf{y}$ can also be computed as 
+$$
+\mathrm{var}(\mathbf{y}) = E(\mathbf{y}\mathbf{y}^T)-E(\mathbf{y})E(\mathbf{y})^T.
+$$
+Also, noting that $\mathrm{cov}(Y, Y) = \mathrm{var}(Y)$ for a random variable $Y$, we can write the variance matrix of $\mathbf{y}$ as
+$$
+\begin{aligned}
+\mathrm{var}(\mathbf{y}) &= \begin{bmatrix}\mathrm{var}(Y_1) & \mathrm{cov}(Y_1,Y_2) &\dots &\mathrm{cov}(Y_1,Y_n)\\
+\mathrm{cov}(Y_2,Y_1 )&\mathrm{var}(Y_2) &\dots& \mathrm{cov}(Y_2,Y_n) \\
+\vdots&\vdots&\ddots&\vdots\\
+\mathrm{cov}(Y_n,Y_1)&\mathrm{cov}(Y_n,Y_2)&\dots&\mathrm{var}(Y_n)\end{bmatrix}.
+\end{aligned}
+$$
+The variance matrix of $\mathbf{y}$ is also called the **covariance matrix** or **variance-covariance matrix** of $\mathbf{y}$.
+
+Let $\mathbf{x} = [X_1, X_2, \ldots, X_n]$ be an $n\times 1$ random vector. The covariance matrix between $\mathbf{x}$ and $\mathbf{y}$ is defined as
+$$
+\begin{align}
+\mathrm{cov}(\mathbf{x}, \mathbf{y}) &= E\bigl[(\mathbf{x} - E(\mathbf{x}))(\mathbf{y}  - E(\mathbf{y})^T\bigr]\\
+&=
+\begin{bmatrix}
+\mathrm{cov}(X_1, Y_1) & \mathrm{cov}(X_1,Y_2) &\dots &\mathrm{cov}(X_1,Y_n) \\
+\mathrm{cov}(X_2,Y_1 )&\mathrm{cov}(X_2, Y_2) &\dots& \mathrm{cov}(X_2,Y_n) \\
+\vdots&\vdots&\dots&\vdots\\
+\mathrm{cov}(X_n,Y_1)&\mathrm{cov}(X_n,Y_2)&\dots&\mathrm{cov}(X_n, Y_n)
+\end{bmatrix}.
+\end{align}
+$$
+The covariance matrix between $\mathbf{x}$ and $\mathbf{y}$ may also be computed as $\mathrm{cov}(\mathbf{x}, \mathbf{y}) = E(\mathbf{x}\mathbf{y}^T) - E(\mathbf{x}) E(\mathbf{y})^T.$
+
+We note that $\mathrm{var}(\mathbf{y})=\mathrm{cov}(\mathbf{y}, \mathbf{y})$.
+
+## Properties of transformations of random vectors
+
+Define:
+
+-   $\mathbf{a}$ to be an $n\times 1$ vector of real numbers.
+-   $\mathbf{A}$ to be an $m\times n$ matrix of real numbers.
+-   $\mathbf{x}=[X_1,X_2,\ldots,X_n]$ to be an $n\times 1$ random vector.
+-   $\mathbf{y}=[Y_1,Y_2,\ldots,Y_n]$ to be an $n\times 1$ random vector.
+-   $\mathbf{z}=[Z_1,Z_2,\ldots,Z_n]$ to be an $n\times 1$ random vector.
+-   $0_{m\times n}$ to be an $m\times n$ matrix of zeros.
+
+Then:
+
+- $E(\mathbf{a}) = \mathbf{a}$.
+-   $E(\mathbf{A}\mathbf{y})=\mathbf{A}E(\mathbf{y})$.
+-   $E(\mathbf{y}\mathbf{A}^T )=E(\mathbf{y}) \mathbf{A}^T$.
+-   $E(\mathbf{x}+\mathbf{y})=E(\mathbf{x})+E(\mathbf{y})$.
+-   $\mathrm{var}(\mathbf{A}\mathbf{y})=\mathbf{A}\mathrm{var}(\mathbf{y}) \mathbf{A}^T$.
+-   $\mathrm{cov}(\mathbf{x}+\mathbf{y},\mathbf{z})=\mathrm{cov}(\mathbf{x},\mathbf{z})+\mathrm{cov}(\mathbf{y},\mathbf{z})$.
+-   $\mathrm{cov}(\mathbf{x},\mathbf{y}+\mathbf{z})=\mathrm{cov}(\mathbf{x},\mathbf{y})+\mathrm{cov}(\mathbf{x},\mathbf{z})$.
+-   $\mathrm{cov}(\mathbf{A}\mathbf{x},\mathbf{y})=\mathbf{A}\ \mathrm{cov}(\mathbf{x},\mathbf{y})$.
+-   $\mathrm{cov}(\mathbf{x},\mathbf{A}\mathbf{y})=\mathrm{cov}(\mathbf{x},\mathbf{y}) \mathbf{A}^T$.
+-   $\mathrm{var}(\mathbf{a})= 0_{n\times n}$.
+-   $\mathrm{cov}(\mathbf{a},\mathbf{y})=0_{n\times n}$.
+-   $\mathrm{var}(\mathbf{a}+\mathbf{y})=\mathrm{var}(\mathbf{y})$.
+
+## Example (Continuous bivariate distribution continued)
+
+Using the definitions and results for random vectors, we want to answer **Q7** of the hydration example in @sec-continuous-bivariate-distribution-example. Summarizing only the essential details, we have a $2\times 1$ random vector $\mathbf{z}=[X, Y]$ with mean $E(\mathbf{z})=[2/5, 4/5]$ and covariance matrix
+$$
+\mathrm{var}(\mathbf{z})=
+\begin{bmatrix}
+14/225 & 1/75 \\
+1/75 & 2/75
+\end{bmatrix}.
+$$
+
+We want to determine $E(Y-X)$ and $\mathrm{var}(Y-X)$.
+
+Define $\mathbf{A}=[-1, 1]^T$ (the ROW vector with 1 and -1). Then, 
+$$
+\mathbf{Az}=\begin{bmatrix}-1 & 1\end{bmatrix}
+\begin{bmatrix}
+X\\
+Y
+\end{bmatrix}
+=Y-X
+$$
+and
+$$
+\begin{aligned}
+E(Y-X)&=E(\mathbf{Az})\\
+&=\begin{bmatrix}-1 & 1\end{bmatrix}
+\begin{bmatrix}
+2/5\\
+4/5
+\end{bmatrix}\\
+&=-2/5+4/5\\
+&=2/5.
+\end{aligned}
+$$
+Additionally,
+$$
+\begin{aligned}
+& \mathrm{var}(Y-X) \\
+&=\mathrm{var}(\mathbf{Az}) \\
+&=\mathbf{A}\mathrm{var}(\mathbf{z})\mathbf{A}^T \\
+&=
+\begin{bmatrix}
+-1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+14/225 & 1/75 \\
+1/75 & 2/75
+\end{bmatrix}
+\begin{bmatrix}
+-1 \\ 1
+\end{bmatrix} \\
+&= \begin{bmatrix}
+-14/225+1/75 & -1/75+2/75
+\end{bmatrix}
+\begin{bmatrix}
+-1 \\ 1
+\end{bmatrix} \\
+&= 14/225 - 1/75 -1/75 + 2/75 \\
+&=14/225.
+\end{aligned}
+$$
+
+## Multivariate normal (Gaussian) distribution
+
+The random vector $\mathbf{y}=[Y_1,\dots,Y_n]$ has a multivariate normal distribution with mean $E(\mathbf{y})=\boldsymbol{\mu}$ (an $n\times 1$ vector) and covariance matrix $\mathrm{var}(\mathbf{y})=\boldsymbol{\Sigma}$ (an $n\times n$ matrix) if its joint pdf is
+$$
+f(\mathbf{y})=\frac{1}{(2\pi)^{n/2} |\boldsymbol{\Sigma}|^{1/2} }  \exp\left(-\frac{1}{2} (\mathbf{y}-\boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{y}-\boldsymbol{\mu})\right),
+$$
+where $|\boldsymbol{\Sigma}|$ is the determinant of $\boldsymbol{\Sigma}$. Note that $\boldsymbol{\Sigma}$ must be symmetric and positive definite.
+
+In this case, we denote the distribution of $\mathbf{y}$ as 
+$$
+\mathbf{y}\sim \mathsf{N}(\boldsymbol{\mu},\boldsymbol{\Sigma}).
+$$
+
+## Linear transformation of a multivariate normal random vector
+
+Assume that $\mathbf{y}$ is an $n\times 1$ random vector and $\mathbf{y}\sim \mathsf{N}(\boldsymbol{\mu},\boldsymbol{\Sigma}).$ Also, assume that $\mathbf{a}$ is an $m\times 1$ vector of real numbers and $\mathbf{A}$ is an $m\times n$ matrix of real numbers.
+
+A linear transformation of a multivariate normal random vector of the form $\mathbf{a}+\mathbf{A}\mathbf{y}$ is also a multivariate normal random vector  (though it could collapse to a single random variable if $\mathbf{A}$ is a $1\times n$ vector).  
+
+**Application**: Suppose that $\mathbf{y}\sim \mathsf{N}(\boldsymbol{\mu},\boldsymbol{\Sigma})$. For an $m\times n$ matrix of constants $\mathbf{A}$, $\mathbf{A}\mathbf{y}\sim \mathsf{N}(\mathbf{A}\boldsymbol{\mu},\mathbf{A}\boldsymbol{\Sigma} \mathbf{A}^T)$.
+
+The most common estimators used in linear regression are linear combinations of a (typically) multivariate normal random vectors, meaning that many of the estimators also have a (multivariate) normal distribution.
+
+## Example (OLS matrix form)
+
+Ordinary least squares regression is a method for fitting a linear regression model to data. Suppose that we have observed variables $X_1, X_2, X_3, \ldots, X_{p-1}, Y$ for each of $n$ subjects from some population, with $X_{i,j}$ denoting the value of $X_j$ for observation $i$ and $Y_i$ denoting the value of $Y$ for observation $i$. In general, we want to use $X_1, \ldots, X_{p-1}$ to predict the value of $Y$. Define $\mathbf{X}$ to be a full-rank $n\times p$ matrix as
+$$
+\mathbf{X} =
+\begin{bmatrix}
+1 & X_{1,1} & X_{1,2} & \cdots & X_{1,p-1} \\
+1 & X_{2,1} & X_{2,2} & \cdots & X_{2,p-1} \\
+\vdots & \vdots & \vdots & \vdots & \vdots \\
+1 & X_{n,1} & X_{n,2} & \cdots & X_{n,p-1}
+\end{bmatrix}
+$$
+Define $\mathbf{y}$ to be the $n\times 1$ random vector of responses as $\mathbf{y}=[Y_1, Y_2, \ldots,Y_n]$.
+
+As is common in regression, we assume that,
+$$
+\mathbf{y}\sim \mathsf{N}(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}_{n\times n}),
+$$
+where $\boldsymbol{\beta}=[\beta_0,\beta_1,\ldots,\beta_{p-1}]$ is a $p\times 1$ vector of real numbers.
+
+The matrix $\mathbf{H}=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ projects $\mathbf{y}$ into the space spanned by the vectors in $\mathbf{X}$.
+
+Determine the distribution of $\mathbf{Hy}$.
+
+Notice that
+$$
+\begin{aligned}
+E(\mathbf{Hy}) &= \mathbf{H}E(\mathbf{y}) \\  &=\mathbf{HX}\boldsymbol{\beta}\\
+&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} \\
+&=\mathbf{X}\mathbf{I}_{p\times p}\boldsymbol{\beta} \\
+&=\mathbf{X}\boldsymbol{\beta}.
+\end{aligned}
+$$
+
+Additionally,
+$$
+\begin{aligned}
+\mathrm{var}(\mathbf{Hy}) &= \mathbf{H}\mathrm{var}(\mathbf{y})\mathbf{H}^T \\
+&=\mathbf{H}\sigma^2 \mathbf{I}_{n\times n}\mathbf{\mathbf{H^T}} \\
+&= \sigma^2 \mathbf{H}\mathbf{H}^T\\
+&=\sigma^2 \mathbf{H}.
+\end{aligned}
+$$
+
+Lastly, since $\mathbf{Hy}$ is a linear transformation of a multivariate normal random vector, it also have a multivariate normal distribution.
+
+We combine these facts together to see that   
+$$
+\mathbf{Hy}\sim \mathsf{N}(\mathbf{H}\boldsymbol{\beta}, \sigma^2 \mathbf{H}).
+$$
