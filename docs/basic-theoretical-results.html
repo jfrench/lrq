@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Appendix B — Probability Basics – A Progressive Introduction to Linear Models</title>
+<title>5&nbsp; Basic theoretical results – A Progressive Introduction to Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./random-variables.html" rel="next">
-<link href="./matrix-facts.html" rel="prev">
+<link href="./matrix-facts.html" rel="next">
+<link href="./interpretation.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -69,35 +69,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -111,7 +82,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./probability-basics.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Probability Basics</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./basic-theoretical-results.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic theoretical results</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -168,7 +139,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./basic-theoretical-results.html" class="sidebar-item-text sidebar-link">
+  <a href="./basic-theoretical-results.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic theoretical results</span></span></a>
   </div>
 </li>
@@ -189,7 +160,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./probability-basics.html" class="sidebar-item-text sidebar-link active">
+  <a href="./probability-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Probability Basics</span></span></a>
   </div>
 </li>
@@ -230,24 +201,15 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#basic-set-operations" id="toc-basic-set-operations" class="nav-link active" data-scroll-target="#basic-set-operations"><span class="header-section-number">B.1</span> Basic set operations</a></li>
-  <li><a href="#probability-function" id="toc-probability-function" class="nav-link" data-scroll-target="#probability-function"><span class="header-section-number">B.2</span> Probability function</a></li>
-  <li><a href="#independence-and-conditional-probability" id="toc-independence-and-conditional-probability" class="nav-link" data-scroll-target="#independence-and-conditional-probability"><span class="header-section-number">B.3</span> Independence and conditional probability</a></li>
-  <li><a href="#additional-probability-results" id="toc-additional-probability-results" class="nav-link" data-scroll-target="#additional-probability-results"><span class="header-section-number">B.4</span> Additional probability results</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-facts.html">Appendices</a></li><li class="breadcrumb-item"><a href="./probability-basics.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Probability Basics</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-probability-basics" class="quarto-section-identifier">Appendix B — Probability Basics</span></h1>
+<h1 class="title"><span id="sec-basic-theoretical-results" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic theoretical results</span></span></h1>
 </div>
 
 
@@ -264,114 +226,324 @@ window.Quarto = {
 </header>
 
 
-<hr>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<hr>
-<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
-<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/b-probability-basics-notebook.ipynb"> <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/5e46eb8016c13447d4d918321ebb943cde8f2dcc/images/qr-prob-basics.svg" width="100"> </a></p>
-<hr>
-<p>The mathematical field of probability attempts to quantify how frequently outcomes from a random experiment will occur.</p>
-<p>We review some basic probability-related terminology in <a href="#tbl-prob-tab1" class="quarto-xref">Table&nbsp;<span>B.1</span></a>.</p>
-<div class="cell" data-filters="parse-latex">
-<div id="tbl-prob-tab1" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-filters="parse-latex">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prob-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;B.1: Basic terminology used in probability.
-</figcaption>
-<div aria-describedby="tbl-prob-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output-display">
-<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 18%">
-<col style="width: 70%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: left;">notation</th>
-<th style="text-align: left;">definition</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">experiment</td>
-<td style="text-align: left;">N/A</td>
-<td style="text-align: left;">A mechanism that produces outcomes that cannot be predicted with absolute certainty.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">outcome</td>
-<td style="text-align: left;"><span class="math inline">\(\omega\)</span></td>
-<td style="text-align: left;">The simplest kind of result produced by an experiment.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sample space</td>
-<td style="text-align: left;"><span class="math inline">\(\Omega\)</span></td>
-<td style="text-align: left;">The set of all possible outcomes an experiment can produce.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">event</td>
-<td style="text-align: left;"><span class="math inline">\(A\)</span>, <span class="math inline">\(A_i\)</span>, <span class="math inline">\(B\)</span>, etc.</td>
-<td style="text-align: left;">Any subset of <span class="math inline">\(\Omega\)</span>.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">empty set</td>
-<td style="text-align: left;"><span class="math inline">\(\emptyset\)</span></td>
-<td style="text-align: left;">The event that includes no outcomes.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</figure>
-</div>
-</div>
-<p>We make some notes about the terms in <a href="#tbl-prob-tab1" class="quarto-xref">Table&nbsp;<span>B.1</span></a>:</p>
-<ul>
-<li><strong>Outcomes</strong> are also known as <strong>points</strong>, <strong>realizations</strong>, or <strong>elements</strong>.</li>
-<li>An <strong>event</strong> is a set of outcomes.</li>
-<li>The <strong>empty set</strong> is a subset of <span class="math inline">\(\Omega\)</span> but not an outcome of <span class="math inline">\(\Omega\)</span>.</li>
-<li>The <strong>empty set</strong> is a subset of every event <span class="math inline">\(A\subseteq \Omega\)</span>.</li>
-</ul>
-<section id="basic-set-operations" class="level2" data-number="B.1">
-<h2 data-number="B.1" class="anchored" data-anchor-id="basic-set-operations"><span class="header-section-number">B.1</span> Basic set operations</h2>
-<p>We now review some basic set operations and related facts. Let <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> be two events contained in <span class="math inline">\(\Omega\)</span>.</p>
-<p>The <strong>intersection</strong> of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, denoted <span class="math inline">\(A \cap B\)</span>, is the set of outcomes that are common to both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, i.e., <span class="math inline">\(A \cap B = \{\omega \in \Omega: \omega \in A\;\mathrm{and}\;\omega \in B\}\)</span>.</p>
-<p>Events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>disjoint</strong> if <span class="math inline">\(A\cap B = \emptyset\)</span>, i.e., if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> have no common outcomes.</p>
-<p>The <strong>union</strong> of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, denoted <span class="math inline">\(A \cup B\)</span>, is the set of outcomes that are in <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> or both, i.e., <span class="math inline">\(A \cup B = \{\omega \in \Omega: \omega \in A\;\mathrm{or}\;\omega \in B\}\)</span>.</p>
-<p>The <strong>complement</strong> of <span class="math inline">\(A\)</span>, denoted <span class="math inline">\(A^c\)</span>, is the set of outcomes that are in <span class="math inline">\(\Omega\)</span> but are not in <span class="math inline">\(A\)</span>, i.e., <span class="math inline">\(A^c = \{\omega \in \Omega: \omega \not\in A\}\)</span>. The complement of <span class="math inline">\(A\)</span> may also be denoted as <span class="math inline">\(\overline{A}\)</span> or <span class="math inline">\(A'\)</span>.</p>
-<p>The set <strong>difference</strong> between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, denoted <span class="math inline">\(A \setminus B\)</span>, is the set of outcomes in <span class="math inline">\(A\)</span> that are not in <span class="math inline">\(B\)</span>, i.e., <span class="math inline">\(A\setminus B = \{\omega \in A: \omega \not\in B\}\)</span>. The set difference between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> may also be denoted by <span class="math inline">\(A-B\)</span>. The set difference is order specific, i.e., <span class="math inline">\((A\setminus B) \not= (B\setminus A)\)</span> in general.</p>
-</section>
-<section id="probability-function" class="level2" data-number="B.2">
-<h2 data-number="B.2" class="anchored" data-anchor-id="probability-function"><span class="header-section-number">B.2</span> Probability function</h2>
-<p>A <strong>probability function</strong> is a function <span class="math inline">\(P\)</span> that assigns a real number <span class="math inline">\(P(A)\)</span> to every event <span class="math inline">\(A \subseteq \Omega\)</span> and satisfies three properties:</p>
-<ol type="1">
-<li><span class="math inline">\(P(A)\geq 0\)</span> for all <span class="math inline">\(A\subseteq \Omega\)</span>.</li>
-<li><span class="math inline">\(P(\Omega) = 1\)</span>. Alternatively, <span class="math inline">\(P(\emptyset) = 0\)</span>. Informally, the probability that at least one of the possible outcomes in the sample space occurs is 1.</li>
-<li>If <span class="math inline">\(A_1, A_2, \ldots\)</span> are disjoint, then <span class="math inline">\(P\left(\bigcup_{i=1}^\infty A_i \right)=\sum_{i=1}^\infty P(A_i)\)</span>.</li>
-</ol>
-</section>
-<section id="independence-and-conditional-probability" class="level2" data-number="B.3">
-<h2 data-number="B.3" class="anchored" data-anchor-id="independence-and-conditional-probability"><span class="header-section-number">B.3</span> Independence and conditional probability</h2>
-<p>A set of events <span class="math inline">\(\{A_i:i\in I\}\)</span> are <strong>independent</strong> if <span class="math display">\[
-P\left(\cap_{i\in J} A_i \right)=\prod_{i\in J} P(A_i )
-\]</span> for every finite subset <span class="math inline">\(J\subseteq I\)</span>.</p>
-<p>The <strong>conditional probability</strong> of <span class="math inline">\(A\)</span> given <span class="math inline">\(B\)</span>, denoted as <span class="math inline">\(P(A\mid B)\)</span>, is the probability that <span class="math inline">\(A\)</span> occurs given that <span class="math inline">\(B\)</span> has occurred, and is defined as <span class="math display">\[
-P(A\mid B) = \frac{P(A\cap B)}{P(B)}, \quad P(B) &gt; 0.
-\]</span></p>
-</section>
-<section id="additional-probability-results" class="level2" data-number="B.4">
-<h2 data-number="B.4" class="anchored" data-anchor-id="additional-probability-results"><span class="header-section-number">B.4</span> Additional probability results</h2>
-<p>The following probability results are frequently useful in solving practical problems:</p>
-<ul>
-<li><strong>Complement rule</strong>: <span class="math inline">\(P(A^c) = 1 - P(A)\)</span>.</li>
-<li><strong>Addition rule</strong>: <span class="math inline">\(P(A\cup B) = P(A) + P(B) - P(A \cap B)\)</span>.</li>
-<li><strong>Bayes’ rule</strong>: Assuming <span class="math inline">\(P(A) &gt; 0\)</span> and <span class="math inline">\(P(B) &gt; 0\)</span>, then <span class="math display">\[P(A\mid B) = \frac{P(B\mid A)P(A)}{P(B)}.\]</span></li>
-<li><strong>Law of Total Probability</strong>: Let <span class="math inline">\(B_1, B_2, \ldots\)</span> be a countably infinite partition of <span class="math inline">\(\Omega\)</span>. Then <span class="math display">\[P(A) = \sum_{i=1}^{\infty} P(A \cap B_i) = \sum_{i=1}^{\infty} P(A \mid B_i) P(B_i).\]</span></li>
-</ul>
+<!-- In this chapter we discuss many basic theoretical results for linear models. The results are not interesting by themselves, but they are foundational for the inferential results discussed in Chapter \@ref(inference). Appendices \@ref(overview-of-matrix-facts) and \@ref(prob-review) provide an overview of properties related to matrices and random vectors that are needed for the derivations below. -->
+<!-- We assume the responses can be modeled as -->
+<!-- \[ -->
+<!-- Y_i=\beta_0+\beta_1 x_{i,1} +\ldots + \beta_{p-1}x_{i,-1}+\epsilon_i,\quad i=1,2,\ldots,n, -->
+<!-- \] -->
+<!-- or using matrix formulation, as -->
+<!-- \[ -->
+<!-- \mathbf{y} = \mathbf{X}\boldsymbol{\beta}+\boldsymbol{\epsilon}.(\#eq:linear-model-def-matrix) -->
+<!-- \] -->
+<!-- using the notation defined in Chapter \@ref(linear-model-estimation). -->
+<!-- ## Standard assumptions -->
+<!-- We assume that the components of our linear model have the characteristics previously described in Section \@ref(ss:term-summary). For the results we will derive below, we also need to make several specific assumptions about the errors. We have mentioned some of them previously, but discuss them all for completeness. -->
+<!-- The first error assumption is that conditional on the regressors, the mean of the errors is zero. This means that $E(\epsilon_i \mid \mathbb{X} = \mathbf{x}_i)=0$ for $i=1,2,\ldots,n$, or using matrix notation, -->
+<!-- \[ -->
+<!-- E(\boldsymbol{\epsilon}\mid \mathbf{X}) = 0_{n\times 1}, -->
+<!-- \] -->
+<!-- where "$\mid \mathbf{X}$" is notation meaning "conditional on knowing the regressor values for all observations". -->
+<!-- We also assume that the errors have constant variances and are uncorrelated, conditional on knowing the regressors, i.e.,  -->
+<!-- \[\mathrm{var}(\epsilon_i\mid \mathbb{X}=\mathbf{x}_i) = \sigma^2, \quad i=1,2,\ldots,n,\] -->
+<!-- and  -->
+<!-- \[ -->
+<!-- \mathrm{cov}(\epsilon_i, \epsilon_j\mid \mathbf{X}) = 0, \quad i,j=1,2,\ldots,n,\quad i\neq j. -->
+<!-- \] -->
+<!-- In matrix notation, this is stated as -->
+<!-- \[ -->
+<!-- \mathrm{var}(\boldsymbol{\epsilon} \mid {\mathbf{X}})=\sigma^2\mathbf{I}_{n\times n}. -->
+<!-- \] -->
+<!-- Additionally, we assume that the errors are identically distributed. Formally, this may be written as -->
+<!-- \[ -->
+<!-- \epsilon_i \sim F, i=1,2,\ldots,n, -->
+<!-- (\#eq:errordist) -->
+<!-- \] -->
+<!-- where $F$ is some arbitrary distribution. The $\sim$ is read as "distributed as". In other words, Equation \@ref(eq:errordist) means, "$\epsilon_i$ is distributed as $F$ for $i$ equal to $1,2,\ldots,n$". In practice, it is common to assume the errors have a normal (Gaussian) distribution. Two uncorrelated normal random variables are also independent (this is true for normal random variables, but is not generally true for other distributions). Thus, we may concisely state the typical error assumptions as -->
+<!-- \[ -->
+<!-- \epsilon_1,\epsilon_2,\ldots,\epsilon_n \mid \mathbf{X}\stackrel{i.i.d.}{\sim} \mathsf{N}(0, \sigma^2), -->
+<!-- \] -->
+<!-- or using matrix notation as -->
+<!-- \[ -->
+<!-- \boldsymbol{\epsilon}\mid \mathbf{X}\sim \mathsf{N}(\mathbf{0}_{n\times 1},\sigma^2 \mathbf{I}_{n\times n}), (\#eq:error-assumptions-matrix) -->
+<!-- \] -->
+<!-- where $\mathbf{0}_{n\times 1}$ is the $n \times 1$ vector of zeros and $\mathbf{I}_{n\times n}$ is the $n\times n$ identity matrix. Equation \@ref(eq:error-assumptions-matrix) -->
+<!-- combines the following assumptions: -->
+<!-- 1. $E(\epsilon_i \mid \mathbb{X}=\mathbf{x}_i)=0$ for $i=1,2,\ldots,n$. -->
+<!-- 1. $\mathrm{var}(\epsilon_i\mid \mathbb{X}=\mathbf{x}_i)=\sigma^2$ for $i=1,2,\ldots,n$. -->
+<!-- 1. $\mathrm{cov}(\epsilon_i,\epsilon_j\mid \mathbf{X})=0$ for $i\neq j$ with $i,j=1,2,\ldots,n$. -->
+<!-- 1. $\epsilon_i$ has a normal distribution for $i=1,2,\ldots,n$. -->
+<!-- ## Summary of results -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation  \@ref(eq:error-assumptions-matrix), we have the following results: -->
+<!-- 1. $\mathbf{y}\mid \mathbf{X}\sim \mathsf{N}(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}_{n\times n})$. -->
+<!-- 1. $\hat{\boldsymbol{\beta}}\mid \mathbf{X}\sim \mathsf{N}(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$. -->
+<!-- 1. $\hat{\boldsymbol{\epsilon}}\mid \mathbf{X}\sim \mathsf{N}(\mathbf{0}_{n\times 1}, \sigma^2 (\mathbf{I}_{n\times n} - \mathbf{H}))$. -->
+<!-- 1. $\hat{\boldsymbol{\beta}}$ has the minimum variance among all unbiased estimators of $\boldsymbol{\beta}$ with the additional assumptions that the model is correct and $\mathbf{X}$ is full-rank. -->
+<!-- We prove these results in the sections below. To simplify the derivations below, we let $\mathbf{I}=\mathbf{I}_{n\times n}$ for the duration of this chapter. -->
+<!-- ## Results for $\mathbf{y}$ -->
+<!-- :::{.theorem #mean-y} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation  \@ref(eq:error-assumptions-matrix),  -->
+<!-- $$ -->
+<!-- E(\mathbf{y}\mid \mathbf{X})=\mathbf{X}\boldsymbol{\beta}. (\#eq:mean-y) -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- E(\mathbf{y}|\mathbf{X})&=E(\mathbf{X}\boldsymbol{\beta}+\boldsymbol\epsilon|\mathbf{X})&\tiny\text{(by definition)}\\ -->
+<!-- &=E(\mathbf{X}\boldsymbol{\beta}|\mathbf{X})+E(\boldsymbol\epsilon|\mathbf{X})&\tiny\text{(linearity of expectation)}\\ -->
+<!-- &=E(\mathbf{X}\boldsymbol{\beta}|\mathbf{X})+\mathbf{0}_{n\times 1}&\tiny\text{(by assumption about }\epsilon)\\ -->
+<!-- &=\mathbf{X}\boldsymbol{\beta}.&\tiny\text{(since }\mathbf{X}\text{ and } \boldsymbol{\beta} \text{ are constant}) -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- ::: -->
+<!-- $\vphantom{blank}$ -->
+<!-- :::{.theorem #var-y} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation  \@ref(eq:error-assumptions-matrix),  -->
+<!-- \[ -->
+<!-- \mathrm{var}(\mathbf{y}\mid \mathbf{X})=\sigma^2 \mathbf{I}.(\#eq:var-y) -->
+<!-- \] -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \text{var}(\mathbf{y}|\mathbf{X})&=\text{var}(\mathbf{X}\boldsymbol{\beta}+\boldsymbol\epsilon|\mathbf{X})&\tiny\text{(by definition)}\\ -->
+<!-- &=\text{var}(\boldsymbol\epsilon|\mathbf{X})&\tiny(\mathbf{X}\boldsymbol{\beta}\text{ is constant)}\\ -->
+<!-- &=\sigma^2\mathbf{I}.&\tiny\text{(by assumption)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- ::: -->
+<!-- $\vphantom{blank}$ -->
+<!-- :::{.theorem #dist-properties-y} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix),  -->
+<!-- \[ -->
+<!-- \mathbf{y}\mid \mathbf{X}\sim \mathsf{N}(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}).(\#eq:dist-properties-y) -->
+<!-- \] -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- We know that $E(\mathbf{y}\mid \mathbf{X}) = \mathbf{X}\boldsymbol{\beta}$ from Theorem \@ref(thm:mean-y) and -->
+<!-- $\mathrm{var}(\mathbf{y}\mathbf{X}) = \sigma^2 \mathbf{I}$ from Theorem \@ref(thm:var-y).  -->
+<!-- Since $\mathbf{y}$ is a linear function of the multivariate normal vector $\boldsymbol{\epsilon}$, then $\mathbf{y}$ must also have a multivariate normal distribution. -->
+<!-- ::: -->
+<!-- $\vphantom{blank}$ -->
+<!-- ## Results for $\hat{\boldsymbol{\beta}}$ -->
+<!-- ::: {.theorem #unbiasedness-betahat} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix), the OLS estimator for $\boldsymbol{\beta}$,  -->
+<!-- $$ -->
+<!-- \hat{\boldsymbol{\beta}}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}, -->
+<!-- $$ -->
+<!-- is an unbiased estimator for $\boldsymbol{\beta}$, i.e., -->
+<!-- \[ -->
+<!-- E(\hat{\boldsymbol{\beta}}\mid \mathbf{X})=\boldsymbol{\beta}.(\#eq:unbiasedness-betahat) -->
+<!-- \] -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- We previously derived the following results, -->
+<!-- \[E(\mathbf{y}|\mathbf{X})=\mathbf{X}\boldsymbol\beta\] -->
+<!-- \[\text{var}(\mathbf{y}|\mathbf{X})=\sigma^2\mathbf{I}\] -->
+<!-- Then, -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- E(\hat{\boldsymbol{\beta}}|\mathbf{X})&=E((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}|\mathbf{X})&\tiny\text{(substitute OLS formula)}\\ -->
+<!-- &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^TE(\mathbf{y}|\mathbf{X})&\tiny(\text{factor non-random terms)}\\ -->
+<!-- &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}&\tiny\text{(above result)}\\ -->
+<!-- &=\mathbf{I}_{p\times p}\boldsymbol\beta&\tiny\text{(property of inverse matrices)}\\ -->
+<!-- &=\boldsymbol\beta. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- ::: -->
+<!-- $\vphantom{blah}$ -->
+<!-- ::: {.theorem #var-betahat} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix),  -->
+<!-- \[ -->
+<!-- \mathrm{var}(\hat{\boldsymbol{\beta}}\mid \mathbf{X})=\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}.(\#eq:var-betahat) -->
+<!-- \] -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \text{var}(\hat{\boldsymbol\beta}|\mathbf{X})&=\text{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}|\mathbf{X})&\tiny\text{(by OLS formula)}\\ -->
+<!-- &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\text{var}(\mathbf{y}|\mathbf{X})((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T&\tiny\text{(pull constants out of variance)}\\ -->
+<!-- &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\text{var}(\mathbf{y}|\mathbf{X})\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}&\tiny\text{(simplification)}\\ -->
+<!-- &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\sigma^2\mathbf{I})\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}&\tiny\text{(previous result)}\\ -->
+<!-- &=\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}&\tiny(\sigma^2 \text{ is a scalar)}\\ -->
+<!-- &=\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}.&\tiny\text{(simplification)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- ::: -->
+<!-- $\vphantom{blah}$ -->
+<!-- :::{.theorem #dist-properties-betahat} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix), -->
+<!-- \[ -->
+<!-- \hat{\boldsymbol{\beta}}\mid \mathbf{X}\sim \mathsf{N}(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}).(\#eq:dist-properties-betahat) -->
+<!-- \] -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- Since $\hat{\boldsymbol\beta}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$ is a linear combination of $\mathbf{y}$, and $\mathbf{y}$ is a multivariate normal random vector, then $\hat{\boldsymbol\beta}$ is also a multivariate normal random vector. Using the previous two results for the expectation and variance,  -->
+<!-- $$ -->
+<!-- \hat{\boldsymbol\beta}|\mathbf{X} \sim N(\boldsymbol\beta,\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}). -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- ## Results for the residuals -->
+<!-- The residual vector can be expressed in various equivalent ways, such as -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- \hat{\boldsymbol{\epsilon}} &= \mathbf{y}-\hat{\mathbf{y}} \\ -->
+<!-- &= \mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}. -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- The **hat** matrix is denoted as -->
+<!-- $$ -->
+<!-- \mathbf{H}=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T.(\#eq:hat-matrix-def) -->
+<!-- $$ -->
+<!-- Thus, using the substitution $\hat{\boldsymbol{\beta}}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$ and the definition for $\mathbf{H}$ in Equation \@ref(eq:hat-matrix-def), we see that -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- \hat{\boldsymbol{\epsilon}} &= \mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}} \\  -->
+<!-- &= \mathbf{y} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y} \\ -->
+<!-- &= \mathbf{y} - \mathbf{H}\mathbf{y} \\ -->
+<!-- &= (\mathbf{I}-\mathbf{H})\mathbf{y}. -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- The hat matrix is an important theoretical matrix, as it projects $\mathbf{y}$ into the space spanned by the vectors in $\mathbf{X}$. It also has some properties that we will exploit in some of the derivations below. -->
+<!-- ::: {.theorem #h-properties} -->
+<!-- The hat matrix $\mathbf{H}$ is symmetric and idempotent. -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- Notice that, -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- \mathbf{H}^T&=(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T&\tiny\text{(definition of }\mathbf{H})\\ -->
+<!-- &=(\mathbf{X}^T)^T((\mathbf{X}^T\mathbf{X})^{-1})^T\mathbf{X}^T&\tiny\text{(apply transpose to matrix product)}\\ -->
+<!-- &=\mathbf{X}((\mathbf{X}^T\mathbf{X})^T)^{-1}\mathbf{X}^T&\tiny\text{(simplification, reversibility of inverse and transpose)}\\ -->
+<!-- &=\mathbf{X}(\mathbf{X}^T(\mathbf{X}^T)^T)^{-1}\mathbf{X}^T&\tiny\text{(apply transpose to matrix product)}\\ -->
+<!-- &=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&\tiny\text{(simplification)}\\ -->
+<!-- &=\mathbf{H}. -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- Thus, $\mathbf{H}$ is symmetric. -->
+<!-- Additionally, -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- \mathbf{H}\mathbf{H}&=(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)&\tiny\text{(definition of }\mathbf{H}\text{)}\\ -->
+<!-- &=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}(\mathbf{X}^T\mathbf{X})(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^t&\tiny\text{(associative property of matrices)}\\ -->
+<!-- &=\mathbf{X}\mathbf{I}_{p\times p}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&\tiny\text{(property of inverse matrices)}\\ -->
+<!-- &=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&\tiny\text{(simplification)}\\ -->
+<!-- &=\mathbf{H}. -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- Therefore, $\mathbf{H}$ is idempotent. -->
+<!-- ::: -->
+<!-- ::: {.theorem #i-h-properties} -->
+<!-- The matrix $\mathbf{I} - \mathbf{H}$ is symmetric and idempotent. -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- First, notice that, -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- (\mathbf{I}-\mathbf{H})^T &= \mathbf{I}^T-\mathbf{H}^T&\tiny\text{(transpose to matrix sum)}\\ -->
+<!-- &= \mathbf{I}-\mathbf{H}.&\tiny\text{(since }\mathbf{I}\text{ and }\mathbf{H}\text{ are symmetric)} -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- Thus, $\mathbf{I}-\mathbf{H}$ is symmetric. -->
+<!-- Next, -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- (\mathbf{I}-\mathbf{H})(\mathbf{I}-\mathbf{H})&=\mathbf{I}-2\mathbf{H}+\mathbf{H}\mathbf{H}&\tiny\text{(transpose to matrix sum)}\\ -->
+<!-- &=\mathbf{I}-2\mathbf{H}+\mathbf{H}&\tiny\text{(since H is idempotent)}\\ -->
+<!-- &=\mathbf{I}-\mathbf{H}.&\tiny\text{(simplification)} -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- Thus, $\mathbf{I}-\mathbf{H}$ is idempotent. -->
+<!-- ::: -->
+<!-- ::: {.theorem #mean-residuals} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix), -->
+<!-- $$ -->
+<!-- E(\hat{\boldsymbol{\epsilon}}\mid \mathbf{X})=\mathbf{0}_{n\times 1}.(\#eq:mean-residuals) -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- E(\hat{\boldsymbol{\epsilon}}|\mathbf{X})&=E((\mathbf{I}-\mathbf{H})\mathbf{y}|\mathbf{X})\\ -->
+<!-- &=(\mathbf{I}-\mathbf{H})E(\mathbf{y}|\mathbf{X})&\tiny(\mathbf{I}-\mathbf{H}\text{ is non-random)}\\ -->
+<!-- &=(\mathbf{I}-\mathbf{H})\mathbf{X}\boldsymbol\beta&\tiny\text{(earlier result)}\\ -->
+<!-- &=\mathbf{X}\boldsymbol\beta-\mathbf{HX}\boldsymbol\beta&\tiny\text{(distribute the product)}\\ -->
+<!-- &=\mathbf{X}\boldsymbol\beta-\mathbf{X}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol\beta&\tiny\text{(definition of H)}\\ -->
+<!-- &=\mathbf{X}\boldsymbol\beta-\mathbf{X}\mathbf{I}_{p\times p}\boldsymbol\beta&\tiny\text{(property of inverse matrix)}\\ -->
+<!-- &=\mathbf{X}\boldsymbol\beta-\mathbf{X}\boldsymbol\beta&\tiny\text{(simplification)}\\ -->
+<!-- &=\mathbf{0}_{n\times1}.&\tiny\text{(simplification)} -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- $\vphantom{blank}$ -->
+<!-- ::: {.theorem #var-residuals} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix), -->
+<!-- $$ -->
+<!-- \mathrm{var}(\hat{\boldsymbol{\epsilon}}\mid \mathbf{X})=\sigma^2 (\mathbf{I} - \mathbf{H}).(\#eq:var-residuals) -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- \text{var}(\hat{\boldsymbol{\epsilon}}|\mathbf{X})&=\text{var}((\mathbf{I}-\mathbf{H})\mathbf{y}|\mathbf{X})\\ -->
+<!-- &=(\mathbf{I}-\mathbf{H})\text{var}(\mathbf{y}|\mathbf{X})(\mathbf{I}-\mathbf{H})^T&\tiny(\mathbf{I}-\mathbf{H}\text{ is nonrandom)}\\ -->
+<!-- &=(\mathbf{I}-\mathbf{H})\sigma^2(\mathbf{I}-\mathbf{H})^T&\tiny\text{(earlier result)}\\ -->
+<!-- &=\sigma^2(\mathbf{I}-\mathbf{H})(\mathbf{I}-\mathbf{H})&\tiny(\mathbf{I}-\mathbf{H}\text{ is symmetric)}\\ -->
+<!-- &=\sigma^2(\mathbf{I}-\mathbf{H}).&\tiny(\mathbf{I}-\mathbf{H}\text{ is idempotent)} -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- ::: {.theorem #dist-properties-residuals} -->
+<!-- For the linear model given in Equation \@ref(eq:linear-model-def-matrix) and under the assumptions summarized in Equation \@ref(eq:error-assumptions-matrix), -->
+<!-- $$ -->
+<!-- \hat{\boldsymbol{\epsilon}}\mid \mathbf{X}\sim \mathsf{N}(\mathbf{0}_{n\times 1}, \sigma^2 (\mathbf{I} - \mathbf{H})).(\#eq:dist-properties-residuals) -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- Since $\hat{\boldsymbol{\epsilon}}$  is a linear combination of multivariate normal vectors, and using previous results, it has mean $\mathbf{0}_{n\times1}$ and variance matrix $\sigma^2(\mathbf{I}-\mathbf{H})$. -->
+<!-- ::: -->
+<!-- $\vphantom{blank}$ -->
+<!-- :::{.theorem} -->
+<!-- The RSS can be represented as, -->
+<!-- $$ -->
+<!-- RSS=\mathbf{y}^T(\mathbf{I}-\mathbf{H})\mathbf{y}. -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- :::{.proof} -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- RSS &= \hat{\boldsymbol{\epsilon}}^T\hat{\boldsymbol{\epsilon}}&\tiny\text{(matrix representation of RSS)}\\ -->
+<!-- &=((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}&\tiny\text{(previous result)}\\ -->
+<!-- &=\mathbf{y}^T(\mathbf{I}-\mathbf{H})^T(\mathbf{I}-\mathbf{H})\mathbf{y}&\tiny\text{(apply transpose)}\\ -->
+<!-- &=\mathbf{y}^T(\mathbf{I}-\mathbf{H})(\mathbf{I}-\mathbf{H})\mathbf{y}&\tiny(\mathbf{I}-\mathbf{H} \text{ is symmetric)}\\ -->
+<!-- &=\mathbf{y}^T(\mathbf{I}-\mathbf{H})\mathbf{y}.&\tiny(\mathbf{I}-\mathbf{H} \text{ is idempotent)}\\ -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- ::: -->
+<!-- ## The Gauss-Markov Theorem -->
+<!-- Suppose we will fit the regression model -->
+<!-- \[ -->
+<!-- \mathbf{y}=\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}. -->
+<!-- \] -->
+<!-- Assume that  -->
+<!-- 1. $E(\boldsymbol{\epsilon}\mid \mathbf{X}) = \boldsymbol{0}_{n\times1}$. -->
+<!-- 1. $\mathrm{var}(\boldsymbol{\epsilon}\mid \mathbf{X}) = \sigma^2 \mathbf{I}$, i.e., the errors have constant variance and are uncorrelated. -->
+<!-- 1. $E(\mathbf{y}\mid \mathbf{X})=\mathbf{X}\boldsymbol{\beta}$. -->
+<!-- 1. $\mathbf{X}$ is a full-rank matrix. -->
+<!-- Then the **Gauss-Markov** Theorem states that the OLS estimator of $\boldsymbol{\beta}$,  -->
+<!-- \[ -->
+<!-- \hat{\boldsymbol{\beta}}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}, -->
+<!-- \] -->
+<!-- has the minimum variance among all unbiased estimators of $\boldsymbol{\beta}$ and this estimator is unique. -->
+<!-- Some comments: -->
+<!-- - Assumption 3 guarantees that we have hypothesized the correct model, i.e., that we have included exactly the correct regressors in our model. Not only are we fitting a linear model to the data, but our hypothesized model is actually correct. -->
+<!-- - Assumption 4 ensures that the OLS estimator can be computed (otherwise, there is no unique solution). -->
+<!-- - The Gauss-Markov theorem only applies to unbiased estimators of $\boldsymbol{\beta}$. Biased estimators could have a smaller variance. -->
+<!-- - The Gauss-Markov theorem states that no unbiased estimator of $\boldsymbol{\beta}$ can have a smaller variance than $\hat{\boldsymbol{\beta}}$. -->
+<!-- - The OLS estimator uniquely has the minimum variance property, meaning that if $\tilde{\boldsymbol{\beta}}$ is another unbiased estimator of $\boldsymbol{\beta}$ and $\mathrm{var}(\tilde{\boldsymbol{\beta}}) = \mathrm{var}(\hat{\boldsymbol{\beta}})$, then in fact the two estimators are identical and $\tilde{\boldsymbol{\beta}}=\hat{\boldsymbol{\beta}}$. -->
+<!-- We do not prove this theorem. -->
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -796,13 +968,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./matrix-facts.html" class="pagination-link" aria-label="Overview of matrix definitions, properties, operations, etc.">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Overview of matrix definitions, properties, operations, etc.</span></span>
+      <a href="./interpretation.html" class="pagination-link" aria-label="Interpreting a Fitted Model">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interpreting a Fitted Model</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./random-variables.html" class="pagination-link" aria-label="Random Variables">
-        <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./matrix-facts.html" class="pagination-link" aria-label="Overview of matrix definitions, properties, operations, etc.">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Overview of matrix definitions, properties, operations, etc.</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Parameter Estimation and Model Fitting – A Progressive Introduction to Linear Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./interpretation.html" rel="next">
+<link href="./data-exploration.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./parameter-estimation-and-model-fitting.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Estimation and Model Fitting</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">A Progressive Introduction to Linear Models</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preliminaries</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Foundations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-exploration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Cleaning and Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./parameter-estimation-and-model-fitting.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Estimation and Model Fitting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interpretation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interpreting a Fitted Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic-theoretical-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic theoretical results</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-facts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Overview of matrix definitions, properties, operations, etc.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Probability Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./random-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Random Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multivariate-distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./random-vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Random vectors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./estimation-inference-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Review of Estimation, Hypothesis Testing, and Confidence Intervals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-what-is-regression" id="toc-sec-what-is-regression" class="nav-link active" data-scroll-target="#sec-what-is-regression"><span class="header-section-number">3.1</span> What is regression?</a>
+  <ul class="collapse">
+  <li><a href="#response-versus-predictor-variables" id="toc-response-versus-predictor-variables" class="nav-link" data-scroll-target="#response-versus-predictor-variables"><span class="header-section-number">3.1.1</span> Response versus predictor variables</a></li>
+  <li><a href="#selecting-the-best-model" id="toc-selecting-the-best-model" class="nav-link" data-scroll-target="#selecting-the-best-model"><span class="header-section-number">3.1.2</span> Selecting the best model</a></li>
+  </ul></li>
+  <li><a href="#sec-slr-estimation" id="toc-sec-slr-estimation" class="nav-link" data-scroll-target="#sec-slr-estimation"><span class="header-section-number">3.2</span> Estimation of the simple linear regression model</a>
+  <ul class="collapse">
+  <li><a href="#sec-fv-resid-rss" id="toc-sec-fv-resid-rss" class="nav-link" data-scroll-target="#sec-fv-resid-rss"><span class="header-section-number">3.2.1</span> Defining a simple linear regression model</a></li>
+  <li><a href="#important-terminology" id="toc-important-terminology" class="nav-link" data-scroll-target="#important-terminology"><span class="header-section-number">3.2.2</span> Important terminology</a></li>
+  <li><a href="#visualizing-terms" id="toc-visualizing-terms" class="nav-link" data-scroll-target="#visualizing-terms"><span class="header-section-number">3.2.3</span> Visualizing terms</a></li>
+  <li><a href="#ols-estimators-of-the-simple-linear-regression-parameters" id="toc-ols-estimators-of-the-simple-linear-regression-parameters" class="nav-link" data-scroll-target="#ols-estimators-of-the-simple-linear-regression-parameters"><span class="header-section-number">3.2.4</span> OLS estimators of the simple linear regression parameters</a></li>
+  </ul></li>
+  <li><a href="#sec-penguins-slr" id="toc-sec-penguins-slr" class="nav-link" data-scroll-target="#sec-penguins-slr"><span class="header-section-number">3.3</span> Penguins simple linear regression example</a></li>
+  <li><a href="#defining-a-linear-model" id="toc-defining-a-linear-model" class="nav-link" data-scroll-target="#defining-a-linear-model"><span class="header-section-number">3.4</span> Defining a linear model</a>
+  <ul class="collapse">
+  <li><a href="#sec-necessary-components" id="toc-sec-necessary-components" class="nav-link" data-scroll-target="#sec-necessary-components"><span class="header-section-number">3.4.1</span> Necessary components and notation</a></li>
+  <li><a href="#standard-definition-of-linear-model" id="toc-standard-definition-of-linear-model" class="nav-link" data-scroll-target="#standard-definition-of-linear-model"><span class="header-section-number">3.4.2</span> Standard definition of linear model</a></li>
+  <li><a href="#examples-of-linear-models" id="toc-examples-of-linear-models" class="nav-link" data-scroll-target="#examples-of-linear-models"><span class="header-section-number">3.4.3</span> Examples of linear models</a></li>
+  </ul></li>
+  <li><a href="#estimation-of-the-multiple-linear-regression-model" id="toc-estimation-of-the-multiple-linear-regression-model" class="nav-link" data-scroll-target="#estimation-of-the-multiple-linear-regression-model"><span class="header-section-number">3.5</span> Estimation of the multiple linear regression model</a>
+  <ul class="collapse">
+  <li><a href="#using-matrix-notation-to-represent-a-linear-model" id="toc-using-matrix-notation-to-represent-a-linear-model" class="nav-link" data-scroll-target="#using-matrix-notation-to-represent-a-linear-model"><span class="header-section-number">3.5.1</span> Using matrix notation to represent a linear model</a></li>
+  <li><a href="#sec-slr-derivation" id="toc-sec-slr-derivation" class="nav-link" data-scroll-target="#sec-slr-derivation"><span class="header-section-number">3.5.2</span> Derivation of the OLS estimators of the simple linear regression model coefficients</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-estimation-fitting" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Estimation and Model Fitting</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<hr>
+<p>A condensed, interactive version of this content is available as a Colab notebook, which can be accessed by clicking or scanning the QR code below.</p>
+<p><a href="https://colab.research.google.com/github/jfrench/LinearRegression/blob/master/notebooks/06-linear-model-inference-notebook.ipynb"> <img src="https://raw.githubusercontent.com/jfrench/LinearRegression/68b90703718e3dc214dedfa7b0c22b6604c29327/images/qr-inference.svg" width="100"> </a></p>
+<hr>
+<section id="sec-what-is-regression" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-what-is-regression"><span class="header-section-number">3.1</span> What is regression?</h2>
+<p><span class="citation" data-cites="pearson1897">Pearson and Lee (<a href="references.html#ref-pearson1897" role="doc-biblioref">1897</a>)</span> and <span class="citation" data-cites="pearson_and_lee_1903">Pearson and Lee (<a href="references.html#ref-pearson_and_lee_1903" role="doc-biblioref">1903</a>)</span> collected a classical data set that measures the heights of mothers and their adult daughters. <a href="#fig-mdheights" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> displays a scatter plot of 5 randomly selected observations from that data set. Is it be reasonable to use a mother’s height to predict the height of her adult daughter?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-mdheights" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mdheights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter-estimation-and-model-fitting_files/figure-html/fig-mdheights-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mdheights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: A scatter plot displaying pairs of heights for mothers and their adult daughters.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>regression model</strong> is a model describing the typical relationship between a set of variables. A <strong>regression analysis</strong> is the process of building a regression model using a set of variables based on <span class="math inline">\(n\)</span> observations of these variables sampled from a population. In the present context, we want to model the height of adult daughters using the height of their mothers.</p>
+<section id="response-versus-predictor-variables" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="response-versus-predictor-variables"><span class="header-section-number">3.1.1</span> Response versus predictor variables</h3>
+<p>The variables in a regression analysis may be divided into two types: the response variable and the predictor variables.</p>
+<p>The <strong>response variable</strong> is the outcome variable want to predict. It is also known as the <strong>outcome</strong>, <strong>output</strong>, or <strong>dependent</strong> variable. The response variable is denoted by <span class="math inline">\(Y\)</span>. The observed value of <span class="math inline">\(Y\)</span> for observation <span class="math inline">\(i\)</span> is denoted by <span class="math inline">\(Y_i\)</span>.</p>
+<p><strong>Predictors variables</strong> are the variables available to model the response variable. Predictor variables are also known as <strong>explanatory</strong>, <strong>regressor</strong>, <strong>input</strong>, or <strong>independent</strong> variables, or simply as <strong>features</strong>. Following the convention of <span class="citation" data-cites="alr4">Weisberg (<a href="references.html#ref-alr4" role="doc-biblioref">2014</a>)</span>, we use the term <strong>regressor</strong> to refer to the variables used in our regression model, whether that is the original predictor variable, some transformation of a predictor, some combination of predictors, etc. Thus, every predictor can be a regressor but not all regressors are a predictor. The regressor variables are denoted by <span class="math inline">\(X_1, X_2, \ldots, X_{p-1}\)</span>. The value of <span class="math inline">\(X_j\)</span> for observation <span class="math inline">\(i\)</span> is denoted by <span class="math inline">\(x_{i,j}\)</span>. If there is only a single regressor in the model, we can denote the single regressor as <span class="math inline">\(X\)</span> and the observed values of <span class="math inline">\(X\)</span> as <span class="math inline">\(x_1, x_2, \ldots, x_n\)</span>. For the height data, the 5 pairs of observed data are denoted <span class="math display">\[
+(x_1, Y_1), (x_2, Y_2), \ldots, (x_5, Y_5),
+\]</span> with <span class="math inline">\((x_i, Y_i)\)</span> denoting the data for observation <span class="math inline">\(i\)</span>. In our height example shown in <a href="#fig-mdheights" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>, <span class="math inline">\(x_i\)</span> denotes the mother’s height for observation <span class="math inline">\(i\)</span> and <span class="math inline">\(Y_i\)</span> denotes the daughter’s height for observation <span class="math inline">\(i\)</span>. Using the data provided in <a href="#tbl-mdheights" class="quarto-xref">Table&nbsp;<span>3.1</span></a>, we see that <span class="math inline">\(x_3 = 63.5\)</span> and <span class="math inline">\(Y_5 = 66.5\)</span>.</p>
+<div class="cell">
+<div id="tbl-mdheights" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mdheights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: The height (in) of the mothers and daughters displayed in <a href="#fig-mdheights" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>.
+</figcaption>
+<div aria-describedby="tbl-mdheights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">observation</th>
+<th style="text-align: right;">mother</th>
+<th style="text-align: right;">daughter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">57.5</td>
+<td style="text-align: right;">61.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">60.5</td>
+<td style="text-align: right;">63.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">63.5</td>
+<td style="text-align: right;">63.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">66.5</td>
+<td style="text-align: right;">66.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">69.5</td>
+<td style="text-align: right;">66.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="selecting-the-best-model" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="selecting-the-best-model"><span class="header-section-number">3.1.2</span> Selecting the best model</h3>
+<p>Suppose we want to find the straight line that best fits the points in the plot of mother and daughter heights in <a href="#fig-mdheights" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. How do we determine the “best fitting” model? Consider <a href="#fig-two-fitted-lines" class="quarto-xref">Figure&nbsp;<span>3.2</span></a>, in which 2 potential “best fitting” lines are drawn on the scatter plot of the height data. Which one is best?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-two-fitted-lines" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-fitted-lines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter-estimation-and-model-fitting_files/figure-html/fig-two-fitted-lines-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-fitted-lines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Comparison of two potential fitted models to some observed data. The fitted models are shown in grey.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The rest of this chapter focuses on defining and estimating the parameters of a <em>linear</em> regression model. We will start with the simplest type of linear regression, called simple linear regression, which only uses a single regressor variable to model the response. We will then consider more complicated linear regression models. After that, we learn how to evaluate how well an estimated regression model fits the data. We conclude with a summary of some important concepts from the chapter.</p>
+</section>
+</section>
+<section id="sec-slr-estimation" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-slr-estimation"><span class="header-section-number">3.2</span> Estimation of the simple linear regression model</h2>
+<p><strong>Parameter estimation</strong> is the process of using observed data to estimate model parameters. There are many different methods of parameter estimation in statistics: method-of-moments, maximum likelihood, Bayesian, etc. The most common parameter estimation method for linear models is the <strong>least squares method</strong>, which is commonly called <strong>Ordinary Least Squares (OLS)</strong> estimation. OLS estimation estimates the regression coefficients with the values that minimize the residual sum of squares (RSS), which we will define shortly.</p>
+<section id="sec-fv-resid-rss" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-fv-resid-rss"><span class="header-section-number">3.2.1</span> Defining a simple linear regression model</h3>
+<p>The regression model for <span class="math inline">\(Y\)</span> as a function of <span class="math inline">\(X\)</span>, denoted <span class="math inline">\(E(Y \mid X)\)</span>, is the expected value of <span class="math inline">\(Y\)</span> conditional on the value of regressor <span class="math inline">\(X\)</span>. Thus, a regression model specifically refers to the expected relationship between the response and regressors.</p>
+<p>The <strong>simple linear regression model</strong> assumes the mean of the response variable <span class="math inline">\(Y\)</span>, conditional on a single regressor <span class="math inline">\(X\)</span>, is <span id="eq-slr-model"><span class="math display">\[
+E(Y\mid X) = \beta_0 + \beta_1 X.
+\tag{3.1}\]</span></span></p>
+<p>The response variable <span class="math inline">\(Y\)</span> is modeled as <span id="eq-slr-model-Y"><span class="math display">\[
+\begin{aligned}
+Y &amp;= E(Y \mid X) + \epsilon \\
+&amp;= \beta_0 + \beta_1 X + \epsilon,
+\end{aligned}
+\tag{3.2}\]</span></span> where <span class="math inline">\(\epsilon\)</span> is the model error.</p>
+<p>The error term <span class="math inline">\(\epsilon\)</span> is literally the deviation of the response variable from its mean. We typically assume that conditional on the regressor variable, the error term has mean 0 and variance <span class="math inline">\(\sigma^2\)</span>, which can be written as <span id="eq-error-mean"><span class="math display">\[
+E(\epsilon \mid X) = 0
+\tag{3.3}\]</span></span> and <span id="eq-error-var"><span class="math display">\[
+\mathrm{var}(\epsilon \mid X) = \sigma^2.
+\tag{3.4}\]</span></span> Using the response values <span class="math inline">\(Y_1, \ldots, Y_n\)</span> and their associated regressor values <span class="math inline">\(x_1, \ldots, x_n\)</span>, the observed data are modeled as <span class="math display">\[
+\begin{aligned}
+Y_i &amp;= \beta_0 + \beta_1 x_i + \epsilon_i \\
+&amp;= E(Y\mid X = x_i) + \epsilon_i,
+\end{aligned}
+\]</span> for <span class="math inline">\(i=1, 2, \ldots, n\)</span>, where <span class="math inline">\(\epsilon_i\)</span> denotes the error for observation <span class="math inline">\(i\)</span>.</p>
+</section>
+<section id="important-terminology" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="important-terminology"><span class="header-section-number">3.2.2</span> Important terminology</h3>
+<p>The <strong>estimated regression model</strong> or <strong>fitted model</strong> is defined as <span class="math display">\[
+\hat{E}(Y|X) = \hat{\beta}_0 + \hat{\beta}_1 X,
+\]</span> where <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> denote the estimated values of our regression parameters.</p>
+<p>The <span class="math inline">\(i\)</span>th <strong>fitted value</strong> is defined as <span id="eq-def-fitted-value-slr"><span class="math display">\[
+\hat{Y}_i = \hat{E}(Y|X = x_i) = \hat{\beta}_0 + \hat{\beta}_1 x_i.
+\tag{3.5}\]</span></span> Thus, the <span class="math inline">\(i\)</span>th fitted value is the estimated mean of <span class="math inline">\(Y\)</span> when the regressor <span class="math inline">\(X=x_i\)</span>. More specifically, the <span class="math inline">\(i\)</span>th fitted value is the estimated mean response based on the regressor value observed for the <span class="math inline">\(i\)</span>th observation.</p>
+<p>The <span class="math inline">\(i\)</span>th <strong>residual</strong> is defined as <span id="eq-def-residual-slr"><span class="math display">\[
+\hat{\epsilon}_i = Y_i - \hat{Y}_i.
+\tag{3.6}\]</span></span> The <span class="math inline">\(i\)</span>th residual is the difference between the response and estimated mean response of observation <span class="math inline">\(i\)</span>.</p>
+<p>The <strong>residual sum of squares (RSS)</strong> of a regression model is the sum of its squared residuals, which we define as <span id="eq-def-rss-slr"><span class="math display">\[
+RSS = \sum_{i=1}^n \hat{\epsilon}_i^2.
+\tag{3.7}\]</span></span></p>
+<p>There are many equivalent expressions for the RSS. Notably, in the context of simple linear regression, to emphasize the dependence of the RSS on the estimated regression coefficients, <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, <a href="#eq-def-rss-slr" class="quarto-xref">Equation&nbsp;<span>3.7</span></a> can be rewritten using <a href="#eq-def-fitted-value-slr" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> and <a href="#eq-def-residual-slr" class="quarto-xref">Equation&nbsp;<span>3.6</span></a> as <span id="eq-equiv-def-rss-slr"><span class="math display">\[
+\begin{aligned}
+RSS(\hat{\beta}_0, \hat{\beta}_1) &amp;= \sum_{i=1}^n \hat{\epsilon}_i^2 \\
+&amp;= \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 &amp; \\
+&amp;= \sum_{i=1}^n (Y_i - \hat{E}(Y|X=x_i))^2 \\
+&amp;= \sum_{i=1}^n (Y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i))^2.
+\end{aligned}
+\tag{3.8}\]</span></span></p>
+<p>The <strong>fitted model</strong> is the estimated model that minimizes the RSS and is written as <span id="eq-def-fitted-model-slr"><span class="math display">\[
+\hat{Y}=\hat{E}(Y|X) = \hat{\beta}_0 + \hat{\beta}_1 X.
+\tag{3.9}\]</span></span> Both <span class="math inline">\(\hat{Y}\)</span> and <span class="math inline">\(\hat{E}(Y|X)\)</span> are used to denote a fitted model. <span class="math inline">\(\hat{Y}\)</span> is used for brevity, while <span class="math inline">\(\hat{E}(Y|X)\)</span> is used for clarity. In a simple linear regression context, the fitted model is known as the <strong>line of best fit</strong>.</p>
+</section>
+<section id="visualizing-terms" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="visualizing-terms"><span class="header-section-number">3.2.3</span> Visualizing terms</h3>
+<p><a href="#fig-rss-viz2" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> visualizes the response values, fitted values, residuals, and fitted model in a simple linear regression context.</p>
+<ul>
+<li>The fitted model is shown as the dashed grey line and minimizes the RSS.</li>
+<li>The observed values of the response variable, <span class="math inline">\(Y\)</span>, are shown as black dots.</li>
+<li>The fitted values, shown as blue x’s, are the values returned by evaluating the fitted model at the observed regressor values.</li>
+<li>The residuals, shown as solid orange lines, indicate the distance and direction between the observed responses and their corresponding fitted value. If the response is larger than the fitted value then the residual is positive, otherwise it is negative. The RSS is the sum of the squared vertical distances between the response and fitted values, i.e., the sum of the squared residuals.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-rss-viz2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rss-viz2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter-estimation-and-model-fitting_files/figure-html/fig-rss-viz2-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rss-viz2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: Visualization of the fitted model, response values, fitted values, and residuals.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ols-estimators-of-the-simple-linear-regression-parameters" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="ols-estimators-of-the-simple-linear-regression-parameters"><span class="header-section-number">3.2.4</span> OLS estimators of the simple linear regression parameters</h3>
+<p>The estimators of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> that minimize the RSS for a simple linear regression model can be obtained analytically using basic calculus under minimal assumptions. Specifically, the optimal analytical solutions for <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> are valid as long as the regressor values are not a constant value, i.e, <span class="math inline">\(x_i \neq x_j\)</span> for at least some <span class="math inline">\(i,j\in \{1,2,\ldots,n\}\)</span>.</p>
+<p>Define <span class="math inline">\(\bar{x}=\frac{1}{n}\sum_{i=1}^n x_i\)</span> and <span class="math inline">\(\bar{Y} = \frac{1}{n}\sum_{i=1}^n Y_i\)</span>. The expression <span class="math inline">\(\bar{x}\)</span> is read “x bar”, and it is the sample mean of the observed <span class="math inline">\(x_i\)</span> values. The OLS estimators of the simple linear regression coefficients that minimize the RSS are <span id="eq-slr-beta1hat"><span class="math display">\[
+\begin{aligned}
+\hat{\beta}_1 &amp;= \frac{\sum_{i=1}^n x_i Y_i - \frac{1}{n} \biggl(\sum_{i=1}^n x_i\biggr)\biggl(\sum_{i=1}^n Y_i\biggr)}{\sum_{i=1}^n x_i^2 - \frac{1}{n} \biggl(\sum_{i=1}^n x_i\biggr)^2} \\
+&amp;= \frac{\sum_{i=1}^n (x_i - \bar{x})(Y_i - \bar{Y})}{\sum_{i=1}^n (x_i - \bar{x})^2} \\
+&amp;= \frac{\sum_{i=1}^n (x_i - \bar{x})Y_i}{\sum_{i=1}^n (x_i - \bar{x})x_i}
+\end{aligned}
+\tag{3.10}\]</span></span> and <span id="eq-slr-beta0hat"><span class="math display">\[
+\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{x}.
+\tag{3.11}\]</span></span> The various expressions given in <a href="#eq-slr-beta1hat" class="quarto-xref">Equation&nbsp;<span>3.10</span></a> are equivalent. In fact, in <a href="#eq-slr-beta1hat" class="quarto-xref">Equation&nbsp;<span>3.10</span></a>, all of the numerators are equivalent, and all of the denominators are equivalent. We provide derivations of the estimators for <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> in <a href="#sec-slr-derivation" class="quarto-xref"><span>Section 3.5.2</span></a>.</p>
+<p>In addition to the regression coefficients, the other parameter we mentioned in <a href="#sec-fv-resid-rss" class="quarto-xref"><span>Section 3.2.1</span></a> is the error variance, <span class="math inline">\(\sigma^2\)</span>. The most common estimator of the error variance is <span id="eq-sigmasq-hat"><span class="math display">\[
+\hat{\sigma}^2 = \frac{RSS}{\mathrm{df}_{RSS}}.
+\tag{3.12}\]</span></span> where <span class="math inline">\(\mathrm{df}_{RSS}\)</span> is the <strong>degrees of freedom</strong> of the RSS. In a simple linear regression context, the denominator of Equation <a href="#eq-sigmasq-hat" class="quarto-xref">Equation&nbsp;<span>3.12</span></a>) is <span class="math inline">\(n-2\)</span>. <span class="quarto-unresolved-ref">?sec-degrees-of-freedom</span> provides additional details about degrees of freedom.</p>
+</section>
+</section>
+<section id="sec-penguins-slr" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-penguins-slr"><span class="header-section-number">3.3</span> Penguins simple linear regression example</h2>
+<p>We will use the <code>penguins</code> data set in the <strong>palmerpenguins</strong> package <span class="citation" data-cites="R-palmerpenguins">(<a href="references.html#ref-R-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2022</a>)</span> to illustrate a very basic simple linear regression analysis.</p>
+<p>The <code>penguins</code> data set provides data related to various penguin species measured in the Palmer Archipelago (Antarctica), originally provided by <span class="citation" data-cites="GormanEtAl2014">Gorman, Williams, and Fraser (<a href="references.html#ref-GormanEtAl2014" role="doc-biblioref">2014</a>)</span>. The data set includes 344 observations of 8 variables. The variables are:</p>
+<ul>
+<li><code>species</code>: the penguin species (<code>factor</code>).</li>
+<li><code>island</code>: the island on which the penguin was observed (<code>factor</code>).</li>
+<li><code>bill_length_mm</code>: the penguin’s bill length in millimeters (<code>numeric</code>).</li>
+<li><code>bill_depth_mm</code>: the penguin’s bill depth in millimeters (<code>numeric</code>).</li>
+<li><code>flipper_length_mm</code>: the penguin’s flipper length in millimeters (<code>integer</code>).</li>
+<li><code>body_mass_g</code>: the penguin’s body mass in grams (<code>integer</code>).</li>
+<li><code>sex</code>: the penguin’s sex (<code>factor</code>).</li>
+<li><code>year</code>: the study year the penguin was observed (<code>integer</code>).</li>
+</ul>
+<p>We start by loading the data into memory.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(penguins, <span class="at">package =</span> <span class="st">"palmerpenguins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We use the <code>head</code> function to examine the first six rows of the data frame. We see that some observations have missing values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>We begin by creating a scatter plot of <code>bill_length_mm</code> versus <code>body_mass_g</code> (y-axis versus x-axis) in <a href="#fig-penguin-plot-2" class="quarto-xref">Figure&nbsp;<span>3.4</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bill_length_mm <span class="sc">~</span> body_mass_g, <span class="at">data =</span> penguins,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"bill length (mm)"</span>, <span class="at">xlab =</span> <span class="st">"body mass (g)"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Penguin size measurements"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-penguin-plot-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-penguin-plot-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter-estimation-and-model-fitting_files/figure-html/fig-penguin-plot-2-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-penguin-plot-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: A scatter plot of penguin bill length (mm) versus body mass (g).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We see a clear positive association between body mass and bill length: as the body mass increases, the bill length tends to increase. The pattern is linear, i.e., roughly a straight line.</p>
+<p>We will build a simple linear regression model that regresses <code>bill_length_mm</code> on <code>body_mass_g</code>. More specifically, we want to estimate the parameters of the regression model <span class="math inline">\(E(Y \mid X) = \beta_0 + \beta_1X\)</span>, with <span class="math inline">\(Y=\mathtt{bill\_length\_mm}\)</span> and <span class="math inline">\(X=\mathtt{body\_mass\_g}\)</span>, i.e., we want to estimate the parameters of the model <span class="math display">\[
+E(\mathtt{bill\_length\_mm}\mid \mathtt{body\_mass\_g})=\beta_0+\beta_1\mathtt{body\_mass\_g}.
+\]</span></p>
+<p>The <code>lm</code> function uses OLS estimation to fit a linear model to data. The function has two main arguments:</p>
+<ul>
+<li><code>formula</code>: a <span class="citation" data-cites="wilkinsonrogers1973">Wilkinson and Rogers (<a href="references.html#ref-wilkinsonrogers1973" role="doc-biblioref">1973</a>)</span> style formula describing the linear regression model. For complete details, run <code>?stats::formula</code> in the Console. If <code>y</code> is the response variable and <code>x</code> is an available numeric predictor, then <code>formula = y ~ x</code> tells <code>lm</code> to fit the simple linear regression model <span class="math inline">\(E(Y|X)=\beta_0+\beta_1 X\)</span>.</li>
+<li><code>data</code>: the data frame in which the model variables are stored. This can be omitted if the variables are already stored in memory.</li>
+</ul>
+<p>We use the code below to fit a linear model regressing <code>bill_length_mm</code> on <code>body_mass_g</code> using the <code>penguins</code> data frame and assign the result the name <code>lmod</code>. <code>lmod</code> is an object of class <code>lm</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lmod <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> body_mass_g, <span class="at">data =</span> penguins) <span class="co"># fit model</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(lmod) <span class="co"># class of lmod</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "lm"</code></pre>
+</div>
+</div>
+<p>The <code>summary</code> function summarizes the results of a fitted model. When an <code>lm</code> object is supplied to the <code>summary</code> function, it returns:</p>
+<ul>
+<li><code>Call</code>: the function call used to fit the model.</li>
+<li><code>Residuals</code>: A 5-number summary of <span class="math inline">\(\hat{\epsilon}_1, \ldots, \hat{\epsilon}_n\)</span>.</li>
+<li><code>Coefficients</code>: A table that lists:
+<ul>
+<li>The regressors in the fitted model.</li>
+<li><code>Estimate</code>: the estimated coefficient of each regressor.</li>
+<li><code>Std. Error</code>: the <em>estimated</em> standard error of the estimated coefficients.</li>
+<li><code>t value</code>: the computed test statistic associated with testing <span class="math inline">\(H_0: \beta_j = 0\)</span> versus <span class="math inline">\(H_a: \beta_j \neq 0\)</span> for each regression coefficient in the model.</li>
+<li><code>Pr(&gt;|t|)</code>: the associated p-value of each test.</li>
+</ul></li>
+<li>Various summary statistics:
+<ul>
+<li><code>Residual standard error</code> is the value of <span class="math inline">\(\hat{\sigma}\)</span>, the estimate of the error standard deviation. The degrees of freedom is <span class="math inline">\(\mathrm{df}_{RSS}\)</span>, the number of observations minus the number of estimated coefficients in the model.</li>
+<li><code>Multiple R-squared</code> is a measure of model fit discussed in Section @ref(evaluating-model-fit).</li>
+<li><code>Adjusted R-squared</code> is a modified version of <code>Multiple R-squared</code>.</li>
+<li><code>F-statistic</code> is the test statistic of the test that compares the model with an only an intercept to the fitted model. The <code>DF</code> (degrees of freedom) values relate to the statistic under the null hypothesis, and the <code>p-value</code> is the p-value of the test.</li>
+</ul></li>
+</ul>
+<p>We use the <code>summary</code> function on <code>lmod</code> to produce the output below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize results stored in lmod</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = bill_length_mm ~ body_mass_g, data = penguins)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.1251  -3.0434  -0.8089   2.0711  16.1109 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 2.690e+01  1.269e+00   21.19   &lt;2e-16 ***
+body_mass_g 4.051e-03  2.967e-04   13.65   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.394 on 340 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.3542,    Adjusted R-squared:  0.3523 
+F-statistic: 186.4 on 1 and 340 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Using the output above, we see that the estimated parameters are <span class="math inline">\(\hat{\beta}_0=26.9\)</span> and <span class="math inline">\(\hat{\beta}_1=0.004\)</span>. Thus, our fitted model is <span class="math display">\[
+\widehat{\mathtt{bill\_length\_mm}}=26.9+0.004 \mathtt{body\_mass\_g}.
+\]</span></p>
+<p>In the context of a simple linear regression model, the intercept term is the expected response when the value of the regressor is zero, while the slope is the expected change in the response when the regressor increases by 1 unit. Thus, based on the model we fit to the <code>penguins</code> data, we can make the following interpretations:</p>
+<ul>
+<li><span class="math inline">\(\hat{\beta}_1\)</span>: If a penguin has a body mass 1 gram larger than another penguin, we expect the larger penguin’s bill length to be 0.004 millimeters longer.</li>
+<li><span class="math inline">\(\hat{\beta}_0\)</span>: A penguin with a body mass of 0 grams is expected to have a bill length of 26.9 millimeters.</li>
+</ul>
+<p>The latter interpretation is nonsensical. It doesn’t make sense to discuss a penguin with a body mass of 0 grams unless we are talking about an embryo, in which case it doesn’t even make sense to discuss bill length. This is caused by the fact that we are extrapolating far outside the observed body mass values. Our data only includes information for adult penguins, so we should be cautious about drawing conclusions for penguins at other life stages.</p>
+<p>The <code>abline</code> function can be used to automatically overlay the fitted model on the observed data. We run the code below to produce <a href="#fig-slr-penguin-fit" class="quarto-xref">Figure&nbsp;<span>3.5</span></a>. The fit of the model to our observed data seems reasonable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bill_length_mm <span class="sc">~</span> body_mass_g, <span class="at">data =</span> penguins, <span class="at">main =</span> <span class="st">"Penguin size measurements"</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"bill length (mm)"</span>, <span class="at">xlab =</span> <span class="st">"body mass (g)"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># draw fitted line on plot</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-slr-penguin-fit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slr-penguin-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter-estimation-and-model-fitting_files/figure-html/fig-slr-penguin-fit-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slr-penguin-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.5: The fitted model overlaid on the penguin data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>R provides many additional methods (generic functions that do something specific when applied to a certain type of object) for <code>lm</code> objects. Commonly used ones include:</p>
+<ul>
+<li><code>residuals</code>: extracts the residuals, <span class="math inline">\(\hat{\epsilon}_1, \ldots, \hat{\epsilon}_n\)</span> from an <code>lm</code> object.</li>
+<li><code>fitted</code>: extracts the fitted values, <span class="math inline">\(\hat{Y}_1, \ldots, \hat{Y}_n\)</span> from an <code>lm</code> object.</li>
+<li><code>predict</code>: by default, computes <span class="math inline">\(\hat{Y}_1, \ldots, \hat{Y}_n\)</span> for an <code>lm</code> object. It can also be used to make arbitrary predictions for the <code>lm</code> object.</li>
+<li><code>coef</code> or <code>coefficients</code>: extracts the estimated coefficients from an <code>lm</code> object.</li>
+<li><code>deviance</code>: extracts the RSS from an <code>lm</code> object.</li>
+<li><code>df.residual</code>: extracts <span class="math inline">\(\mathrm{df}_{RSS}\)</span>, the degrees of freedom for the RSS, from an <code>lm</code> object.</li>
+<li><code>sigma</code>: extracts <span class="math inline">\(\hat{\sigma}\)</span> from an <code>lm</code> object.</li>
+</ul>
+<p>We now use some of the methods to extract important characteristics of our fitted model.</p>
+<p>The <code>coef</code> function extracts the estimated regression coefficients, <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, from the fitted model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(coeffs <span class="ot">&lt;-</span> <span class="fu">coef</span>(lmod)) <span class="co"># extract, assign, and print coefficients</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)  body_mass_g 
+26.898872424  0.004051417 </code></pre>
+</div>
+</div>
+<p>The <code>residuals</code> function extracts the vector of residuals, <span class="math inline">\(\hat{\epsilon}_1,\ldots, \hat{\epsilon}_n\)</span> from the fitted model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ehat <span class="ot">&lt;-</span> <span class="fu">residuals</span>(lmod) <span class="co"># extract and assign residuals</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ehat) <span class="co"># first few residuals</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         1          2          3          5          6          7 
+-2.9916846 -2.7942554  0.2340237 -4.1762596 -2.3865430 -2.6852575 </code></pre>
+</div>
+</div>
+<p>The <code>fitted</code> function extracts the vector of fitted values, <span class="math inline">\(\hat{Y}_1,\ldots, \hat{Y}_n\)</span>, from the fitted model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(lmod) <span class="co"># extract and assign fitted values</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(yhat) <span class="co"># first few fitted values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2        3        5        6        7 
+42.09168 42.29426 40.06598 40.87626 41.68654 41.58526 </code></pre>
+</div>
+</div>
+<p>The <code>predict</code> function also extracts the vector of fitted values from the fitted model. It can be also used to predict the response of an observation for arbitrary values of the predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>yhat2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lmod) <span class="co"># compute and assign fitted values</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(yhat2) <span class="co"># first few fitted values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2        3        5        6        7 
+42.09168 42.29426 40.06598 40.87626 41.68654 41.58526 </code></pre>
+</div>
+</div>
+<p>The <code>deviance</code> function extracts the RSS of the fitted model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(rss <span class="ot">&lt;-</span> <span class="fu">deviance</span>(lmod)) <span class="co"># extract, assign, and print rss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6564.494</code></pre>
+</div>
+</div>
+<p>The <code>df.residual</code> function extracts the residual degrees of freedom from the fitted model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>(dfr <span class="ot">&lt;-</span> <span class="fu">df.residual</span>(lmod)) <span class="co"># extract n - p</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 340</code></pre>
+</div>
+</div>
+<p>The <code>sigma</code> function extracts the estimated error standard deviation, <span class="math inline">\(\hat{\sigma}=\sqrt{\hat{\sigma}^2}\)</span>, from the fitted model. In the code below, we square <span class="math inline">\(\hat{\sigma}\)</span> to estimate the error variance, <span class="math inline">\(\hat{\sigma}^2\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>(sigmasqhat <span class="ot">&lt;-</span> <span class="fu">sigma</span>(lmod)<span class="sc">^</span><span class="dv">2</span>) <span class="co"># estimated error variance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 19.30734</code></pre>
+</div>
+</div>
+<p>From the output above, we that the the first 3 residuals are -2.99, -2.79, and 0.23. The first 3 fitted values are 42.09, 42.29, and 40.07. The RSS for the fitted model is 6564.49 with 340 degrees of freedom. The estimated error variance, <span class="math inline">\(\hat{\sigma}^2\)</span>, is 19.31.</p>
+<p>We use the <code>methods</code> function to obtain a full list of methods available for <code>lm</code> objects using the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">methods</span>(<span class="at">class =</span> <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] add1           alias          anova          case.names     coerce        
+ [6] confint        cooks.distance deviance       dfbeta         dfbetas       
+[11] drop1          dummy.coef     effects        extractAIC     family        
+[16] formula        hatvalues      influence      initialize     kappa         
+[21] labels         logLik         model.frame    model.matrix   nobs          
+[26] plot           predict        print          proj           qr            
+[31] residuals      rstandard      rstudent       show           simulate      
+[36] slotsFromS3    summary        variable.names vcov          
+see '?methods' for accessing help and source code</code></pre>
+</div>
+</div>
+</section>
+<section id="defining-a-linear-model" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="defining-a-linear-model"><span class="header-section-number">3.4</span> Defining a linear model</h2>
+<section id="sec-necessary-components" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="sec-necessary-components"><span class="header-section-number">3.4.1</span> Necessary components and notation</h3>
+<p>We now wish to discuss linear models in a broader context. We begin by defining notation for the components of a linear model and provide some of their important properties. We repeat some of the previous discussion for clarity.</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> denotes the response variable.
+<ul>
+<li>The response variable is treated as a random variable.</li>
+<li>We will observe realizations of this random variable for each observation in our data set.</li>
+</ul></li>
+<li><span class="math inline">\(X\)</span> denotes a single regressor variable. <span class="math inline">\(X_1, X_2, \ldots, X_{p-1}\)</span> denote distinct regressor variables if we are performing regression with multiple regressor variables.
+<ul>
+<li>The regressor variables are treated as non-random variables.</li>
+<li>The observed values of the regressor variables are treated as fixed, known values.</li>
+</ul></li>
+<li><span class="math inline">\(\mathbb{X}=\{X_0, X_1,\ldots,X_{p-1}\}\)</span> denotes the collection of all regressors under consideration, though this notation is really only needed in the context of multiple regression. <span class="math inline">\(X_0\)</span> is usually the constant regressor 1, which is needed to include an intercept in the regression model.</li>
+<li><span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\ldots\)</span>, <span class="math inline">\(\beta_{p-1}\)</span> denote <strong>regression coefficients</strong>.
+<ul>
+<li>Regression coefficients are statistical parameters that we will estimate from our data.</li>
+<li>The regression coefficients are treated as fixed, non-random but unknown values.</li>
+<li>Regression coefficients are not observable.</li>
+</ul></li>
+<li><span class="math inline">\(\epsilon\)</span> denotes model <strong>error</strong>.
+<ul>
+<li>The model error is more accurately described as random variation of each observation from the regression model.</li>
+<li>The error is treated as a random variable.</li>
+<li>The error is assumed to have mean 0 for all values of the regressors. We write this as <span class="math inline">\(E(\epsilon \mid \mathbb{X}) = 0\)</span>, which is read as, “The expected value of <span class="math inline">\(\epsilon\)</span> conditional on knowing all the regressor values equals 0”. The notation “<span class="math inline">\(\mid \mathbb{X}\)</span>” extends the notation used in <a href="#eq-slr-model" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> to multiple regressors.</li>
+<li>The variance of the errors is assumed to be a constant value for all values of the regressors. We write this assumption as <span class="math inline">\(\mathrm{var}(\epsilon \mid \mathbb{X})=\sigma^2\)</span>.</li>
+<li>The error is not observable.</li>
+</ul></li>
+</ul>
+</section>
+<section id="standard-definition-of-linear-model" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="standard-definition-of-linear-model"><span class="header-section-number">3.4.2</span> Standard definition of linear model</h3>
+<p>In general, a linear regression model can have an arbitrary number of regressors. A <strong>multiple linear regression</strong> model has two or more regressors.</p>
+<p>A <strong>linear model</strong> for <span class="math inline">\(Y\)</span> is defined by the equation <span id="eq-lmdef"><span class="math display">\[
+\begin{aligned}
+Y &amp;= \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_{p-1}
+X_{p-1} + \epsilon \\
+&amp;= E(Y \mid \mathbb{X}) + \epsilon.
+\end{aligned}
+\tag{3.13}\]</span></span> We write the linear model in this way to emphasize the fact <em>the response value equals the expected response for that combination of regressor values plus some error</em>. It should be clear from <a href="#eq-lmdef" class="quarto-xref">Equation&nbsp;<span>3.13</span></a> that <span class="math display">\[
+E(Y \mid \mathbb{X}) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_{p-1} X_{p-1},
+\]</span> which we prove in <a href="basic-theoretical-results.html" class="quarto-xref"><span>Chapter 5</span></a> under mild assumptions.</p>
+<p>More generally, we can say that a regression model is linear if the mean function can be written as <span id="eq-lmdef-cj"><span class="math display">\[
+E(Y \mid \mathbb{X}) = \sum_{j=0}^{p-1} c_j \beta_j,
+\tag{3.14}\]</span></span> where <span class="math inline">\(c_0, c_1, \ldots, c_{p-1}\)</span> are known functions of the regressor variables. For example, we could have <span class="math inline">\(c_1 = X_1 X_2 X_3\)</span>, <span class="math inline">\(c_3 = X_2^2\)</span>, <span class="math inline">\(c_8 = \ln(X_1)/X_2^2\)</span>, etc.</p>
+<p>Alternatively, if <span class="math inline">\(g_0,\ldots,g_{p-1}\)</span> are functions of <span class="math inline">\(\mathbb{X}\)</span>, then a linear regression model can be written as <span class="math display">\[
+E(Y\mid \mathbb{X}) = \sum_{j=0}^{p-1} g_j(\mathbb{X})\beta_j.
+\]</span></p>
+<p>The key feature of the linear regression model is that the model is a linear combination of the regression coefficients.</p>
+</section>
+<section id="examples-of-linear-models" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="examples-of-linear-models"><span class="header-section-number">3.4.3</span> Examples of linear models</h3>
+<p>A model is linear because of its <em>form</em>, not the shape it produces.</p>
+<p>Some examples of linear regression models are:</p>
+<ul>
+<li><span class="math inline">\(E(Y|X) = \beta_0\)</span>.</li>
+<li><span class="math inline">\(E(Y|X) = \beta_0 + \beta_1 X + \beta_2 X^2\)</span>.</li>
+<li><span class="math inline">\(E(Y|X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_2\)</span>.</li>
+<li><span class="math inline">\(E(Y|X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2\)</span>.</li>
+<li><span class="math inline">\(E(Y|X_1, X_2) = \beta_0 + \beta_1 \ln(X_1) + \beta_2 X_2^{-1}\)</span>.</li>
+<li><span class="math inline">\(E(\ln(Y)|X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_2\)</span>.</li>
+<li><span class="math inline">\(E(Y^{-1}|X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_2\)</span>.</li>
+</ul>
+<p>Many of the linear model examples given above do not result in a straight line or surface but instead curve.</p>
+<p>Some examples of non-linear regression models are:</p>
+<ul>
+<li><span class="math inline">\(E(Y|X) = \beta_0 + e^{\beta_1 X}\)</span>.</li>
+<li><span class="math inline">\(E(Y|X) = \beta_0 + \beta_1 X/(\beta_2 + X)\)</span>.</li>
+</ul>
+<p>The latter regression models are non-linear models because there is no way to express them using the expression in <a href="#eq-lmdef-cj" class="quarto-xref">Equation&nbsp;<span>3.14</span></a>.</p>
+</section>
+</section>
+<section id="estimation-of-the-multiple-linear-regression-model" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="estimation-of-the-multiple-linear-regression-model"><span class="header-section-number">3.5</span> Estimation of the multiple linear regression model</h2>
+<p>Suppose we want to estimate the parameters of the model relating the response variable to multiple regressors via the equation <span class="math display">\[
+Y=\beta_0 + \beta_1 X_1 + \cdots + \beta_{p-1} X_{p-1} + \epsilon.
+\]</span></p>
+<p>The system of equations relating the responses, the regressors, and the errors for all <span class="math inline">\(n\)</span> observations can be written as <span id="eq-lmSystem"><span class="math display">\[
+Y_i = \beta_0 + \beta_1 x_{i,1} + \beta_2 x_{i,2} + \cdots + \beta_{p-1} x_{i,p-1} + \epsilon_i,\quad i=1,2,\ldots,n.
+\tag{3.15}\]</span></span></p>
+<section id="using-matrix-notation-to-represent-a-linear-model" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="using-matrix-notation-to-represent-a-linear-model"><span class="header-section-number">3.5.1</span> Using matrix notation to represent a linear model</h3>
+<p>We can simplify the linear model described in <a href="#eq-lmSystem" class="quarto-xref">Equation&nbsp;<span>3.15</span></a> using matrix notation. <a href="matrix-facts.html" class="quarto-xref"><span>Appendix A</span></a> provides an overview of matrix-related information that may be useful for understanding the discussion below.</p>
+<p>We use the following notation:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{y} = [Y_1, Y_2, \ldots, Y_n]\)</span> denotes the <span class="math inline">\(n\times 1\)</span> column vector containing the <span class="math inline">\(n\)</span> observed response values.</li>
+<li><span class="math inline">\(\mathbf{X}\)</span> denotes the <span class="math inline">\(n\times p\)</span> matrix containing a column of 1s and the observed regressor values for <span class="math inline">\(X_1, X_2, \ldots, X_{p-1}\)</span>. This may be written as <span class="math display">\[
+\mathbf{X} = \begin{bmatrix}
+1 &amp; x_{1,1} &amp; x_{1,2} &amp; \cdots &amp; x_{1,p-1} \\
+1 &amp; x_{2,1} &amp; x_{2,2} &amp; \cdots &amp; x_{2,p-1} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+1 &amp; x_{n,1} &amp; x_{n,2} &amp; \cdots &amp; x_{n,p-1}
+\end{bmatrix}.
+\]</span></li>
+<li><span class="math inline">\(\boldsymbol{\beta} = [\beta_0, \beta_1, \ldots, \beta_{p-1}]\)</span> denotes the <span class="math inline">\(p\times 1\)</span> column vector containing the <span class="math inline">\(p\)</span> regression coefficients.</li>
+<li><span class="math inline">\(\boldsymbol{\epsilon} = [\epsilon_1, \epsilon_2, \ldots, \epsilon_n]\)</span> denotes the <span class="math inline">\(n\times 1\)</span> column vector containing the <span class="math inline">\(n\)</span> model errors.</li>
+</ul>
+<p>The system of equations defining the model in <a href="#eq-lmSystem" class="quarto-xref">Equation&nbsp;<span>3.15</span></a> can be written as <span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}.
+\]</span> A regression model that cannot be represented as a system of linear equations using matrices is not a linear model.</p>
+<!-- ### Residuals, fitted values, and RSS for multiple linear regression {#ss:fv-resid-rss-mlr} -->
+<!-- We now discuss of residuals, fitted values, and RSS for the multiple linear regression context using matrix notation. -->
+<!-- The vector of estimated values for the coefficients contained in $\boldsymbol{\beta}$ is denoted -->
+<!-- \[ -->
+<!-- \hat{\boldsymbol{\beta}}=[\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_{p-1}]. (\#eq:def-beta-matrix) -->
+<!-- \] -->
+<!-- The vector of regressor values for the $i$th observation is denoted -->
+<!-- \[ -->
+<!-- \mathbf{x}_i=[1,x_{i,1},\ldots,x_{i,p-1}], (\#eq:def-ith-regressor-matrix) -->
+<!-- \] -->
+<!-- where the 1 is needed to account for the intercept in our model. -->
+<!-- Extending the original definition of a fitted value in Equation \@ref(eq:def-fitted-value-slr), the $i$th **fitted value** in the context of multiple linear regression is defined as -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \hat{Y}_i &= \hat{E}(Y \mid \mathbb{X} = \mathbf{x}_i) \\ -->
+<!-- &= \hat{\beta}_0 + \hat{\beta}_1 x_{i,1} + \cdots + \hat{\beta}_{p-1} x_{i,p-1} \\ -->
+<!-- &= \mathbf{x}_i^T\hat{\boldsymbol{\beta}}. -->
+<!-- \end{aligned} -->
+<!-- (\#eq:def-fitted-value-matrix) -->
+<!-- \] -->
+<!-- The notation "$\mathbb{X} = \mathbf{x}_i$" is a concise way of saying "$X_0 = 1, X_1=x_{i,1}, \ldots, X_{p-1}=x_{i,p-1}$". -->
+<!-- The column vector of fitted values is defined as -->
+<!-- \[ -->
+<!-- \hat{\mathbf{y}} = [\hat{Y}_1,\ldots,\hat{Y}_n], (\#eq:def-fitted-values-matrix) -->
+<!-- \] -->
+<!-- and can be computed as -->
+<!-- \[ -->
+<!-- \hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}. (\#eq:compute-yhat) -->
+<!-- \] -->
+<!-- Extending the original definition of a residual in Equation \@ref(eq:def-residual-slr), -->
+<!-- the $i$th **residual** in the context of multiple linear regression can be written as -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \hat{\epsilon}_i = Y_i - \hat{Y}_i=Y_i-\mathbf{x}_i^T\hat{\boldsymbol{\beta}}, -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- using Equation \@ref(eq:def-fitted-value-matrix). -->
+<!-- The column vector of residuals is defined as -->
+<!-- \[ -->
+<!-- \hat{\boldsymbol{\epsilon}} = [\hat{\epsilon}_1,\ldots,\hat{\epsilon}_n]. (\#eq:def-residuals-matrix) -->
+<!-- \] -->
+<!-- Using Equations \@ref(eq:def-fitted-values-matrix) and \@ref(eq:compute-yhat), equivalent expressions for the residual vector are -->
+<!-- \[ -->
+<!-- \hat{\boldsymbol{\epsilon}}=\mathbf{y}-\hat{\mathbf{y}}=\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}.(\#eq:epsilonhat-expressions) -->
+<!-- \] -->
+<!-- The RSS for a multiple linear regression model, as a function of the estimated regression coefficients, is -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- RSS(\hat{\boldsymbol{\beta}}) &= \sum_{i=1}^n \hat{\epsilon}_i^2 \\ -->
+<!-- &= \hat{\boldsymbol{\epsilon}}^T \hat{\boldsymbol{\epsilon}} \\ -->
+<!-- &= (\mathbf{y} - \hat{\mathbf{y}})^T (\mathbf{y} - \hat{\mathbf{y}}) \\ -->
+<!-- & = (\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}})^T (\mathbf{y} - \mathbf{X} \hat{\boldsymbol{\beta}}). -->
+<!-- \end{aligned} (\#eq:def-rss-matrix) -->
+<!-- \] -->
+<!-- The various expressions in Equation \@ref(eq:def-rss-matrix) are equivalent (cf. Equation \@ref(eq:epsilonhat-expressions)). -->
+<!-- ### OLS estimator of the regression coefficients -->
+<!-- The OLS estimator of the regression coefficient vector, $\boldsymbol{\beta}$, is -->
+<!-- \[ -->
+<!-- \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}. (\#eq:betahat) -->
+<!-- \] -->
+<!-- Equation \@ref(eq:betahat) assumes that $\mathbf{X}$ has full-rank ($n>p$ and none of the columns of $\mathbf{X}$ are linear combinations of other columns in $\mathbf{X}$), which is a very mild assumption. We provide a derivation of the estimator for $\beta$ in Section \@ref(mlr-derivation). -->
+<!-- The general estimator of the $\sigma^2$ in the context of multiple linear regression is -->
+<!-- \[ -->
+<!-- \hat{\sigma}^2 = \frac{RSS}{n-p}, -->
+<!-- \] -->
+<!-- which is consistent with the previous definition given in Equation \@ref(eq:sigmasq-hat). -->
+<!-- ## Penguins multiple linear regression example {#s:penguins-mlr} -->
+<!-- We continue our analysis of the `penguins` data introduced in Section \@ref(s:penguins-slr). We will fit a multiple linear regression model regressing `bill_length_mm` on `body_mass_g` and `flipper_length_mm`, and will once again do so using the `lm` function. -->
+<!-- Before we do that, we provide some additional discussion of the of the `formula` argument of the `lm` function. This will be very important as we discuss more complicated models. Assume `y` is the response variable and `x`, `x1`, `x2`, `x3` are available numeric predictors. Then: -->
+<!-- -   `y ~ x` describes the simple linear regression model $E(Y|X)=\beta_0+\beta_1 X$. -->
+<!-- -   `y ~ x1 + x2` describes the multiple linear regression model $E(Y|X_1, X_2)=\beta_0+\beta_1 X_1 + \beta_2 X_2$. -->
+<!-- -   `y ~ x1 + x2 + x1:x2` and `y ~ x1 * x2` describe the multiple linear regression model -->
+<!--   $E(Y|X_1, X_2)=\beta_0+\beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2$. -->
+<!-- -   `y ~ -1 + x1 + x2` describe a multiple linear regression model without an intercept, in this case, -->
+<!--   $E(Y|X_1, X_2)=\beta_1 X_1 + \beta_2 X_2$. The `-1` tells R not to include an intercept in the fitted model. -->
+<!-- -   `y ~ x + I(x^2)` describe the multiple linear regression model $E(Y|X)=\beta_0+\beta_1 X + \beta_2 X^2$. The `I()` function is a special function that tells R to create a regressor based on the syntax inside the `()` and include that regressor in the model. -->
+<!-- In the code below, we fit the linear model regressing `bill_length_mm` on `body_mass_g` and `flipper_length_mm` and then use the `coef` and `deviance` functions to extract the estimated coefficients and RSS of the fitted model, respectively. -->
+<!-- ```{r} -->
+<!-- # fit model -->
+<!-- mlmod <- lm(bill_length_mm ~ body_mass_g + flipper_length_mm, data = penguins) -->
+<!-- # extract estimated coefficients -->
+<!-- coef(mlmod) -->
+<!-- # extract RSS -->
+<!-- deviance(mlmod) -->
+<!-- ``` -->
+<!-- The fitted model is -->
+<!-- \[ -->
+<!-- \widehat{\mathtt{bill\_length\_mm}}=-3.44+0.0007 \,\mathtt{body\_mass\_g}+0.22\,\mathtt{flipper\_length\_mm}. -->
+<!-- \] -->
+<!-- We discuss how to interpret the coefficients of a multiple linear regression model in Chapter \@ref(interp-chapter). -->
+<!-- The RSS for the fitted model is 5764.59, which is substantially less than the RSS of the fitted simple linear regression model in Section \@ref(s:penguins-slr). -->
+<!-- <!-- It is trivial to add additional numeric regressors to our linear regression model using the `lm` function. But what if we have a categorical predictor? The next section discusses how to transform a categorical predictors into 1 or more numeric regressors that can be included in our linear model. -->
+<p>–&gt;</p>
+<!-- ## Types of linear models {#model-types} -->
+<!-- We provide a brief overview of different types of linear regression models. Our discussion is not exhaustive, nor are the types exclusive (a model can sometimes be described using more than one of these labels). We have previously discussed some of the terms, but include them for completeness. -->
+<!-- - **Simple**: a model with an intercept and a single regressor. -->
+<!-- - **Multiple**: a model with 2 or more regressors. -->
+<!-- - **Polynomial**: a model with squared, cubic, quartic predictors, etc. E.g, $E(Y\mid X) = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3$ is a 4th-degree polynomial. -->
+<!-- - **First-order**: a model in which each predictor is used to create no more than one regressor. -->
+<!-- - **Main effect**: a model in which none of the regressors are functions of more than one predictor. A predictor can be used more than once, but each regressor is only a function of one predictor. E.g., if $X_1$ and $X_2$ are different predictors, then the regression model $E(Y\mid X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_1^2 + \beta_3 X_2$ would be a main effect model, but not a first-order model since $X_1$ was used to create two regressors. -->
+<!-- - **Interaction**: a model in which some of the regressors are functions of more than 1 predictor. E.g., if $X_1$ and $X_2$ are different predictors, then the regression model $E(Y\mid X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1X_2$ is a very simple interaction model since the third regressor is the product of $X_1$ and $X_2$. -->
+<!-- - **Analysis of variance (ANOVA)**: a model for which all predictors used in the model are categorical. -->
+<!-- - **Analysis of covariance (ANCOVA)**: a model that uses at least one numeric predictor and at least one categorical predictor. -->
+<!-- - **Generalized (GLM)**: a "generalized" linear regression model in which the responses do not come from a normal distribution. -->
+<!-- ## Categorical predictors {#categorical-predictors} -->
+<!-- Categorical  predictors can greatly improve the explanatory power or predictive capability of a fitted model when different patterns exist for different levels of the variables. We discuss two basic uses of categorical predictors in linear regression models. We will briefly introduce the: -->
+<!-- - **parallel lines regression model**, which is a main effect regression model that has a single numeric regressor and a single categorical predictor. The model produces parallel lines for each level of the categorical variable. -->
+<!-- - **separate lines regression model**, which adds an interaction term between the numeric regressor and categorical predictor of the parallel lines regression model. The model produces separate lines for each level of the categorical variable. -->
+<!-- <!-- Chapter \@ref(more-on-categorical-predictors) provides more information about using categorical predictors in a regression model. -->
+<p>–&gt;</p>
+<!-- ### Indicator variables -->
+<!-- In order to compute $\hat{\boldsymbol{\beta}}$ using Equation \@ref(eq:betahat), both $\mathbf{X}$ and $\mathbf{y}$ must contain numeric values. How can we use a categorical predictor in our regression model when its values are not numeric? To do so, we must transform the categorical predictor into one or more **indicator** or **dummy variables**, which we explain in more detail below. -->
+<!-- An **indicator function** is a function that takes the value 1 if a certain property is true and 0 otherwise. An **indicator variable** is the variable that results from applying an indicator function to each observation of a variable. Many notations exist for indicator functions. We use the notation, -->
+<!-- \[ -->
+<!-- I_S(x) = -->
+<!-- \begin{cases} -->
+<!-- 1 & \textrm{if}\;x \in S\\ -->
+<!-- 0 & \textrm{if}\;x \notin S -->
+<!-- \end{cases}, -->
+<!-- \] -->
+<!-- which is shorthand for a function that returns 1 if $x$ is in the set $S$ and 0 otherwise. Some examples are: -->
+<!-- - $I_{\{2,3\}}(2) = 1$. -->
+<!-- - $I_{\{2,3\}}(2.5) = 1$. -->
+<!-- - $I_{[2,3]}(2.5) = 1$, where $[2,3]$ is the interval from 2 to 3 and not the set containing only the numbers 2 and 3. -->
+<!-- - $I_{\{\text{red},\text{green}\}}(\text{green}) = 1$. -->
+<!-- Let $C$ denote a categorical predictor with levels $L_1$ and $L_2$. The $C$ stands for "categorical", while the $L$ stands for "level". Let $c_i$ denote the value of $C$ for observation $i$. -->
+<!-- Let $D_j$ denote the indicator (dummy) variable for factor level $L_j$ of $C$. The value of $D_j$ for observation $i$ is denoted $d_{i,j}$, with -->
+<!-- \[ -->
+<!-- d_{i,j} = I_{\{L_j\}}(c_i), -->
+<!-- \] -->
+<!-- i.e., $d_{i,j}$ is 1 if $c_i$ has factor level $L_j$ and 0 otherwise. -->
+<!-- ### Parallel and separate lines models -->
+<!-- Assume we want to build a linear regression model using a single numeric regressor $X$ and a two-level categorical predictor $C$. -->
+<!-- The standard simple linear regression model is -->
+<!-- \[E(Y\mid X)=\beta_0 + \beta_1 X.\] -->
+<!-- To create a parallel lines regression model, we add regressor $D_2$ to the simple linear regression model. Thus, the parallel lines regression model is -->
+<!-- \[ -->
+<!-- E(Y\mid X,C)=\beta_{0}+\beta_1 X+\beta_2 D_2. (\#eq:parallel-lines-model) -->
+<!-- \] -->
+<!-- Since $D_2=0$ when $C=L_1$ and $D_2=1$ when $C=L_2$, we see that the model in Equation \@ref(eq:parallel-lines-model) simplifies to -->
+<!-- \[ -->
+<!-- E(Y\mid X, C) = -->
+<!-- \begin{cases} -->
+<!--   \beta_0+\beta_1 X & \mathrm{if}\;C = L_1 \\ -->
+<!--   (\beta_0 + \beta_2) +\beta_1 X & \mathrm{if}\;C = L_2 -->
+<!-- \end{cases}. -->
+<!-- \] -->
+<!-- The parallel lines will be separated vertically by the distance $\beta_2$. -->
+<!-- To create a separate lines regression model, we add regressor $D_2$ and the interaction regressor $X D_2$ to our simple linear regression model. Thus, the separate lines regression model is -->
+<!-- \[ -->
+<!-- E(Y\mid X,C)=\beta_0+\beta_1 X+\beta_2 D_2 + \beta_{3} XD_2, -->
+<!-- \] -->
+<!-- which, similar to the previous model, simplifies to -->
+<!-- \[ -->
+<!-- E(Y\mid X, C) = -->
+<!-- \begin{cases} -->
+<!--   \beta_{0}+\beta_1 X & \mathrm{if}\;C = L_1 \\ -->
+<!--   (\beta_{0} + \beta_{2}) +(\beta_1 + \beta_{3}) X & \mathrm{if}\;C = L_2 -->
+<!-- \end{cases}. -->
+<!-- \] -->
+<!-- ### Extensions -->
+<!-- We have presented the most basic regression models that include a categorical predictor. If we have a categorical predictor $C$ with $K$ levels $L_1, L_2, \ldots, L_K$, then we can add indicator variables $D_2, D_3, \ldots, D_K$ to a simple linear regression model to create a parallel lines model for each level of $C$. Similarly, we can add regressors $D_2, D_3, \ldots, D_K, X D_2, X D_3, \ldots, X D_K$ to a simple linear regression model to create a separate lines model for each level of $C$. -->
+<!-- It is easy to imagine using multiple categorical predictors in a model, interacting one or more categorical predictors with one or more numeric regressors in model, etc. These models can be fit easily using R (as we'll see below), though interpretation becomes more challenging. -->
+<!-- ### Avoiding an easy mistake -->
+<!-- Consider the setting where $C$ has only 2 levels. Why don't we add $D_1$ to the parallel lines model that already has $D_2$? Or $D_1$ and $D_1 X$ to the separate lines model that already has $D_2$ and $D_2 X$? First, we notice that we don't *need* to add them. E.g., if an observation doesn't have level $L_2$ ($D_2=0$), then it must have level $L_1$. More importantly, we didn't do this because it will create linear dependencies in the columns of the regressor matrix $\mathbf{X}$. -->
+<!-- Let $\mathbf{d}_1=[d_{1,1}, d_{2,1}, \ldots, d_{n,1}]$ be the column vector of observed values for indicator variable $D_1$ and $\mathbf{d}_2$ be the column vector for $D_2$. Then for a two-level categorical variable, $\mathbf{d}_1 + \mathbf{d}_2$ is an $n\times 1$ vector of 1s, meaning that $D_1$ and $D_2$ will be linearly dependent with the intercept column of our $\mathbf{X}$ matrix. Thus, adding $D_1$ to the parallel lines model would result in $\mathbf{X}$ having linearly dependent columns, which creates estimation problems. -->
+<!-- For a categorical predictor with $K$ levels, we only need indicator variables for $K-1$ levels of the categorical predictor. The level without an indicator variable in the regression model is known as the **reference level**, which is explained in Chapter  \@ref(interp-chapter). Technically, we can choose any level to be our reference level, but R automatically chooses the first level of a categorical (`factor`) variable to be the reference level, so we adopt that convention. -->
+<!-- ## Penguins example with categorical predictor {#s:penguins-mlr2} -->
+<!-- We return once again to the `penguins` data previously introduced. We use the code below to produce Figure \@ref(fig:penguins-grouped-scatter), which displays the grouped scatter plot of `bill_length_mm` versus `body_mass_g` that distinguishes the `species` of each observation. It is very clear that the relationship between bill length and body mass changes depending on the species of penguin. -->
+<!-- ```{r penguins-grouped-scatter, fig.cap="A grouped scatter plot of body mass versus bill length that distinguishes penguin species.", warning = FALSE} -->
+<!-- library(ggplot2) # load package -->
+<!-- # create grouped scatterplot -->
+<!-- ggplot(data = penguins) + -->
+<!--   geom_point(aes(x = body_mass_g, y = bill_length_mm, shape = species, color = species)) + -->
+<!--   xlab("body mass (g)") + ylab("bill length (mm)") -->
+<!-- ``` -->
+<!-- How do we use a categorical variable in R's `lm` function? Recall that we should represent our categorical variables as a `factor` in R. The `lm` function will automatically convert a `factor` variable to the correct number of indicator variables when we include the `factor` variable in our `formula` argument. R will automatically choose the reference level to be the first level of the `factor` variable. To add a main effect term for a categorical predictor, we simply add the term to our `lm` formula. To create an interaction term, we use `:` between the interacting variables. E.g., if `c` is a `factor` variable and `x` is a `numeric` variable, we can use the notation `c:x` in our `formula` to get all the interactions between `c` and `x`. -->
+<!-- In our present context, the categorical predictor of interest is `species`, which has the levels `Adelie`, `Chinstrap`, and `Gentoo`. The `species` variable is already a `factor`. Since the variable has 3 levels, it will be transformed into 2 indicator variables by R. The first level of species is `Adelie`, so R will treat that level as the reference level, and automatically create indicator variables for the levels `Chinstrap` and `Gentoo`. (Reminder: to determine the level order of a `factor` variable `c`, run the commend `levels(c)`, or in this case `levels(penguins$species)`.) -->
+<!-- Let $D_C$ denote the indicator variable for the `Chinstrap` level and $D_G$ denote the indicator variable for the `Gentoo` level. To fit the parallel lines regression model -->
+<!-- \[E(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}) = \beta_{0} + \beta_1 \mathtt{body\_mass\_g} + \beta_2 D_C + \beta_3 D_G,\] -->
+<!-- we run the code below. The `coef` function is used to extract the estimated coefficients from our fitted model in `lmodp`. -->
+<!-- ```{r} -->
+<!-- # fit parallel lines model -->
+<!-- lmodp <- lm(bill_length_mm ~ body_mass_g + species, data = penguins) -->
+<!-- # extract coefficients -->
+<!-- coef(lmodp) -->
+<!-- ``` -->
+<!-- Thus, the fitted parallel lines model is -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}) \\ -->
+<!-- &= 24.92 + 0.004 \mathtt{body\_mass\_g} + 9.92 D_C + 3.56 D_G. -->
+<!-- \end{aligned} -->
+<!-- (\#eq:pl-model-penguins) -->
+<!-- \] -->
+<!-- Note that `speciesChinstrap` and `speciesGentoo` are the indicator variables related to the `Chinstrap` and `Gentoo` levels of `species`, respectively, i.e., they represent $D_C$ and $D_G$. When an observation has `species` level `Adelie`, then Equation \@ref(eq:pl-model-penguins) simplifies to -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}=\mathtt{Adelie}) \\ -->
+<!-- &=24.92 + 0.004 \mathtt{body\_mass\_g} + 9.92 \cdot 0 + 3.56 \cdot 0 \\ -->
+<!-- &= 24.92 + 0.004 \mathtt{body\_mass\_g}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- When an observation has `species` level `Chinstrap`, then Equation \@ref(eq:pl-model-penguins) simplifies to -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}=\mathtt{Chinstrap}) \\ -->
+<!-- &=24.92 + 0.004 \mathtt{body\_mass\_g} + 9.92 \cdot 1 + 3.56 \cdot 0 \\ -->
+<!-- &= 34.84 + 0.004 \mathtt{body\_mass\_g}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Lastly, when an observation has `species` level `Gentoo`, then Equation \@ref(eq:pl-model-penguins) simplifies to -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}=\mathtt{Gentoo}) \\ -->
+<!-- &=24.92 + 0.004 \mathtt{body\_mass\_g} + 9.92 \cdot 0 + 3.56 \cdot 1 \\ -->
+<!-- &= 28.48 + 0.004 \mathtt{body\_mass\_g}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Adding fitted lines for each `species` level to the scatter plot in Figure \@ref(fig:penguins-grouped-scatter) is a bit more difficult than before. One technique is to use `predict` to get the fitted values of each observation, use the `transform` function to add those values as a column to the original the data frame, then use `geom_line` to connect the fitted values from each group. -->
+<!-- We start by adding our fitted values to the `penguins` data frame. We use the `predict` function to obtained the fitted values of our fitted model and then use the `transform` function to add those values as the `pl_fitted` variable in the `penguins` data frame. -->
+<!-- ```{r, error=TRUE} -->
+<!-- penguins <- -->
+<!--   penguins |> -->
+<!--   transform(pl_fitted = predict(lmodp)) -->
+<!-- ``` -->
+<!-- We just received a nasty error. What is going on? The original `penguins` data frame has 344 rows. However, two rows had `NA` observations such that when we used the `lm` function to fit our parallel lines model, those observations were removed prior to fitting. The `predict` function produces fitted values for the observations used in the fitting process, so there are only 342 predicted values. There is a mismatch between the number of rows in `penguins` and the number of values we attempt to add in the new column `pl_fitted`, so we get an error. -->
+<!-- To handle this error, we refit our model while setting the `na.action` argument to `na.exclude`. As stated Details section of the documentation for the `lm` function (run `?lm` in the Console): -->
+<!-- > $\ldots$ when `na.exclude` is used the residuals and predictions are padded to the correct length by inserting `NA`s for cases omitted by `na.exclude`. -->
+<!-- We refit the parallel lines model below with `na.action = na.exclude`, then use the `predict` function to add the fitted values to the `penguins` data frame via the `transform` function. -->
+<!-- ```{r} -->
+<!-- # refit parallel lines model with new na.action behavior -->
+<!-- lmodp <- lm(bill_length_mm ~ body_mass_g + species, data = penguins, na.action = na.exclude) -->
+<!-- # add fitted values to penguins data frame -->
+<!-- penguins <- -->
+<!--   penguins |> -->
+<!--   transform(pl_fitted = predict(lmodp)) -->
+<!-- ``` -->
+<!-- We now use the `geom_line` function to add the fitted lines for each `species` level to our scatter plot. Figure \@ref(fig:pl-penguin-fit) displays the results from running the code below. The parallel lines model shown in Figure \@ref(fig:pl-penguin-fit) fits the `penguins` data better than the simple linear regression model shown in Figure \@ref(fig:slr-penguin-fit). -->
+<!-- ```{r pl-penguin-fit, fig.cap="The fitted lines from the separate lines model for each level of `species` is added to the grouped scatter plot of `bill_length_mm` versus `body_mass_g`.", warning = FALSE} -->
+<!-- # create plot -->
+<!-- # create scatterplot -->
+<!-- # customize labels -->
+<!-- # add lines for each level of species -->
+<!-- ggplot(data = penguins) + -->
+<!--   geom_point(aes(x = body_mass_g, y = bill_length_mm, -->
+<!--                  shape = species, color = species)) + -->
+<!--   xlab("body mass (g)") + ylab("bill length (mm)") + -->
+<!--   geom_line(aes(x = body_mass_g, y = pl_fitted, color = species)) -->
+<!-- ``` -->
+<!-- We now fit a separate lines regression model to the `penguins` data. Specifically, we fit the model -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &E(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}) \\ -->
+<!-- &= \beta_{0} + \beta_1 \mathtt{body\_mass\_g} + \beta_2 D_C + \beta_3 D_G + \beta_4 \mathtt{body\_mass\_g} D_C + \beta_5 \mathtt{body\_mass\_g} D_G , -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- using the code below, using the `coef` function to extract the estimated coefficients. The terms with `:` are interaction variables, e.g., `body_mass_g:speciesChinstrap` is $\hat{\beta}_4$, the coefficient for the interaction between regressor $\mathtt{body\_mass\_g} D_C$. -->
+<!-- ```{r} -->
+<!-- # fit separate lines model -->
+<!-- # na.omit = na.exclude used to change predict behavior -->
+<!-- lmods <- lm(bill_length_mm ~ body_mass_g + species + body_mass_g:species, -->
+<!--             data = penguins, na.action = na.exclude) -->
+<!-- # extract estimated coefficients -->
+<!-- coef(lmods) -->
+<!-- ``` -->
+<!-- Thus, the fitted separate lines model is -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}) \\ -->
+<!-- &= 26.99 + 0.003 \mathtt{body\_mass\_g} + 5.18 D_C - 0.25 D_G \\ -->
+<!-- & \quad + 0.001 \mathtt{body\_mass\_g} D_C + 0.0009 \mathtt{body\_mass\_g} D_G. \end{aligned} -->
+<!-- (\#eq:sl-model-penguins) -->
+<!-- $$ -->
+<!-- When an observation has `species` level `Adelie`, then Equation \@ref(eq:sl-model-penguins) simplifies to -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}=\mathtt{Adelie}) \\ -->
+<!-- &=26.99 + 0.003 \mathtt{body\_mass\_g} + 5.18 \cdot 0 - 0.25 \cdot 0\\ -->
+<!-- &\quad + 0.001 \cdot \mathtt{body\_mass\_g} \cdot 0 + 0.0009 \cdot \mathtt{body\_mass\_g} \cdot 0\\ -->
+<!-- &= 26.99 + 0.003 \mathtt{body\_mass\_g}. -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- When an observation has `species` level `Chinstrap`, then Equation \@ref(eq:sl-model-penguins) simplifies to -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}=\mathtt{Chinstrap}) \\ -->
+<!-- &=26.99 + 0.003 \mathtt{body\_mass\_g} + 5.18 \cdot 1 - 0.25 \cdot 0 \\ -->
+<!-- &\quad + 0.001 \cdot \mathtt{body\_mass\_g} \cdot 1 + 0.0009 \cdot \mathtt{body\_mass\_g} \cdot 0 \\ -->
+<!-- &= 32.17 + 0.004 \mathtt{body\_mass\_g}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- When an observation has `species` level `Gentoo`, then Equation \@ref(eq:sl-model-penguins) simplifies to -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &\hat{E}(\mathtt{bill\_length\_mm} \mid \mathtt{body\_mass\_g}, \mathtt{species}=\mathtt{Chinstrap}) \\ -->
+<!-- &=26.99 + 0.003 \mathtt{body\_mass\_g} + 5.18 \cdot 0 - 0.25 \cdot 1 \\ -->
+<!-- &\quad + 0.001 \cdot \mathtt{body\_mass\_g} \cdot 0 + 0.0009 \cdot \mathtt{body\_mass\_g} \cdot 1 \\ -->
+<!-- &= 26.74 + 0.004 \mathtt{body\_mass\_g}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- We use the code below to display the fitted lines for the separate lines model on the `penguins` data. Figure \@ref(fig:sl-penguin-fit) shows the results. The fitted lines match the observed data behavior reasonably well. -->
+<!-- ```{r sl-penguin-fit, fig.cap="The fitted model for each level of `species` is added to the grouped scatter plot of `bill_length_mm` versus `body_mass_g`.", warning = FALSE} -->
+<!-- # add separate lines fitted values to penguins data frame -->
+<!-- penguins <- -->
+<!--   penguins |> -->
+<!--   transform(sl_fitted = predict(lmods)) -->
+<!-- # use geom_line to add fitted lines to plot -->
+<!-- ggplot(data = penguins) + -->
+<!--   geom_point(aes(x = body_mass_g, y = bill_length_mm, shape = species, color = species)) + -->
+<!--   xlab("body mass (g)") + ylab("bill length (mm)") + -->
+<!--   geom_line(aes(x = body_mass_g, y = sl_fitted, col = species)) -->
+<!-- ``` -->
+<!-- Having fit several models for the `penguins` data, we may be wondering how to evaluate how well the models fit the data. We discuss that in the next section. -->
+<!-- ## Evaluating model fit -->
+<!-- The most basic statistic measuring the fit of a regression model is the **coefficient of determination**, which is defined as -->
+<!-- \[ -->
+<!-- R^2 = 1 - \frac{\sum_{i=1}^n (Y_i-\hat{Y}_i)^2}{\sum_{i=1}^n (Y_i-\bar{Y})^2},(\#eq:rsquared) -->
+<!-- \] -->
+<!-- where $\bar{Y}$ is the sample mean of the observed response values. -->
+<!-- To interpret this statistic, we need to introduce some new "sum-of-squares" statistics similar to the RSS. -->
+<!-- The **total sum of squares** (corrected for the mean) is computed as -->
+<!-- \[ -->
+<!-- TSS = \sum_{i=1}^n(Y_i-\bar{Y})^2. (\#eq:tss) -->
+<!-- \] -->
+<!-- The TSS is the sum of the squared deviations of the response values from the sample mean. However, it has a more insightful interpretation. Consider the **constant mean model**, which is the model -->
+<!-- \[ -->
+<!-- E(Y)=\beta_0. (\#eq:constant-mean-model) -->
+<!-- \] -->
+<!-- Using basic calculus, we can show that the OLS estimator of $\beta_0$ for the model in Equation \@ref(eq:constant-mean-model) is $\hat{\beta}_0=\bar{Y}$. For the constant mean model, the fitted value of every observation is $\hat{\beta}_0$, i.e., $\hat{Y}_i=\hat{\beta}_0$ for $i=1,2,\ldots,n$. Thus, the RSS of the constant mean model is $\sum_{i=1}^n(Y_i-\hat{Y}_i)^2=\sum_{i=1}^n(Y_i-\bar{Y})^2$. Thus, *the TSS is the RSS for the constant mean model*. -->
+<!-- The **regression sum-of-squares** or **model sum-of-squares** is defined as -->
+<!-- \[ -->
+<!-- SS_{reg} = \sum_{i=1}^n(\hat{Y}_i-\bar{Y})^2. (\#eq:ssreg) -->
+<!-- \] -->
+<!-- Thus, SS~reg~ is the sum of the squared deviations between the fitted values of a model and the fitted values of the constant mean model. More helpfully, we have the following equation relating TSS, RSS, and SS~reg~: -->
+<!-- \[ -->
+<!-- TSS = RSS + SS_{reg}.(\#eq:ss-equality) -->
+<!-- \] -->
+<!-- Thus, $SS_{reg}=TSS-RSS$. This means that *SS~reg~ measures the reduction in RSS when comparing the fitted model to the constant mean model*. -->
+<!-- Comparing Equations \@ref(eq:def-rss-slr), \@ref(eq:rsquared), \@ref(eq:tss), and \@ref(eq:ssreg), we can express $R^2$ as: -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- R^2 &= 1-\frac{\sum_{i=1}^n (Y_i-\hat{Y}_i)^2}{\sum_{i=1}^n (Y_i-\bar{Y})^2} \\ -->
+<!-- &= 1 - \frac{RSS}{TSS} \\ -->
+<!-- &= \frac{TSS - RSS}{TSS} \\ -->
+<!-- &= \frac{SS_{reg}}{TSS} \\ -->
+<!-- &= [\mathrm{cor}(\mathbf{y}, \hat{\mathbf{y}})]^2. -->
+<!-- \end{aligned} -->
+<!-- (\#eq:rsquared2) -->
+<!-- \] -->
+<!-- The last expression is the squared sample correlation between the observed and fitted values, and is a helpful way to express the coefficient of determination because it extends to regression models that are not linear. -->
+<!-- Looking at Equation \@ref(eq:rsquared2) in particular, we can say that *the coefficient of determination is the proportional reduction in RSS when comparing the fitted model to the constant mean model*. -->
+<!-- Some comments about the coefficient of determination: -->
+<!-- - $0\leq R^2 \leq 1$. -->
+<!-- - $R^2=0$ for the constant mean model. -->
+<!-- - $R^2=1$ for a fitted model that perfectly fits the data (the fitted values match the observed response values). -->
+<!-- - Generally, larger values of $R^2$ suggest that the model explains a lot of the variation in the response variable. Smaller $R^2$ values suggest the fitted model does not explain a lot of the response variation. -->
+<!-- - The `Multiple R-squared` value printed by the `summary` of an `lm` object is $R^2$. -->
+<!-- - To extract $R^2$ from a fitted model, we can use the syntax `summary(lmod)$r.squared`, where `lmod` is our fitted model. -->
+<!-- Figure \@ref(fig:rsquared-examples) provides examples of the $R^2$ value for various fitted simple linear regression models. The closer the points fall to a straight line, the larger $R^2$ tends to be. However, as shown in the bottom right panel of Figure \@ref(fig:rsquared-examples), a poorly fit model can result in a lower $R^2$ model even if there is a clear relationship between the points (the points have a perfect quadratic relationship). -->
+<!-- ```{r rsquared-examples, fig.cap="The coefficient of determination values for 4 different data sets.", echo = FALSE} -->
+<!-- par(mfrow = c(2, 2)) -->
+<!-- set.seed(27) -->
+<!-- x1 <- runif(25, 0, 10) -->
+<!-- y1 <- 2 + 3 * x1 -->
+<!-- fit1 <- lm(y1 ~ x1) -->
+<!-- plot(x1, 2 + 3 * x1, xlab = "X", ylab = "Y") -->
+<!-- abline(fit1) -->
+<!-- title(expression(R^2==1)) -->
+<!-- x2 <- runif(25, 0, 10) -->
+<!-- y2 <- rnorm(length(x2)) -->
+<!-- fit2 <- lm(y2 ~ x2) -->
+<!-- r2b <- round(summary(fit2)$r.squared, 2) -->
+<!-- q2 <- bquote(R^2==.(format(r2b, digits = 2))) -->
+<!-- plot(x2, y2, xlab = "X", ylab = "Y") -->
+<!-- abline(fit2) -->
+<!-- title(q2) -->
+<!-- x3 <- runif(25, 0, 10) -->
+<!-- y3 <- 3 - 2 * x3 + rnorm(length(x3), sd = 5) -->
+<!-- fit3 <- lm(y3 ~ x3) -->
+<!-- r2c <- round(summary(fit3)$r.squared, 2) -->
+<!-- q3 <- bquote(R^2==.(format(r2c, digits = 2))) -->
+<!-- plot(x3, y3, xlab = "X", ylab = "Y") -->
+<!-- abline(fit3) -->
+<!-- title(q3) -->
+<!-- x4 <- runif(25, -10, 10) -->
+<!-- y4 <- 2 - 2 * x4 + 3 - x4^2 -->
+<!-- fit4 <- lm(y4 ~ x4) -->
+<!-- r2c <- round(summary(fit4)$r.squared, 2) -->
+<!-- q4 <- bquote(R^2==.(format(r2c, digits = 2))) -->
+<!-- plot(x4, y4, xlab = "X", ylab = "Y") -->
+<!-- abline(fit4) -->
+<!-- title(q4) -->
+<!-- par(mfrow = c(1, 1)) -->
+<!-- ``` -->
+<!-- The coefficient of determination for the parallel lines model fit to the `penguins` data in Section \@ref(s:penguins-mlr2) is 0.81, as shown in the R output below. By adding the `body_mass_g` regressor and `species` predictor to the constant mean model of `bill_length_mm`, we reduced the RSS by 81%. -->
+<!-- ```{r} -->
+<!-- summary(lmodp)$r.squared -->
+<!-- ``` -->
+<!-- It may seem sensible to choose between models based on the value of $R^2$. This is unwise for two reasons: -->
+<!-- 1. $R^2$ never decreases as regressors are added to an existing model. Basically, we can increase $R^2$ by simply adding regressors to our existing model, even if they are non-sensical. -->
+<!-- 2. $R^2$ doesn't tell us whether a model adequately describes the pattern of the observed data. $R^2$ is a useful statistic for measuring model fit when there is approximately a linear relationship between the response values and fitted values. -->
+<!-- Regarding point 1, consider what happens when we add a regressor of random values to the parallel lines model fit to the `penguins` data. The code below sets a random number seed so that we can get the same results each time we run the code, creates the regressor `noisyx` by sampling 344 values randomly drawn from a $\mathcal{N}(0,1)$ distribution, adds `noisyx` as a regressor to the parallel lines regression model stored in `lmodp`, and then extracts the $R^2$ value. We use the `update` method to update our existing model. The `update` function takes an existing model as its first argument and then the `formula` for the updated model. The syntax `. ~ .` means "keep the same response (on the left) and the same regressors (on the right)". We can then add or subtract regressors using the typical `formula` syntax. We use this approach to add the `noisyx` regressor to the regressors already in `lmodp`. -->
+<!-- ```{r} -->
+<!-- set.seed(28) # for reproducibility -->
+<!-- # create regressor of random noise -->
+<!-- noisyx <- rnorm(344) -->
+<!-- # add noisyx as regressor to lmodp -->
+<!-- lmod_silly <- update(lmodp, . ~ . + noisyx) -->
+<!-- # extract R^2 from fitted model -->
+<!-- summary(lmod_silly)$r.squared -->
+<!-- ``` -->
+<!-- The $R^2$ value increased from 0.8080 to 0.8088! So clearly, choosing the model with the largest $R^2$ can be a mistake, as it will tend to favor models with more regressors. -->
+<!-- Regarding point 2, $R^2$ can mislead us into thinking an inappropriate model fits better than it actually does. @anscombe1973graphs provided a canonical data set known as "Anscombe's quartet" that illustrates this point. The data set is comprised of 4 different data sets. When a simple linear regression model is fit to each data set, we find that $\hat{\beta}_0=3$, $\hat{\beta}_1=0.5$, and that $R^2=0.67$. However, as we will see, not all models describe the data particularly well! -->
+<!-- Anscombe's quartet is available as the `anscombe` data set in the **datasets** package. The data set includes 11 observations of -->
+<!-- 8 variables. The variables are: -->
+<!-- -   `x1`, `x2`, `x3`, `x4`: the regressor variable for each individual data set. -->
+<!-- -   `y1`, `y2`, `y3`, `y4`: the response variable for each individual data set. -->
+<!-- We fit the simple linear regression model to the four data sets in the code below, then extract the coefficients and $R^2$ to verify the information provided above. -->
+<!-- ```{r} -->
+<!-- # fit model to first data set -->
+<!-- lmod_a1 <- lm(y1 ~ x1, data = anscombe) -->
+<!-- # extract coefficients from fitted model -->
+<!-- coef(lmod_a1) -->
+<!-- # extract R^2 from fitted model -->
+<!-- summary(lmod_a1)$r.squared -->
+<!-- # fit model to second data set -->
+<!-- lmod_a2 <- lm(y2 ~ x2, data = anscombe) -->
+<!-- coef(lmod_a2) -->
+<!-- summary(lmod_a2)$r.squared -->
+<!-- # fit model to third data set -->
+<!-- lmod_a3 <- lm(y3 ~ x3, data = anscombe) -->
+<!-- coef(lmod_a3) -->
+<!-- summary(lmod_a3)$r.squared -->
+<!-- # fit model to fourth data set -->
+<!-- lmod_a4 <- lm(y4 ~ x4, data = anscombe) -->
+<!-- coef(lmod_a4) -->
+<!-- summary(lmod_a4)$r.squared -->
+<!-- ``` -->
+<!-- Figure \@ref(fig:anscombe-plots) provides a scatter plot each data set and overlays their fitted models. -->
+<!-- ```{r anscombe-plots, fig.cap="Scatter plots of the four Anscombe data sets along with their line of best fit.", fig.asp = .5, echo = FALSE, message = FALSE} -->
+<!-- # par(mfrow = c(1, 4)) -->
+<!-- # plot(y1 ~ x1, data = anscombe) -->
+<!-- # title("data set 1") -->
+<!-- # abline(lmod_a1) -->
+<!-- # plot(y2 ~ x2, data = anscombe) -->
+<!-- # title("data set 2") -->
+<!-- # abline(lmod_a2) -->
+<!-- # plot(y3 ~ x3, data = anscombe) -->
+<!-- # title("data set 3") -->
+<!-- # abline(lmod_a3) -->
+<!-- # plot(y4 ~ x4, data = anscombe) -->
+<!-- # title("data set 4") -->
+<!-- # abline(lmod_a4) -->
+<!-- # par(mfrow = c(1, 1)) -->
+<!-- adf = data.frame(x = unlist(anscombe[,1:4]), -->
+<!--                  y = unlist(anscombe[,5:8]), -->
+<!--                  set = factor(rep(1:4, each = 11))) -->
+<!-- ggplot(adf, aes(x = x, y = y, group = set, col = set)) + -->
+<!--   geom_point(col = "black") + -->
+<!--   geom_smooth(aes(group = set), method = "lm", se = FALSE) + -->
+<!--   facet_grid(. ~ set) + -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- While the fitted model and $R^2$ value is essentially the same for each model, the fitted model is only appropriate for data set 1. The fitted model for the second data set fails to model the curve of the data. The third fitted model doesn't handle the outlier in the data. Lastly, the fourth data set has a single point on the far right side driving the model fit, so the fitted model is highly questionable. -->
+<!-- To address the problem with $R^2$ that it cannot decrease as regressors are added to a model, @ezekiel1930methods proposed the adjusted R-squared statistic for measuring model fit. The adjusted $R^2$ statistic is defined as -->
+<!-- \[ -->
+<!-- R^2_a=1-(1-R^2)\frac{n-1}{n-p}=1-\frac{RSS/(n-p)}{TSS/(n-1)}. -->
+<!-- \] -->
+<!-- Practically speaking, $R^2_a$ will only increase when a regressors substantively improves the fit of the model to the observed data. We favor models with larger values of $R^2_a$. To extract the adjusted R-squared from a fitted model, we can use the syntax `summary(lmod)$adj.R.squared`, where `lmod` is the fitted model. -->
+<!-- Using the code below, we extract the $R^2_a$ for the 4 models we previously fit to the `penguins` data. Specifically, we extract $R_a^2$ for the simple linear regression model fit in Section \@ref(s:penguins-slr), the multiple linear regression model in Section \@ref(s:penguins-mlr), and the parallel and separate lines models fit in Section \@ref(s:penguins-mlr2). -->
+<!-- ```{r} -->
+<!-- # simple linear regression model -->
+<!-- summary(lmod)$adj.r.squared -->
+<!-- # multiple linear regression model -->
+<!-- summary(mlmod)$adj.r.squared -->
+<!-- # parallel lines model -->
+<!-- summary(lmodp)$adj.r.squared -->
+<!-- # separate lines model -->
+<!-- summary(lmods)$adj.r.squared -->
+<!-- ``` -->
+<!-- With an $R_a^2$ of 0.8070, the separate lines regression model appears to be slightly favored over the other 3 models fit to the `penguins` data. To confirm that this statistic is meaningful (i.e., that the model provides a reasonable fit to the data), we use the code below to create a scatter plot of the response versus fitted values shown in Figure \@ref(fig:y-vs-yhat-penguins). The points in Figure \@ref(fig:y-vs-yhat-penguins) follow a linear pattern, so the separate lines model seems to be a reasonable model for the `penguins` data. -->
+<!-- ```{r y-vs-yhat-penguins, fig.cap="A scatter plot of the observed bill length versus the fitted values of the separate lines model for the `penguins` data."} -->
+<!-- plot(penguins$bill_length_mm ~ fitted(lmods), -->
+<!--      xlab = "fitted values", ylab = "bill length (mm)") -->
+<!-- ``` -->
+<!-- ## Summary -->
+<!-- In this chapter, we learned: -->
+<!-- - What a linear model is. -->
+<!-- - What various objects are, such as coefficients, residuals, fitted values, etc. -->
+<!-- - How to estimate the coefficients of a linear model using ordinary least squares estimation. -->
+<!-- - How to fit a linear model using R. -->
+<!-- - How to include a categorical predictor in a linear model. -->
+<!-- - How to evaluate the fit of a model. -->
+<!-- ### Summary of terms {#ss:term-summary} -->
+<!-- We have introduced many terms to define a linear model. It can be difficult to keep track of their notation, their purpose, whether they are observable, and whether they are treated as random variables or vectors. We discuss various terms below, and then summarize the discussion in Table \@ref(tab:term-df). -->
+<!-- We've already talked about observing the response variable and the predictor/regressor variables. So these objects are observable. However, we have no way to measure the regression coefficients or the error. These are not observable. One way to distinguish observable versus non-observable variables is that observable variables are denoted using Phoenician letters (e.g., $X$ and $Y$) while non-observable variables are denoted using Greek letters (e.g., $\beta_j$, $\epsilon$, $\sigma^2$). -->
+<!-- We treat the response variable as a random variable. Perhaps surprisingly, we treat the predictor and regressor variables as fixed, non-random variables. The regression coefficients are treated as fixed, non-random but unknown values. This is standard for parameters in a statistical model. The errors are also treated as random variables. In fact, since both the regressor variables and the regression coefficients are non-random, the only way for the responses in Equation \@ref(eq:lmSystem) to be random variables is for the errors to be random. -->
+<!-- ```{r term-df, echo = FALSE} -->
+<!-- term <- c("$Y$", "$Y_i$", "$\\mathbf{y}$", "$X$", -->
+<!--              "$X_j$", "$x_{i,j}$", "$\\mathbf{X}$", "$\\mathbf{x}_i$", "$\\beta_j$", "$\\boldsymbol{\\beta}$", "$\\epsilon$", "$\\epsilon_i$", "$\\boldsymbol{\\epsilon}$") -->
+<!-- description <- c("response variable", "response value for the $i$th observation", "the $n\\times 1$ column vector of response values", "regressor variable", "the $j$th regressor variable", "the value of the $j$th regressor variable for the $i$th observation", "the $n\\times p$ matrix of regressor values", "the $p\\times 1$ vector of regressor values for the $i$th observation", "the coefficient associated with the $j$th regressor variable", "the $p\\times 1$ column vector of regression coefficients", "the model error", "the error for the $i$th observation", "the $n\\times 1$ column vector of errors") -->
+<!-- observable <- c("Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "No", "No", "No", "No", "No") -->
+<!-- random <- c("Yes", "Yes", "Yes", "No", "No", "No", "No", "No", "No", "No", "Yes", "Yes", "Yes") -->
+<!-- term_df <- data.frame(term, description, observable, random) -->
+<!-- kbl(term_df, -->
+<!--     col.names = c("Term", "Description", "Observable?", "Random?"), -->
+<!--     caption = "An overview of terms used to define a linear model.", -->
+<!--     booktabs = TRUE, -->
+<!--     escape = FALSE) |> -->
+<!--   column_spec(2, width = "2in") |> -->
+<!--   kable_styling(full_width = FALSE) -->
+<!-- ``` -->
+<!-- ### Summary of functions -->
+<!-- We have used many functions in this Chapter. We summarize some of the most important ones in Table \@ref(tab:function-df). -->
+<!-- ```{r function-df, echo = FALSE} -->
+<!-- func <- c("`lm`", "`summary`", "`coef`", "`residuals`", "`fitted`", "`predict`", "`deviance`", "`sigma`", "`update`") -->
+<!-- purpose <- c("Fits a linear model based on a provided `formula`", "Provides summary information about the fitted model", "Extracts the vector of estimated regression coefficients from the fitted model", "Extracts the vector of residuals from the fitted model", "Extracts the vector of fitted values from the fitted model", -->
+<!--              "Computes the fitted values (or arbitrary predictions) based on a fitted model", "Extracts the RSS of a fitted model", "Extracts $\\hat{\\sigma}$ from the fitted model", "Updates a fitted model to remove or add regressors") -->
+<!-- kbl(data.frame(func, purpose), -->
+<!--     col.names = c("Function", "Purpose"), -->
+<!--     caption = "An overview of important functions discussed in this chapter.", -->
+<!--     booktabs = TRUE, -->
+<!--     escape = FALSE) |> -->
+<!--   column_spec(column = 2, width = "3in")  |> -->
+<!--   kable_styling(full_width = FALSE) -->
+<!-- ``` -->
+<!-- ## Going Deeper -->
+<!-- ### Degrees of freedom -->
+<!-- The degrees of freedom of a statistics refers to the number of independent pieces of information that go into its calculation. -->
+<!-- Consider the sample mean -->
+<!-- \[\bar{x}=\sum_{i=1}^n x_i.\] -->
+<!-- The calculation uses $n$ pieces of information to compute, but the statistic only has $n-1$ degrees of freedom. Once we know the sample mean, only $n-1$ values are  independent, while the last is constrained to be a certain value. -->
+<!-- Let's say $n=3$ and $\bar{x} = 10$. Then $x_1$ and $x_2$ can be any numbers, but the last value MUST equal $30 - x_1 - x_2$ so that $x_1 + x_2 + x_3 = 30$ (otherwise the sample mean won't equal 10). To be more specific, if $x_1 = 5$ and $x_2 = 25$, then $x_3$ must be 0, otherwise the sample mean won't be 10. -->
+</section>
+<section id="sec-slr-derivation" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="sec-slr-derivation"><span class="header-section-number">3.5.2</span> Derivation of the OLS estimators of the simple linear regression model coefficients</h3>
+<!-- Assume a simple linear regression model with $n$ observations. The residual sum of squares for the simple linear  regression model is -->
+<!-- \[ -->
+<!-- RSS(\hat\beta_0, \hat\beta_1) = \sum_{i=1}^n(Y_i - \hat\beta_0 - \hat\beta_1x_i)^2. -->
+<!-- \] -->
+<!-- **OLS estimator of $\beta_0$** -->
+<!-- First, we take the partial derivative of the RSS with respect to $\hat\beta_0$ and simplify: -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \frac{\partial RSS(\hat\beta_0, \hat\beta_1)}{\partial \hat\beta_0} &= \frac{\partial}{\partial \hat\beta_0}\sum_{i=1}^n(Y_i - \hat\beta_0 - \hat\beta_1x_i)^2 & \tiny\text{ (substituting the formula for the RSS)} \\ -->
+<!-- &= \sum_{i=1}^n \frac{\partial}{\partial \hat\beta_0}(Y_i - \hat\beta_0 - \hat\beta_1x_i)^2  & \tiny\text{ (by the linearity property of derivatives)} \\ -->
+<!-- &= -2\sum_{i=1}^n(Y_i - \hat\beta_0 - \hat\beta_1x_i). & \tiny\text{ (chain rule, factoring out -2)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Next, we set the partial derivative equal to zero and rearrange the terms to solve for $\hat{\beta}_0$: -->
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- 0 &= \frac{\partial RSS(\hat\beta_0, \hat\beta_1)}{\partial \hat\beta_0}  &  \\ -->
+<!-- 0 &= -2\sum_{i=1}^n(Y_i - \hat\beta_0 - \hat\beta_1x_i) & \tiny\text{ (substitute partial deriviative)}\\ -->
+<!-- 0 &= \sum_{i=1}^n(Y_i - \hat\beta_0 - \hat\beta_1x_i) & \tiny\text{ (divide both sides by -2)} \\ -->
+<!-- 0 &= \sum_{i=1}^n Y_i - \sum_{i=1}^n\hat\beta_0 - \sum_{i=1}^n\hat\beta_1x_i &\tiny\text{ (by linearity of sum)} \\ -->
+<!-- 0 &= \sum_{i=1}^n Y_i - n\hat\beta_0 - \sum_{i=1}^n\hat\beta_1x_i & \tiny(\text{sum }\hat\beta_0\ n\text{ times equals }n\hat\beta_0) \\ -->
+<!-- n\hat\beta_0 &= \sum_{i=1}^n Y_i-\hat{\beta}_1\sum_{i=1}^nx_i. &\tiny\text{ (algebra rearrange, factor }\hat{\beta}_1\text{)} \\ -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<!-- Finally, we divide both sides by $n$ to get the OLS estimator for $\hat\beta_0$ in terms of $\hat\beta_1$: -->
+<!-- \[ -->
+<!-- \hat\beta_0 = \bar Y-\hat\beta_1\bar x -->
+<!-- \] -->
+<!-- **OLS Estimator of $\beta_1$** -->
+<!-- Similar to the previous derivation, we differentiate the RSS with respect to the parameter estimate of interest, set the derivative equal to zero, and solve for the parameter. -->
+<!-- We start by taking the partial derivative of the RSS with respect to $\hat{\beta}_1$ and simplify. -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \frac{\partial RSS(\hat\beta_0, \hat\beta_1)}{\partial \hat\beta_1} &= \frac{\partial}{\partial \hat\beta_1}\sum_{i=1}^n (Y_i - \hat\beta_0 - \hat\beta_1x_i)^2 & \tiny\text{ (substitute formula for RSS)} \\ -->
+<!-- &= \sum_{i=1}^n \frac{\partial}{\partial \hat\beta_1}(Y_i - \hat\beta_0 - \hat\beta_1x_i)^2 & \tiny\text{ (linearity property of derivatives)} \\ -->
+<!-- &= -2\sum_{i=1}^n(Y_i-\hat\beta_0-\hat\beta_1x_i)x_i & \tiny\text{ (chain rule, factor out -2)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- We now set this derivative equal to 0 and rearrange the terms to solve for $\hat{\beta}_1$: -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- 0 &= \frac{\partial RSS(\hat\beta_0, \hat\beta_1)}{\partial \hat\beta_1} & \\ -->
+<!-- 0 &= -2\sum_{i=1}^n(Y_i-\hat\beta_0-\hat\beta_1x_i)x_i &\tiny\text{(substitute partial derivative})\\ -->
+<!-- 0 &= \sum_{i=1}^n(Y_i-(\bar Y -\hat \beta_1\bar x)-\hat\beta_1x_i)x_i &\tiny\text{(substitute OLS estimator of }\hat\beta_0, \text{ divide both sides by -2}) \\ -->
+<!-- 0 &= \sum_{i=1}^n x_iY_i -\sum_{i=1}^n x_i\bar Y+\hat\beta_1\bar x\sum_{i=1}^n x_i-\hat\beta_1\sum_{i=1}^n x_i^2. &\tiny\text{(expand sum, use linearity of sum)} \\ -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Continuing from the previous line, we move the terms involving $\hat{\beta}_1$ to the other side of the equality to get -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \hat\beta_1\sum_{i=1}^n x_i^2-\hat\beta_1\bar x\sum_{i=1}^n x_i &=\sum_{i=1}^n x_iY_i -\sum_{i=1}^n x_i\bar Y & \tiny\text{(move estimator to other side)}\\ -->
+<!-- \hat\beta_1\sum_{i=1}^n x_i^2-\hat\beta_1\frac{1}{n}\sum_{i=1}^n  x_i\sum_{i=1}^n x_i&=\sum_{i=1}^n x_iY_i -\sum_{i=1}^n x_i\frac{1}{n}\sum_{i=1}^n  Y_i  &\tiny\text{(rewrite using definition of sample means)} \\ -->
+<!-- \hat\beta_1\sum_{i=1}^n x_i^2-\hat\beta_1\frac{1}{n}\left(\sum_{i=1}^n  x_i\right)^2 &=\sum_{i=1}^n x_iY_i -\frac{1}{n}\sum_{i=1}^n x_i\sum_{i=1}^n  Y_i  & \tiny\text{(reorder and simplify)} \\ -->
+<!-- \hat\beta_1\left(\sum_{i=1}^n x_i^2-\frac{1}{n}\left(\sum_{i=1}^n  x_i\right)^2\right)&=\sum_{i=1}^n x_iY_i -\frac{1}{n}\sum_{i=1}^n x_i\sum_{i=1}^n  Y_i, & \tiny\text{(factoring)}\\ -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- which allows us to obtain -->
+<!-- \[ -->
+<!-- \hat\beta_1=\frac{\sum_{i=1}^n x_iY_i -\frac{1}{n}\sum_{i=1}^n x_i\sum_{i=1}^n  Y_i}{\sum_{i=1}^n x_i^2-\frac{1}{n}\left(\sum_{i=1}^n  x_i\right)^2}. -->
+<!-- \] -->
+<!-- Thus, we have the OLS estimators of the simple linear regression coefficients are -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \hat\beta_0 &= \bar Y-\hat\beta_1\bar x, \\ -->
+<!-- \hat\beta_1 & =\frac{\sum_{i=1}^n x_iY_i -\frac{1}{n}\sum_{i=1}^n x_i\sum_{i=1}^n Y_i}{\sum_{i=1}^n x_i^2-\frac{1}{n}\left(\sum_{i=1}^n x_i\right)^2}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- ### Unbiasedness of OLS estimators -->
+<!-- We now show that the OLS estimators we derived in Section \@ref(slr-derivation) are unbiased. An estimator is unbiased if the expected value is equal to the parameter it is estimating. -->
+<!-- The OLS estimator assumes we know the value of the regressor variables for all observations. Thus, we must condition our expectation on knowing the regressor matrix $\mathbf{X}$. Thus, we want to show that -->
+<!-- \[ -->
+<!-- E(\hat{\beta}_0\mid \mathbf{X})=\beta_0, -->
+<!-- \] -->
+<!-- where "$\mid \mathbf{X}$" is convenient notation to indicate that we are conditioning our expectation on knowing the regressor values for every observation. -->
+<!-- In Section \@ref(s-slr-estimation), we noted that we assume $E(\epsilon \mid X)=0$, which is true for every error in our model, i.e. $E(\epsilon_i \mid X = x_i) = 0$ for $i=1,2,\ldots,n$. Thus, -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- E(Y_i\mid X=x_i) &= E(\beta_0 + \beta_1 x_i +\epsilon_i\mid X = x_i) & \tiny\text{(substiute definition of $Y_i$)} \\ -->
+<!-- &= E(\beta_0\mid X=x_i) + E(\beta_1 x_i \mid X = X_i) +E(\epsilon_i | X=x_i) & \tiny\text{(linearity property of expectation)} \\ -->
+<!-- &= \beta_0+\beta_1x_i +E(\epsilon_i | X=x_i) & \tiny\text{(the $\beta$s and $x_i$ are non-random values)} \\ -->
+<!-- &= \beta_0+\beta_1x_i + 0 & \tiny\text{(assumption about errors)} \\ -->
+<!-- &= \beta_0+\beta_1x_i. & -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- In the derivations below, every sum is over all values of $i$, i.e., $\sum \equiv \sum_{i=1}^n$. We drop the index for simplicity. -->
+<!-- Next, we note: -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- E\left(\sum x_iY_i \biggm| \mathbf{X} \right) &= \sum E(x_iY_i \mid \mathbf{X}) &\tiny\text{ (by the linearity of the expectation operator)}\\ -->
+<!-- &=\sum x_iE(Y_i\mid \mathbf{X})&\tiny(x_i\text{ is a fixed value, so it can be brought out})\\ -->
+<!-- &=\sum x_i(\beta_0+\beta_1 x_i)&\tiny\text{(substitute expected value of }Y_i)\\ -->
+<!-- &=\sum x_i\beta_0+\sum x_i\beta_1 x_i&\tiny\text{(distribute sum)}\\ -->
+<!-- &=\beta_0\sum x_i+\beta_1\sum x_i^2.&\tiny\text{(factor out constants)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Also, -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- E(\bar Y\mid \mathbf{X}) -->
+<!-- &= E\left(\frac{1}{n}\sum Y_i\Biggm|\mathbf{X} \right)&\tiny\text{(definition of sample mean)}\\ -->
+<!-- &= \frac{1}{n}E\left(\sum Y_i \Bigm| \mathbf{X}\right)&\tiny\text{(factor out constant)}\\ -->
+<!-- &= \frac{1}{n}\sum E\left(Y_i \mid \mathbf{X}\right)&\tiny\text{(linearity of expectation)}\\ -->
+<!-- &= \frac{1}{n}\sum(\beta_0+\beta_1 x_i)&\tiny\text{(substitute expected value of }Y_i)\\ -->
+<!-- &= \frac{1}{n}\left(\sum\beta_0+\sum\beta_1 x_i\right)&\tiny\text{(distribute sum)}\\ -->
+<!-- &= \frac{1}{n}\left(n\beta_0+\beta_1\sum x_i\right)&\tiny\text{(simplify, factor out constant)}\\ -->
+<!-- &= \beta_0+\beta_1\bar x. &\tiny\text{(simplify)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- To simplify our derivation below, define -->
+<!-- \[ -->
+<!-- SSX = \sum x_i^2-\frac{1}{n}\left(\sum  x_i\right)^2. -->
+<!-- \] -->
+<!-- Thus, -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- &E(\hat\beta_1 \mid \mathbf{X}) &\\ -->
+<!-- &= E\left(\frac{\sum x_iY_i -\frac{1}{n}\sum x_i\sum Y_i}{\sum x_i^2-\frac{1}{n}\left(\sum  x_i\right)^2} \Biggm| \mathbf{X} \right) &\tiny\text{(substitute OLS estimator)} \\ -->
+<!-- &= \frac{1}{SSX}E\left(\sum x_iY_i-\frac{1}{n}\sum x_i\sum Y_i \biggm| \mathbf{X}\right)&\tiny\text{(factor out constant denominator, substitute }SSX\text{)} \\ -->
+<!-- &= \frac{1}{SSX}\left[E\left(\sum x_iY_i\Bigm|\mathbf{X}\right)-E\left(\frac{1}{n}\sum x_i\sum Y_i\biggm|\mathbf{X}\right)\right]&\tiny\text{(linearity of expectation)}\\ -->
+<!-- &= \frac{1}{SSX}\left[E\left(\sum x_iY_i\Bigm|\mathbf{X}\right)-\left(\sum x_i\right)E\left(\bar Y\mid \mathbf{X}\right)\right]&\tiny\text{(factor out constant }\sum x_i\text{, use definition of}\bar{Y})\\ -->
+<!-- &= \frac{1}{SSX}\left[\left(\beta_0\sum x_i + \beta_1\sum x_i^2\right)-\left(\sum x_i\right)(\beta_0+\beta_1\bar x)\right]&\tiny\text{(substitute previous derivations -->
+<!-- )}\\ -->
+<!-- &= \frac{1}{SSX}\left[\beta_0\sum x_i+\beta_1\sum x_i^2-\beta_0\sum x_i-\beta_1\bar x\sum x_i\right]&\tiny\text{(expand product and reorder)} \\ -->
+<!-- &= \frac{1}{SSX}\left[\beta_1\sum x_i^2-\beta_1\bar x\sum x_i\right]&\tiny\text{(cancel terms)}\\ -->
+<!-- &= \frac{1}{SSX}\left[\beta_1\sum x_i^2-\beta_1\frac{1}{n}\sum x_i\sum x_i\right]&\tiny\text{(using definition of sample mean)}\\ -->
+<!-- &= \frac{1}{SSX}\beta_1\left[\sum x_i^2-\frac{1}{n}\left(\sum x_i\right)^2\right]&\tiny\text{(factor out }\beta_1\text{, simplify})\\ -->
+<!-- &= \frac{1}{SSX}\beta_1[SSX]&\tiny\text{(substitute }SSX\text{)} \\ -->
+<!-- &=\beta_1. &\tiny\text{(simplify)} -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Therefore, $\hat\beta_1$ is an unbiased estimator of $\beta_1$. -->
+<!-- Next, we show that $\hat\beta_0$ is unbiased: -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- E(\hat\beta_0\mid \mathbf{X}) &= E(\bar Y - \hat{\beta}_1\bar x\mid \mathbf{X}) &\tiny\text{(OLS estimator of }\beta_0) \\ -->
+<!-- &= E(\bar{Y}\mid \mathbf{X}) - E(\hat\beta_1\bar{x}\mid \mathbf{X}) &\tiny\text{(linearity of expectation})\\ -->
+<!-- &= E(\bar{Y}\mid \mathbf{X}) - \bar{x}E(\hat\beta_1\mid \mathbf{X}) &\tiny\text{(factor out constant})\\ -->
+<!-- &= \beta_0 +\beta_1\bar x-\bar x\beta_1 &\tiny\text{(substitute previous derivations})\\ -->
+<!-- &= \beta_0. &\tiny\text{(cancel terms})\\ -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- Therefore, $\hat\beta_0$ is an unbiased estimator of $\beta_0$. -->
+<!-- <!-- Next, we derive the variance of the OLS estimators conditional on the known regressor values, i.e., $\mathrm{var}(\hat\beta_0 \mid \mathbf{X})$ and $\mathrm{var}(\hat\beta_1 \mid \mathbf{X})$. -->
+<p>–&gt;</p>
+<!-- <!-- First, we derive that -->
+<p>–&gt; <!-- <!-- \[ --> –&gt; <!-- <!-- \begin{align} --> –&gt; <!-- <!-- \mathrm{var}(Y_i\mid X = x_i) &= \mathrm{var}(\beta_0+\beta_1x_i+\epsilon_i\mid X = x_i)&\tiny\text{(substitute model definition)} \\ --> –&gt; <!-- <!-- &= \mathrm{var}(\epsilon_i\mid X = x_i)&\tiny(\beta_0, \beta_1, x_i\text{ are fixed, so zero variance)} \\ --> –&gt; <!-- <!-- &= \sigma^2. &\tiny\text{(by assumption)} --> –&gt; <!-- <!-- \end{align} --> –&gt; <!-- <!-- \] --> –&gt;</p>
+<!-- <!-- Second, we derive that -->
+<p>–&gt; <!-- <!-- \[ --> –&gt; <!-- <!-- \begin{align} --> –&gt; <!-- <!-- \text{cov}(Y_i, Y_j\mid \mathbf{X}) &= \text{cov}(\beta_0+\beta_1x_i+\epsilon_i, \beta_0+\beta_1x_j+\epsilon_j\mid \mathbf{X})&\tiny\text{(substitute model definition)} \\ --> –&gt; <!-- <!-- &= \text{cov}(\epsilon_i,\epsilon_j\mid \mathbf{X})&\tiny\text{(other values are fixed)} \\ --> –&gt; <!-- <!-- &= 0.&\tiny\text{(errors are uncorrelated)} --> –&gt; <!-- <!-- \end{align} --> –&gt; <!-- <!-- \] --> –&gt;</p>
+<!-- <!-- Next, to simplify the derivation, we use a different form of $\hat\beta_1$ from Equation \@ref(eq:slr-beta1hat), namely, -->
+<p>–&gt; <!-- <!-- \[ --> –&gt; <!-- <!-- \begin{align} --> –&gt; <!-- <!-- \mathrm{var}(\hat\beta_1\mid \mathbf{X}) &=\mathrm{var}\left(\frac{\sum(x_i-\bar x)Y_i}{\sum(x_i-\bar x)^2}\mid \mathbf{X}\right)&\tiny\text{(expression for }\hat\beta_1)\\ --> –&gt; <!-- <!-- &=\frac{1}{\left[\sum(x_i-\bar x)^2\right]^2}\mathrm{var}\left(\sum(x_i-\bar x)Y_i\Bigm| \mathbf{X}\right)&\tiny\text{(factor out constant denominator)}\\ --> –&gt; <!-- <!-- &=\frac{1}{\left[\sum(x_i-\bar x)^2\right]^2}\biggl[\sum\mathrm{var}((x_i-\bar x)Y_i\mid \mathbf{X})&\\ --> –&gt; <!-- <!-- &\qquad+\sum_{i=1}^{n}\sum_{i\neq j}\text{cov}((x_i-\bar x)Y_i, (x_j-\bar x)Y_j\mid \mathbf{X})\biggr]&\tiny\text{(variance of a sum formula)}\\ --> –&gt; <!-- <!-- &=\frac{1}{\left[\sum(x_i-\bar x)^2\right]^2}\biggl[\sum(x_i-\bar x)^2\mathrm{var}(Y_i\mid \mathbf{X}) & \\ --> –&gt; <!-- <!-- &\qquad +\sum_{i=1}^{n}\sum_{i\neq j}(x_i-\bar x)(x_j-\bar x)\text{cov}(Y_i,Y_j\mid \mathbf{X})\biggr]&\tiny\text{(factor out constants)}\\ --> –&gt; <!-- <!-- &=\frac{1}{\left[\sum(x_i-\bar x)^2\right]^2}\left[\sum(x_i-\bar x)^2\mathrm{var}(Y_i\mid \mathbf{X})\right]&\tiny\text{(simplify using }\text{cov}(Y_i, Y_j\mid \mathbf{X})=0 \text{ for } i\neq j)\\ --> –&gt; <!-- <!-- &=\frac{1}{\left[\sum(x_i-\bar x)^2\right]^2}\left[\sigma^2\sum(x_i-\bar x)^2\right]&\tiny\text{(substitute known variance, factor out }\sigma^2\text{)}\\ --> –&gt; <!-- <!-- &=\frac{\sigma^2}{\sum(x_i-\bar x)^2}.&\tiny\text{(cancel out numerator and denominator)}\ --> –&gt; <!-- <!-- \end{align} --> –&gt; <!-- <!-- \] --> –&gt;</p>
+<!-- ### Manual calculation Penguins simple linear regression example -->
+<!-- In this section, we manually produce (i.e., without the `lm` function) the `penguins` simple linear regression example in Section \@ref(s:penguins-slr). -->
+<!-- First, we will manually fit a simple linear regression model that regresses `bill_length_mm` on `body_mass_g`. -->
+<!-- Using the `summary` function on the `penguins` data frame, we see that both `bill_length_mm` and `body_mass_g` have `NA` values. -->
+<!-- ```{r} -->
+<!-- summary(penguins) -->
+<!-- ``` -->
+<!-- This is important to note because the `lm` function automatically removes any observation with `NA` values for any of the variables specified in the `formula` argument. In order to replicate our results, we must remove the same observations. -->
+<!-- We want to remove the rows of `penguins` where either `body_mass_g` or `bill_length_mm` have `NA` values. We do that below using the `na.omit` function (selecting only the relevant variables) and assign the cleaned -->
+<!-- object the name `penguins_clean`. -->
+<!-- ```{r} -->
+<!-- # remove rows of penguins where bill_length_mm or body_mass_g have NA values -->
+<!-- penguins_clean <- -->
+<!--   penguins |> -->
+<!--   subset(select = c("bill_length_mm", "body_mass_g")) |> -->
+<!--   na.omit() -->
+<!-- ``` -->
+<!-- We extract the `bill_length_mm` variable from the `penguins` data frame and assign it the name `y` since it will be the response variable. We extract the `body_mass_g` variable from the `penguins` data frame and -->
+<!-- assign it the name `x` since it will be the regressor variable. We also determine the number of observations and assign that value the name `n`. -->
+<!-- ```{r} -->
+<!-- # extract response and regressor from penguins_clean -->
+<!-- y <- penguins_clean$bill_length_mm -->
+<!-- x <- penguins_clean$body_mass_g -->
+<!-- # determine number of observations -->
+<!-- n <- length(y) -->
+<!-- ``` -->
+<!-- We now compute $\hat{\beta}_1$ and $\hat{\beta}_0$ using Equations \@ref(eq:slr-beta1hat) and \@ref(eq:slr-beta0hat). Note that placing `()` around the assignment operations will both perform the assignment and print the results. -->
+<!-- ```{r} -->
+<!-- # compute OLS estimate of beta1 -->
+<!-- (b1 <- (sum(x * y) - sum(x) * sum(y) / n)/(sum(x^2) - sum(x)^2/n)) -->
+<!-- # compute OLS estimate of beta0 -->
+<!-- (b0 <- mean(y) - b1 * mean(x)) -->
+<!-- ``` -->
+<!-- The estimated value of $\beta_0$ is $\hat{\beta}_0=26.90$ and the estimated value of $\beta_1$ is $\hat{\beta}_1=0.004$. -->
+<!-- We can also compute the residuals, the fitted values, the RSS, and the estimated error variance. Using the code below, the RSS for our model is 6564.49 and the estimated error variance if $\hat{\sigma}^2=19.31$. -->
+<!-- ```{r} -->
+<!-- yhat <- b0 + b1 * x # compute fitted values -->
+<!-- ehat <- y - yhat # compute residuals -->
+<!-- (rss <- sum(ehat^2)) # sum of the squared residuals -->
+<!-- (sigmasqhat <- rss/(n-2)) # estimated error variance -->
+<!-- ``` -->
+<!-- ### Derivation of the OLS estimator for the multiple linear regression model coefficients {#mlr-derivation} -->
+<!-- We want to determine the value of $\hat{\boldsymbol{\beta}}$ that will minimize -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- RSS(\hat{\boldsymbol{\beta}}) &=\sum_{i=1}^n \hat{\epsilon_i}^2 \\ -->
+<!-- &= \hat{\boldsymbol{\epsilon}}^T\hat{\boldsymbol{\epsilon}} \\ -->
+<!-- &= (\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}})^T(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) \\ -->
+<!-- &= \mathbf{y}^T\mathbf{y}-2\hat{\boldsymbol{\beta}}^T\mathbf{X}^T\mathbf{y}+\hat{\boldsymbol{\beta}}^T\mathbf{X}^T\mathbf{X}\hat{\boldsymbol{\beta}}, -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- where the second term in the last line comes from the fact that $\hat{\boldsymbol{\beta}}^T\mathbf{X}^T\mathbf{y}$ is a $1\times 1$ matrix, and is thus symmetric. Consequently, $\hat{\boldsymbol{\beta}}^T\mathbf{X}^T\mathbf{y}=(\hat{\boldsymbol{\beta}}^T\mathbf{X}^T\mathbf{y})^T=\mathbf{y}^T\mathbf{X}\hat{\boldsymbol{\beta}}$. -->
+<!-- To find the local extrema of $RSS(\hat{\boldsymbol{\beta}})$, we set its derivative with respect to $\hat{\boldsymbol{\beta}}$ equal to 0, and solve for $\hat{\boldsymbol{\beta}})$. -->
+<!-- Using the results in Appendix \@ref(matrix-derivatives), -->
+<!-- we see that -->
+<!-- \[ -->
+<!-- \frac{\partial RSS(\hat{\boldsymbol{\beta}})}{\partial\hat{\boldsymbol{\beta}}} = -2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\hat{\boldsymbol{\beta}}. -->
+<!-- \] -->
+<!-- Setting $\partial RSS(\hat{\boldsymbol{\beta}})/\partial\hat{\boldsymbol{\beta}}=0$ and using some simple algebra, we derive the **normal equations** -->
+<!-- \[\mathbf{X}^T\mathbf{X}\hat{\boldsymbol{\beta}}=\mathbf{X}^T\mathbf{y}.\] -->
+<!-- Assuming the $\mathbf{X}^T\mathbf{X}$ is invertible, which it will be when $\mathbf{X}$ is full-rank, our solution is -->
+<!-- \[\hat{\boldsymbol{\beta}}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}.\] -->
+<!-- To show that the OLS estimator of $\boldsymbol{\beta}$ minimizes $RSS(\hat{\boldsymbol{\beta}})$, we technically need to show that the Hessian matrix of $RSS(\hat{\boldsymbol{\beta}})$, the matrix of second-order partial derivatives, is positive definite. In our context, the Hessian matrix is -->
+<!-- \[ -->
+<!-- \begin{aligned} -->
+<!-- \frac{\partial^2 RSS(\hat{\boldsymbol{\beta}})}{\partial \hat{\boldsymbol{\beta}}^2} &= \frac{\partial}{\partial \hat{\boldsymbol{\beta}}}(-2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\hat{\boldsymbol{\beta}}) \\ -->
+<!-- &= 2\mathbf{X}^T\mathbf{X}. -->
+<!-- \end{aligned} -->
+<!-- \] -->
+<!-- The $p\times p$ matrix $2\mathbf{X}^T\mathbf{X}$ is positive definite, but it is beyond the scope of the course to prove this. -->
+<!-- Therefore, the OLS estimator of $\boldsymbol{\beta}$, -->
+<!-- \[\hat{\boldsymbol{\beta}}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\] -->
+<!-- minimizes the RSS. -->
+<!-- ### Manual calculation of Penguins multiple linear regression example -->
+<!-- We manually verify the calculations for the `penguins` example given in Section \@ref{s:penguins-mlr}, where we fit the multiple linear regression model regressing `bill_length_mm` on `body_mass_g` and `flipper_length_mm`. We refit the model below, specifying the argument `y = TRUE` so we can get the response vector used in the model. -->
+<!-- ```{r} -->
+<!-- # fit regression model, retaining the y vector -->
+<!-- mlmod <- lm(bill_length_mm ~ body_mass_g + flipper_length_mm, -->
+<!--             data = penguins, y = TRUE) -->
+<!-- ``` -->
+<!-- We can use `model.matrix` to extract the $\mathbf{X}$ matrix from our fitted model. And because we specified `y = TRUE` in our call to `lm`, we can also extract `y` from the fitted model using the code below. -->
+<!-- ```{r} -->
+<!-- # extract X matrix from fitted model -->
+<!-- X <- model.matrix(mlmod) -->
+<!-- # extract y vector from fitted model -->
+<!-- y <- mlmod$y -->
+<!-- ``` -->
+<!-- We'll need to learn a few new commands in R to do the calculations: -->
+<!-- - `t` is the transpose of a matrix. -->
+<!-- - `%*%` is the multiplication operator for two matrices. -->
+<!-- - `solve(A, b)` computes $\mathbf{A}^{-1}\mathbf{b}$. -->
+<!-- Thus, we compute $\hat{\boldsymbol{\beta}}$ using the code below, which matches the estimate from the `lm` function. -->
+<!-- ```{r} -->
+<!-- # manually calculate betahat -->
+<!-- solve(t(X) %*% X, t(X) %*% y) -->
+<!-- # betahat from lm function -->
+<!-- coef(mlmod) -->
+<!-- ``` -->
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-GormanEtAl2014" class="csl-entry" role="listitem">
+Gorman, Kristen B., Tony D. Williams, and William R. Fraser. 2014. <span>“Ecological Sexual Dimorphism and Environmental Variability Within a Community of Antarctic Penguins (Genus Pygoscelis).”</span> <em>PLOS ONE</em> 9 (3): 1–14. <a href="https://doi.org/10.1371/journal.pone.0090081">https://doi.org/10.1371/journal.pone.0090081</a>.
+</div>
+<div id="ref-R-palmerpenguins" class="csl-entry" role="listitem">
+Horst, Allison, Alison Hill, and Kristen Gorman. 2022. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a>.
+</div>
+<div id="ref-pearson1897" class="csl-entry" role="listitem">
+Pearson, Karl, and Alice Lee. 1897. <span>“Mathematical Contributions to the Theory of Evolution. On Telegony in Man. &amp;c.”</span> <em>Proceedings of the Royal Society of London</em> 60 (359-367): 273–83. <a href="https://doi.org/10.1098/rspl.1896.0048">https://doi.org/10.1098/rspl.1896.0048</a>.
+</div>
+<div id="ref-pearson_and_lee_1903" class="csl-entry" role="listitem">
+———. 1903. <span>“On the Laws of Inheritance in Man: I. Inheritance of Physical Characters: I. Inheritance of Physical Characters.”</span> <em>Biometrika</em> 2 (4): 357–462. <a href="https://doi.org/10.1093/biomet/2.4.357">https://doi.org/10.1093/biomet/2.4.357</a>.
+</div>
+<div id="ref-alr4" class="csl-entry" role="listitem">
+Weisberg, Sanford. 2014. <em>Applied Linear Regression</em>. Fourth. Hoboken <span>NJ</span>: Wiley. <a href="http://z.umn.edu/alr4ed">http://z.umn.edu/alr4ed</a>.
+</div>
+<div id="ref-wilkinsonrogers1973" class="csl-entry" role="listitem">
+Wilkinson, GN, and CE Rogers. 1973. <span>“Symbolic Description of Factorial Models for Analysis of Variance.”</span> <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 22 (3): 392–99.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./data-exploration.html" class="pagination-link" aria-label="Data Cleaning and Exploration">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Cleaning and Exploration</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./interpretation.html" class="pagination-link" aria-label="Interpreting a Fitted Model">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interpreting a Fitted Model</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

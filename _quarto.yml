@@ -10,6 +10,9 @@ book:
     - index.qmd
     - r-foundations.qmd
     - data-exploration.qmd
+    - parameter-estimation-and-model-fitting.qmd
+    - interpretation.qmd
+    - basic-theoretical-results.qmd
   appendices:
     - matrix-facts.qmd
     - probability-basics.qmd
